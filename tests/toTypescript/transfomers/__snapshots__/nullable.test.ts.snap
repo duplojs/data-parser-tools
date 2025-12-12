@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`nullable > mode in and out 1`] = `"export type NullableIn = string | null;"`;
+
+exports[`nullable > mode in and out 2`] = `"export type NullableOut = string;"`;

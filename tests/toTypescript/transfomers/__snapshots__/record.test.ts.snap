@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`record > handles free and required keys 1`] = `"export type RecordFree = Record<string, number>;"`;
+
+exports[`record > handles free and required keys 2`] = `"export type RecordRequired = Record<"foo" | "bar", boolean>;"`;

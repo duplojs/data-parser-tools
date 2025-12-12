@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`literal > union of literals 1`] = `"export type LiteralUnion = "foo" | 1 | true | 10n | undefined | false | null;"`;

@@ -1,0 +1,83 @@
+{
+  "name": "@duplojs/data-parser-tools",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": "duplojs",
+  "contributors": [
+    {
+      "name": "zeriix",
+      "url": "https://github.com/zeriix"
+    },
+    {
+      "name": "mathcovax",
+      "url": "https://github.com/mathcovax"
+    }
+  ],
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duplojs/data-parser-tools.git"
+  },
+  "scripts": {
+    "build": "rollup --config",
+    "test:tu": "vitest --coverage",
+    "test:tu:bench": "vitest bench",
+    "test:tu:watch": "vitest --coverage --watch",
+    "test:tu:update": "vitest --coverage --update",
+    "test:types": "tsc -p tsconfig.test.json",
+    "test:lint": "eslint",
+    "test:lint:fix": "eslint --fix",
+    "prepare": "husky"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "./toTypescript": {
+      "import": "./dist/toTypescript/index.mjs",
+      "require": "./dist/toTypescript/index.cjs",
+      "types": "./dist/toTypescript/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "19.8.1",
+    "@commitlint/config-conventional": "19.8.1",
+    "@duplojs/eslint": "0.5.0",
+    "@rollup/plugin-typescript": "12.1.4",
+    "@types/node": "24.3.0",
+    "@vitest/coverage-istanbul": "3.2.4",
+    "eslint": "9.34.0",
+    "husky": "9.1.7",
+    "rollup": "4.50.0",
+    "rollup-plugin-delete": "3.0.1",
+    "rollup-plugin-esbuild": "6.2.1",
+    "rollup-plugin-tsc-alias": "1.1.4",
+    "tslib": "2.8.1",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2",
+    "vite-tsconfig-paths": "5.1.4",
+    "vitest": "3.2.4"
+  },
+  "peerDependencies": {
+    "@duplojs/utils": ">=1.2.19 <2.0.0"
+  },
+  "dependencies": {
+    "typescript": "5.9.2"
+  },
+  "workspaces": [
+    "integration", 
+    "docs"
+  ],
+  "keywords": [
+    "duplojs",
+    "data-parser",
+    "tools",
+    "data-parser-to-typescript",
+    "dp2ts"
+  ],
+  "engines": {
+    "node": ">=22.15.1"
+  }
+}

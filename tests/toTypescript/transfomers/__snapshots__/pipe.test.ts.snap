@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`pipe > switches schema based on mode 1`] = `"export type PipeIn = string;"`;
+
+exports[`pipe > switches schema based on mode 2`] = `"export type PipeOut = number;"`;

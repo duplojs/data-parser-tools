@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`object > optional detection by mode 1`] = `
+"export type ObjectOut = {
+    optionalOut: string;
+    coalesced: number;
+    empty?: undefined;
+    literalUndefined?: "value" | undefined;
+    unionWithOptional: number | string;
+    pipeToRequired: number;
+    recoverUndefined: boolean;
+    transformOptional: unknown;
+    lazyOptional: number;
+    required: string;
+};"
+`;
+
+exports[`object > optional detection by mode 2`] = `
+"export type ObjectIn = {
+    optionalOut?: string | undefined;
+    coalesced?: number | undefined;
+    empty?: undefined;
+    literalUndefined?: "value" | undefined;
+    unionWithOptional: number | (string | undefined);
+    pipeToRequired?: string | undefined;
+    recoverUndefined: unknown;
+    transformOptional?: string | undefined;
+    lazyOptional?: number | undefined;
+    required: string;
+};"
+`;

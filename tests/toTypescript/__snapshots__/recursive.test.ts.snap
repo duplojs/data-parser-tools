@@ -1,0 +1,57 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`recursive > with array 1`] = `
+"export type RecursiveType0 = (string | RecursiveType0)[];
+
+export type RecursiveTuple = RecursiveType0;"
+`;
+
+exports[`recursive > with complex recursive schema 1`] = `
+"export type RecursiveType0 = {
+    recursiveProp: {
+        test: RecursiveType0;
+    };
+    tuple: RecursiveType1;
+    array: RecursiveType2;
+};
+
+export type RecursiveType1 = [
+    string,
+    (RecursiveType1 | string)[]
+];
+
+export type RecursiveType2 = (string | RecursiveType2)[];
+
+export type RecursiveObject = RecursiveType0;"
+`;
+
+exports[`recursive > with conflict identified object schema 1`] = `
+"export type Test = {
+    recursiveProp: Test;
+};
+
+export type RecursiveObject = Test;"
+`;
+
+exports[`recursive > with identified objet schema  1`] = `
+"export type RecursiveObject = {
+    recursiveProp: RecursiveObject;
+};"
+`;
+
+exports[`recursive > with tuple 1`] = `
+"export type RecursiveType0 = [
+    string,
+    (RecursiveType0 | string)[]
+];
+
+export type RecursiveTuple = RecursiveType0;"
+`;
+
+exports[`recursive > with unknown object schema 1`] = `
+"export type RecursiveType0 = {
+    recursiveProp: RecursiveType0;
+};
+
+export type RecursiveObject = RecursiveType0;"
+`;

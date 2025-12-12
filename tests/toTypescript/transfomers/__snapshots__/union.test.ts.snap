@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`union > multiple and single options 1`] = `"export type UnionMulti = string | null | undefined;"`;
+
+exports[`union > multiple and single options 2`] = `"export type UnionSingle = string;"`;

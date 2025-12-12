@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`lazy > unwraps inner schema 1`] = `"export type Lazy = "lazy";"`;

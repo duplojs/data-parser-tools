@@ -1,0 +1,11 @@
+import { DP } from "@duplojs/utils";
+import { factory, SyntaxKind } from "typescript";
+import { createTransformer } from "../create";
+
+export const numberTransformer = createTransformer(
+	DP.numberKind.has,
+	(
+		__schema,
+		{ success },
+	) => success(factory.createKeywordTypeNode(SyntaxKind.NumberKeyword)),
+);

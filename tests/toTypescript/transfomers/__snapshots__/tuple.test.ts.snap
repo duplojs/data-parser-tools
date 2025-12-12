@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tuple > with and without rest 1`] = `
+"export type TupleRest = [
+    string,
+    number
+];"
+`;
+
+exports[`tuple > with and without rest 2`] = `
+"export type Tuple = [
+    string,
+    boolean
+];"
+`;

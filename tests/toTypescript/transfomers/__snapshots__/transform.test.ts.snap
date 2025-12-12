@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transform > mode in uses inner, mode out unknown 1`] = `"export type TransformIn = number;"`;
+
+exports[`transform > mode in uses inner, mode out unknown 2`] = `"export type TransformOut = unknown;"`;

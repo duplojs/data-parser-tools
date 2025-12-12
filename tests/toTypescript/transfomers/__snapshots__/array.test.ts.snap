@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array > string array 1`] = `"export type ArrayString = string[];"`;
+
+exports[`array > string array 2`] = `
+"export type Numbers = string[];
+
+export type ArrayNumber = Numbers;"
+`;

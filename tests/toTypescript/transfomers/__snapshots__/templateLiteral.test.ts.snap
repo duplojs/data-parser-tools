@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`templateLiteral > renders combinations 1`] = `"export type TemplateWithHead = \`user-\${number}-id\`;"`;
+
+exports[`templateLiteral > renders combinations 2`] = `"export type TemplateWithDataHead = \`\${number}-items\`;"`;
+
+exports[`templateLiteral > renders combinations 3`] = `"export type TemplateWithBigint = \`id-10n-true\${;"`;
+
+exports[`templateLiteral > renders combinations 4`] = `"export type TemplateWithParsers = \`\${string}\${number}\${boolean}-end\`;"`;
+
+exports[`templateLiteral > renders combinations 5`] = `"export type TemplateMultiSpan = \`pre-\${string}-mid-\${number}-suf\`;"`;
+
+exports[`templateLiteral > void 1`] = `"export type Void = \`\`;"`;

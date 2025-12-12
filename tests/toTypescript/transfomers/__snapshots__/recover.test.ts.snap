@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`recover > keeps inner for input and recovered for output 1`] = `"export type RecoverIn = unknown;"`;
+
+exports[`recover > keeps inner for input and recovered for output 2`] = `"export type RecoverOut = string;"`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`optional > mode in and out 1`] = `"export type OptionalIn = number | undefined;"`;
+
+exports[`optional > mode in and out 2`] = `"export type OptionalOut = number;"`;

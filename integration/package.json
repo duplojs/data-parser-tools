@@ -1,0 +1,10 @@
+{
+  "name": "integrations",
+  "type": "module",
+  "scripts": {
+    "test:int:to-ts": "tsx ./toTypescript/index.ts"
+  },
+  "dependencies": {
+    "@duplojs/data-parser-tools": "file:.."
+  }
+}
