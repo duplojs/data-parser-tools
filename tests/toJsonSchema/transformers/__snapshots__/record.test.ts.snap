@@ -1,0 +1,52 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`record > with requireKey enforces exact keys 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/RecordSchema",
+    "definitions": {
+        "RecordSchema": {
+            "type": "object",
+            "properties": {
+                "a": {
+                    "type": "number"
+                },
+                "b": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "a",
+                "b"
+            ],
+            "additionalProperties": false,
+            "propertyNames": {
+                "enum": [
+                    "a",
+                    "b"
+                ]
+            },
+            "minProperties": 2,
+            "maxProperties": 2
+        }
+    }
+}"
+`;
+
+exports[`record > without requireKey keeps propertyNames/additionalProperties 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/RecordSchema",
+    "definitions": {
+        "RecordSchema": {
+            "type": "object",
+            "propertyNames": {
+                "type": "string"
+            },
+            "additionalProperties": {
+                "type": "number"
+            }
+        }
+    }
+}"
+`;

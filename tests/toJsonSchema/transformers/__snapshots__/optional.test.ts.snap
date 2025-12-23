@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`optional > in mode marks undefined 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/OptionalSchema",
+    "definitions": {
+        "OptionalSchema": {
+            "type": "string"
+        }
+    }
+}"
+`;
+
+exports[`optional > out mode keeps required inner when canBeUndefined false 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/OptionalSchema",
+    "definitions": {
+        "OptionalSchema": {
+            "type": "string"
+        }
+    }
+}"
+`;

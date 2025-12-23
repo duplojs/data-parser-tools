@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`object > drops optional properties from required list in input mode 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/ObjectSchema",
+    "definitions": {
+        "ObjectSchema": {
+            "type": "object",
+            "properties": {
+                "required": {
+                    "type": "string"
+                },
+                "optional": {
+                    "type": "number"
+                },
+                "nullable": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "required": [
+                "required",
+                "nullable"
+            ]
+        }
+    }
+}"
+`;
+
+exports[`object > marks optional properties with undefined support 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/ObjectSchema",
+    "definitions": {
+        "ObjectSchema": {
+            "type": "object",
+            "properties": {
+                "required": {
+                    "type": "string"
+                },
+                "optional": {
+                    "type": "number"
+                },
+                "nullable": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "required",
+                "optional",
+                "nullable"
+            ]
+        }
+    }
+}"
+`;
+
+exports[`object > omits required field when every property is optional 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/ObjectOptionalSchema",
+    "definitions": {
+        "ObjectOptionalSchema": {
+            "type": "object",
+            "properties": {
+                "foo": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}"
+`;

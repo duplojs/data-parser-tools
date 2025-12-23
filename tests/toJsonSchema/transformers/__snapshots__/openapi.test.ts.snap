@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`openapi versions > builds components container 1`] = `
+"{
+    "openapi": "https://spec.openapis.org/oas/3.0.3",
+    "components": {
+        "schemas": {
+            "OpenApiString": {
+                "type": "string"
+            }
+        }
+    },
+    "$ref": "#/components/schemas/OpenApiString"
+}"
+`;

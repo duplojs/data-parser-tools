@@ -2,7 +2,8 @@
   "name": "integrations",
   "type": "module",
   "scripts": {
-    "test:int:to-ts": "tsx ./toTypescript/index.ts"
+    "test:int:to-ts": "tsx ./toTypescript/index.ts",
+    "test:int:to-json": "tsx ./toJsonSchema/index.ts"
   },
   "dependencies": {
     "@duplojs/data-parser-tools": "file:.."

@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`recover > in mode produces unknown 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/RecoverSchema",
+    "definitions": {
+        "RecoverSchema": {}
+    }
+}"
+`;
+
+exports[`recover > out mode uses inner schema 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/RecoverSchema",
+    "definitions": {
+        "RecoverSchema": {
+            "type": "string"
+        }
+    }
+}"
+`;

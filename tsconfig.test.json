@@ -3,7 +3,6 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-	  "@scripts": ["scripts/index.ts"],
       "@scripts/*": ["scripts/*"],
       "@test/*": ["test/*"],
     },

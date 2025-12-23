@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`unknown > renders empty schema 1`] = `
+"{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/UnknownSchema",
+    "definitions": {
+        "UnknownSchema": {}
+    }
+}"
+`;
