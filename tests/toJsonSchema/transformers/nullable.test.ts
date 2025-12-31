@@ -1,5 +1,31 @@
 import { render, defaultTransformers } from "@scripts/toJsonSchema";
-import { DPE } from "@duplojs/utils";
+import { nullableTransformer } from "@scripts/toJsonSchema/transformer/defaults";
+import {
+	supportedVersions,
+	type TransformerParams,
+} from "@scripts/toJsonSchema/transformer/create";
+import { type DP, DPE, E } from "@duplojs/utils";
+
+function buildTransformerParams(
+	schema: DP.DataParser,
+	transformer: TransformerParams["transformer"],
+): TransformerParams {
+	return {
+		mode: "out",
+		context: new Map(),
+		version: supportedVersions.jsonSchema7,
+		transformer,
+		success(result, canBeUndefined = false) {
+			return E.right("buildSuccess", {
+				schema: result,
+				canBeUndefined,
+			});
+		},
+		buildError() {
+			return E.left("buildDataParserError", schema);
+		},
+	};
+}
 
 describe("nullable", () => {
 	it("out mode keeps inner", () => {
@@ -28,5 +54,17 @@ describe("nullable", () => {
 				},
 			),
 		).toMatchSnapshot();
+	});
+
+	it("returns left when inner transform fails", () => {
+		const schema = DPE.nullable(DPE.string());
+		const params = buildTransformerParams(
+			schema,
+			() => E.left("dataParserNotSupport", schema.definition.inner),
+		);
+
+		expect(nullableTransformer(schema, params)).toStrictEqual(
+			E.left("dataParserNotSupport", schema.definition.inner),
+		);
 	});
 });
