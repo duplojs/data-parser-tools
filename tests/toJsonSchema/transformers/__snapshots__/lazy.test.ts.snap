@@ -1,13 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`lazy > unwraps inner schema 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/LazySchema",
-    "definitions": {
-        "LazySchema": {
-            "type": "string"
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/LazySchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "LazySchema": {
+      "type": "string",
+    },
+  },
+}
 `;

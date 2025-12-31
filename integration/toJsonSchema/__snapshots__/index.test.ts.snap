@@ -1,0 +1,217 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`integration 1`] = `
+{
+  "$ref": "#/definitions/UserProfile",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "UserProfile": {
+      "properties": {
+        "address": {
+          "properties": {
+            "city": {
+              "type": "string",
+            },
+            "country": {
+              "const": "FR",
+              "type": "string",
+            },
+            "street": {
+              "type": "string",
+            },
+            "zip": {
+              "pattern": "^\\\\d{5}$",
+              "type": "string",
+            },
+          },
+          "required": [
+            "street",
+            "city",
+            "zip",
+            "country",
+          ],
+          "type": "object",
+        },
+        "age": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number",
+            },
+            {
+              "type": "string",
+            },
+          ],
+        },
+        "contact": {
+          "anyOf": [
+            {
+              "properties": {
+                "phone": {
+                  "pattern": "^[+\\\\d][\\\\d\\\\s-]{5,}$",
+                  "type": "string",
+                },
+              },
+              "required": [
+                "phone",
+              ],
+              "type": "object",
+            },
+            {
+              "properties": {
+                "email": {
+                  "format": "email",
+                  "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]{2,}$",
+                  "type": "string",
+                },
+              },
+              "required": [
+                "email",
+              ],
+              "type": "object",
+            },
+          ],
+        },
+        "createdAt": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+              "type": "string",
+            },
+            {
+              "type": "number",
+            },
+            {
+              "format": "date",
+              "type": "string",
+            },
+            {
+              "format": "date-time",
+              "type": "string",
+            },
+          ],
+        },
+        "email": {
+          "format": "email",
+          "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]{2,}$",
+          "type": "string",
+        },
+        "id": {
+          "pattern": "^(?:user\\-)(?:[0-9]+(\\.[0-9]+)?)(?:\\-db1)$",
+          "type": "string",
+        },
+        "location": {
+          "additionalItems": {
+            "type": "number",
+          },
+          "items": [
+            {
+              "type": "number",
+            },
+            {
+              "type": "number",
+            },
+          ],
+          "minItems": 2,
+          "type": "array",
+        },
+        "metadata": {
+          "additionalProperties": {
+            "type": "string",
+          },
+          "propertyNames": {
+            "type": "string",
+          },
+          "type": "object",
+        },
+        "name": {
+          "minLength": 2,
+          "type": "string",
+        },
+        "preferences": {
+          "anyOf": [
+            {
+              "properties": {
+                "newsletter": {
+                  "type": "boolean",
+                },
+                "theme": {
+                  "anyOf": [
+                    {
+                      "const": "light",
+                      "type": "string",
+                    },
+                    {
+                      "const": "dark",
+                      "type": "string",
+                    },
+                  ],
+                },
+              },
+              "required": [
+                "theme",
+                "newsletter",
+              ],
+              "type": "object",
+            },
+            {
+              "type": "null",
+            },
+          ],
+        },
+        "role": {
+          "anyOf": [
+            {
+              "const": "admin",
+              "type": "string",
+            },
+            {
+              "const": "editor",
+              "type": "string",
+            },
+            {
+              "const": "viewer",
+              "type": "string",
+            },
+          ],
+        },
+        "roles": {
+          "items": {
+            "anyOf": [
+              {
+                "const": "admin",
+                "type": "string",
+              },
+              {
+                "const": "editor",
+                "type": "string",
+              },
+              {
+                "const": "viewer",
+                "type": "string",
+              },
+            ],
+          },
+          "minItems": 1,
+          "type": "array",
+        },
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "role",
+        "contact",
+        "address",
+        "roles",
+        "preferences",
+        "metadata",
+        "location",
+        "createdAt",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;

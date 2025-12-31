@@ -1,5 +1,5 @@
 import { A, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
-import { type MapContext, type DataParserNotSupportedEither, type TransformerParams, type createTransformer, type TransformerMode } from "./create";
+import { type MapContext, type DataParserNotSupportedEither, type TransformerParams, type createTransformer, type TransformerMode, type DataParserErrorEither } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import { type TransformerHook } from "./hook";
 
@@ -88,7 +88,7 @@ export function transformer(
 
 	const result = A.reduce(
 		params.transformers,
-		A.reduceFrom<DataParserNotSupportedEither>(
+		A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
 			E.left("dataParserNotSupport", currentSchema),
 		),
 		({
@@ -100,6 +100,10 @@ export function transformer(
 			const result = functionBuilder(currentSchema, functionParams);
 
 			if (E.isLeft(result)) {
+				if (unwrap(result) !== currentSchema) {
+					return exit(result);
+				}
+
 				return next(lastValue);
 			}
 

@@ -1,5 +1,5 @@
 import { render, defaultTransformers, DataParserToTypescriptRenderError } from "@scripts/toTypescript";
-import { DPE } from "@duplojs/utils";
+import { DP, DPE } from "@duplojs/utils";
 
 describe("tuple", () => {
 	it("with and without rest", () => {
@@ -28,7 +28,12 @@ describe("tuple", () => {
 
 	it("throws on unsupported inner", () => {
 		expect(() => render(
-			DPE.tuple([DPE.date()]),
+			DPE.tuple([
+				DP.dataParserKind.addTo(
+					{ definition: {} } as never,
+					null as never,
+				),
+			]),
 			{
 				identifier: "TupleError",
 				transformers: defaultTransformers,
@@ -39,7 +44,12 @@ describe("tuple", () => {
 
 	it("throws on unsupported rest", () => {
 		expect(() => render(
-			DPE.tuple([DPE.string()], { rest: DPE.date() }),
+			DPE.tuple([DPE.string()], {
+				rest: DP.dataParserKind.addTo(
+					{ definition: {} } as never,
+					null as never,
+				),
+			}),
 			{
 				identifier: "TupleRestError",
 				transformers: defaultTransformers,

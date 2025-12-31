@@ -24,6 +24,6 @@ describe("override", () => {
 
 		const newSchemaWithoutIdentifier = newSchema.addChecker(DP.checkerRefine(justReturn(true)));
 
-		expect(newSchemaWithoutIdentifier.definition.identifier).toBe(undefined);
+		expect(newSchemaWithoutIdentifier.definition.identifier).toBe("test");
 	});
 });

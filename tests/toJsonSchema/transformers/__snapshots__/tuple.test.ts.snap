@@ -1,45 +1,45 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`tuple > fixed items 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/TupleSchema",
-    "definitions": {
-        "TupleSchema": {
-            "type": "array",
-            "items": [
-                {
-                    "type": "string"
-                },
-                {
-                    "type": "number"
-                }
-            ],
-            "minItems": 2,
-            "additionalItems": false,
-            "maxItems": 2
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/TupleSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TupleSchema": {
+      "additionalItems": false,
+      "items": [
+        {
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+    },
+  },
+}
 `;
 
 exports[`tuple > with rest 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/TupleSchema",
-    "definitions": {
-        "TupleSchema": {
-            "type": "array",
-            "items": [
-                {
-                    "type": "string"
-                }
-            ],
-            "minItems": 1,
-            "additionalItems": {
-                "type": "number"
-            }
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/TupleSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TupleSchema": {
+      "additionalItems": {
+        "type": "number",
+      },
+      "items": [
+        {
+          "type": "string",
+        },
+      ],
+      "minItems": 1,
+      "type": "array",
+    },
+  },
+}
 `;

@@ -26,11 +26,10 @@ dataParserInit.overrideHandler.setMethod(
 
 dataParserInit.overrideHandler.setMethod(
 	"addIdentifier",
-	(schema, identifier) => ({
-		...schema,
-		definition: {
+	(schema, identifier) => schema.construct(
+		{
 			...schema.definition,
 			identifier,
-		},
-	}),
+		} as never,
+	),
 );

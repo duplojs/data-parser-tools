@@ -1,32 +1,32 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bigint > basic 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/BigintSchema",
-    "definitions": {
-        "BigintSchema": {
-            "type": "integer"
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/BigintSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BigintSchema": {
+      "type": "integer",
+    },
+  },
+}
 `;
 
 exports[`bigint > coerce on input 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/BigintSchema",
-    "definitions": {
-        "BigintSchema": {
-            "anyOf": [
-                {
-                    "type": "integer"
-                },
-                {
-                    "type": "string"
-                }
-            ]
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/BigintSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BigintSchema": {
+      "anyOf": [
+        {
+          "type": "integer",
+        },
+        {
+          "type": "string",
+        },
+      ],
+    },
+  },
+}
 `;

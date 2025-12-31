@@ -1,4 +1,4 @@
-import { DP } from "@duplojs/utils";
+import { DP, D } from "@duplojs/utils";
 import { createTransformer } from "../create";
 
 export interface JsonSchemaDate {
@@ -6,8 +6,6 @@ export interface JsonSchemaDate {
 	pattern?: string;
 	format?: "date" | "date-time" | "string" | "number";
 }
-
-const theDatePattern = "^date\\d{1,16}[+-]$";
 
 export const dateTransformer = createTransformer(
 	DP.dateKind.has,
@@ -20,7 +18,7 @@ export const dateTransformer = createTransformer(
 	) => {
 		const base = {
 			type: "string",
-			pattern: theDatePattern,
+			pattern: D.theDateRegex.source,
 			format: "date-time",
 		};
 

@@ -124,13 +124,9 @@ export function render(schema: DP.DataParsers, params: RenderParams) {
 
 	const definitionKey = getDefinitionKey(version);
 
-	return JSON.stringify(
-		{
-			$schema: version,
-			...buildRef(params.identifier, version),
-			[definitionKey]: definitionsWithIdentifier,
-		},
-		null,
-		4,
-	);
+	return {
+		$schema: version,
+		...buildRef(params.identifier, version),
+		[definitionKey]: definitionsWithIdentifier,
+	};
 }

@@ -1,9 +1,14 @@
-import { A, DP, equal, innerPipe, isType, P, pipe } from "@duplojs/utils";
+import { A, DP, isType, P, pipe } from "@duplojs/utils";
 import { createTransformer, type JsonSchema } from "../create";
 
 export interface JsonSchemaLiteral {
 	const?: string | number | boolean | null;
 	type?: "string" | "number" | "integer" | "boolean" | "null";
+}
+
+interface ReduceResult {
+	literals: JsonSchema[];
+	canBeUndefined: boolean;
 }
 
 export const literalTransformer = createTransformer(
@@ -16,10 +21,7 @@ export const literalTransformer = createTransformer(
 	) => {
 		const reduced = A.reduce(
 			schema.definition.value,
-			A.reduceFrom<{
-				literals: JsonSchema[];
-				canBeUndefined: boolean;
-			}>({
+			A.reduceFrom<ReduceResult>({
 				literals: [],
 				canBeUndefined: false,
 			}),
@@ -117,15 +119,12 @@ export const literalTransformer = createTransformer(
 		const schemaDefinition = pipe(
 			reduced.literals,
 			P.when(
-				(value) => equal(A.length(value), 0),
+				A.lengthEqual(0),
 				() => ({}),
 			),
 			P.when(
-				(value) => equal(A.length(value), 1),
-				innerPipe(
-					A.first,
-					(value) => value!,
-				),
+				A.lengthEqual(1),
+				A.first,
 			),
 			P.otherwise((value) => ({ anyOf: value })),
 		);

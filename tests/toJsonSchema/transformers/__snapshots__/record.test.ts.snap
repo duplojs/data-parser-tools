@@ -1,52 +1,52 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`record > with requireKey enforces exact keys 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/RecordSchema",
-    "definitions": {
-        "RecordSchema": {
-            "type": "object",
-            "properties": {
-                "a": {
-                    "type": "number"
-                },
-                "b": {
-                    "type": "number"
-                }
-            },
-            "required": [
-                "a",
-                "b"
-            ],
-            "additionalProperties": false,
-            "propertyNames": {
-                "enum": [
-                    "a",
-                    "b"
-                ]
-            },
-            "minProperties": 2,
-            "maxProperties": 2
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/RecordSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecordSchema": {
+      "additionalProperties": false,
+      "maxProperties": 2,
+      "minProperties": 2,
+      "properties": {
+        "a": {
+          "type": "number",
+        },
+        "b": {
+          "type": "number",
+        },
+      },
+      "propertyNames": {
+        "enum": [
+          "a",
+          "b",
+        ],
+      },
+      "required": [
+        "a",
+        "b",
+      ],
+      "type": "object",
+    },
+  },
+}
 `;
 
 exports[`record > without requireKey keeps propertyNames/additionalProperties 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/RecordSchema",
-    "definitions": {
-        "RecordSchema": {
-            "type": "object",
-            "propertyNames": {
-                "type": "string"
-            },
-            "additionalProperties": {
-                "type": "number"
-            }
-        }
-    }
-}"
+{
+  "$ref": "#/definitions/RecordSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecordSchema": {
+      "additionalProperties": {
+        "type": "number",
+      },
+      "propertyNames": {
+        "type": "string",
+      },
+      "type": "object",
+    },
+  },
+}
 `;

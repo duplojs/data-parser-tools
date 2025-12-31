@@ -1,5 +1,5 @@
 import { render, defaultTransformers } from "@scripts/toTypescript";
-import { DPE } from "@duplojs/utils";
+import { DP, DPE } from "@duplojs/utils";
 
 describe("nullable", () => {
 	it("mode in and out", () => {
@@ -30,7 +30,10 @@ describe("nullable", () => {
 
 	it("throws when inner transformer fails", () => {
 		expect(() => render(
-			DPE.nullable(DPE.date()),
+			DPE.nullable(DP.dataParserKind.addTo(
+				{ definition: {} } as never,
+				null as never,
+			)),
 			{
 				identifier: "NullableError",
 				transformers: defaultTransformers,

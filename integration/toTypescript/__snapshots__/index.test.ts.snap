@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`integration 1`] = `
+"export type UserProfile = {
+    id: \`user-\${number}-db1\`;
+    name: string;
+    email: string;
+    role: "admin" | "editor" | "viewer";
+    age: number;
+    contact: {
+        phone: string;
+    } | {
+        email: string;
+    };
+    address: {
+        street: string;
+        city: string;
+        zip: string;
+        country: "FR";
+    };
+    roles: ("admin" | "editor" | "viewer")[];
+    preferences: {
+        theme: "light" | "dark";
+        newsletter: boolean;
+    };
+    metadata: Record<string, string>;
+    location: [
+        number,
+        number,
+        number
+    ];
+    createdAt: \`date\${number}\${"-" | "+"}\`;
+};"
+`;

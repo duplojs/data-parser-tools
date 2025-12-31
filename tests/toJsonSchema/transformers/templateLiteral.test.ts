@@ -18,7 +18,7 @@ describe("templateLiteral", () => {
 	it("covers bigint null and undefined segments", () => {
 		expect(
 			render(
-				DPE.templateLiteral([10n, "-", null, "-", undefined, "-", true]),
+				DPE.templateLiteral([10n, "-", null, "-", undefined, "-", DPE.boolean()]),
 				{
 					identifier: "TemplateSchemaExtended",
 					transformers: defaultTransformers,

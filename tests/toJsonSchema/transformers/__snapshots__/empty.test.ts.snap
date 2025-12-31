@@ -1,21 +1,21 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`empty > coerce on input 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/EmptySchema",
-    "definitions": {
-        "EmptySchema": {}
-    }
-}"
+{
+  "$ref": "#/definitions/EmptySchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "EmptySchema": {},
+  },
+}
 `;
 
 exports[`empty > out mode 1`] = `
-"{
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/EmptySchema",
-    "definitions": {
-        "EmptySchema": {}
-    }
-}"
+{
+  "$ref": "#/definitions/EmptySchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "EmptySchema": {},
+  },
+}
 `;

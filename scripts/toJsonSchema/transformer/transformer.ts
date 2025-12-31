@@ -7,6 +7,7 @@ import {
 	type TransformerMode,
 	type SupportedVersionsUrl,
 	type JsonSchema,
+	type DataParserErrorEither,
 } from "./create";
 import { type TransformerHook } from "./hook";
 
@@ -112,7 +113,7 @@ export function transformer(
 
 	const result = A.reduce(
 		params.transformers,
-		A.reduceFrom<DataParserNotSupportedEither>(
+		A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
 			E.left("dataParserNotSupport", currentSchema),
 		),
 		({
@@ -124,6 +125,10 @@ export function transformer(
 			const result = functionBuilder(currentSchema, functionParams);
 
 			if (E.isLeft(result)) {
+				if (unwrap(result) !== currentSchema) {
+					return exit(result);
+				}
+
 				return next(lastValue);
 			}
 

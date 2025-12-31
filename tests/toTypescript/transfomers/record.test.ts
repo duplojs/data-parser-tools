@@ -28,7 +28,7 @@ describe("record", () => {
 
 	it("throws when key type unsupported", () => {
 		expect(() => render(
-			DPE.record(DPE.date() as never, DPE.string()),
+			DPE.record({ definition: {} } as never, DPE.string()),
 			{
 				identifier: "RecordError",
 				transformers: defaultTransformers,
@@ -39,7 +39,7 @@ describe("record", () => {
 
 	it("throws when value type unsupported", () => {
 		expect(() => render(
-			DPE.record(DPE.string(), DPE.date()),
+			DPE.record(DPE.string(), { definition: {} } as never),
 			{
 				identifier: "RecordValueError",
 				transformers: defaultTransformers,

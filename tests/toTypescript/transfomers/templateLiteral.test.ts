@@ -1,5 +1,5 @@
 import { render, defaultTransformers, DataParserToTypescriptRenderError, templateLiteralTransformer } from "@scripts/toTypescript";
-import { DPE, E } from "@duplojs/utils";
+import { DP, DPE, E } from "@duplojs/utils";
 import { factory, SyntaxKind } from "typescript";
 
 describe("templateLiteral", () => {
@@ -62,7 +62,12 @@ describe("templateLiteral", () => {
 
 	it("throws on unsupported member", () => {
 		expect(() => render(
-			DPE.templateLiteral([DPE.date() as never]),
+			DPE.templateLiteral([
+				DP.dataParserKind.addTo(
+					{ definition: {} } as never,
+					null as never,
+				),
+			]),
 			{
 				identifier: "TemplateError",
 				transformers: defaultTransformers,
