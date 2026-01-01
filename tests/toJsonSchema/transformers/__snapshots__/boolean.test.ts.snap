@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`boolean > basic 1`] = `
+{
+  "$ref": "#/definitions/BooleanSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BooleanSchema": {
+      "type": "boolean",
+    },
+  },
+}
+`;
+
+exports[`boolean > coerce on input 1`] = `
+{
+  "$ref": "#/definitions/BooleanSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BooleanSchema": {
+      "anyOf": [
+        {
+          "type": "boolean",
+        },
+        {
+          "enum": [
+            "true",
+            "false",
+            "0",
+            "1",
+          ],
+          "type": "string",
+        },
+        {
+          "enum": [
+            0,
+            1,
+          ],
+          "type": "number",
+        },
+      ],
+    },
+  },
+}
+`;

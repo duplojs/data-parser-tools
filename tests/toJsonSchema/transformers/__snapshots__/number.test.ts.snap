@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`number > coerce on input 1`] = `
+{
+  "$ref": "#/definitions/NumberSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NumberSchema": {
+      "anyOf": [
+        {
+          "minimum": 1,
+          "type": "number",
+        },
+        {
+          "type": "string",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`number > ignores unknown checker 1`] = `
+{
+  "$ref": "#/definitions/NumberSchemaUnknown",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NumberSchemaUnknown": {
+      "type": "number",
+    },
+  },
+}
+`;
+
+exports[`number > supports int and bounds 1`] = `
+{
+  "$ref": "#/definitions/NumberSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NumberSchema": {
+      "maximum": 10,
+      "type": "integer",
+    },
+  },
+}
+`;

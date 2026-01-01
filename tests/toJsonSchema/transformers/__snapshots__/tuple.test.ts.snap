@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tuple > fixed items 1`] = `
+{
+  "$ref": "#/definitions/TupleSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TupleSchema": {
+      "additionalItems": false,
+      "items": [
+        {
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+    },
+  },
+}
+`;
+
+exports[`tuple > with rest 1`] = `
+{
+  "$ref": "#/definitions/TupleSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TupleSchema": {
+      "additionalItems": {
+        "type": "number",
+      },
+      "items": [
+        {
+          "type": "string",
+        },
+      ],
+      "minItems": 1,
+      "type": "array",
+    },
+  },
+}
+`;

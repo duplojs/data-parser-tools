@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`string > applies string checkers 1`] = `
+{
+  "$ref": "#/definitions/StringSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "StringSchema": {
+      "minLength": 2,
+      "pattern": "^[a-z]+$",
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`string > coerce on input 1`] = `
+{
+  "$ref": "#/definitions/StringSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "StringSchema": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "null",
+      ],
+    },
+  },
+}
+`;
+
+exports[`string > handles email and ignores unknown checker 1`] = `
+{
+  "$ref": "#/definitions/StringEmailSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "StringEmailSchema": {
+      "format": "email",
+      "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9-]*\\.)+[A-Za-z]{2,}$",
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`string > handles url and max 1`] = `
+{
+  "$ref": "#/definitions/StringUrlSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "StringUrlSchema": {
+      "format": "uri",
+      "maxLength": 10,
+      "type": "string",
+    },
+  },
+}
+`;

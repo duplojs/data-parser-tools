@@ -1,0 +1,44 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`date > allows coercion on input 1`] = `
+{
+  "$ref": "#/definitions/DateSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "DateSchema": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+        {
+          "format": "date",
+          "type": "string",
+        },
+        {
+          "format": "date-time",
+          "type": "string",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`date > renders out mode pattern 1`] = `
+{
+  "$ref": "#/definitions/DateSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "DateSchema": {
+      "format": "date-time",
+      "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+      "type": "string",
+    },
+  },
+}
+`;

@@ -1,0 +1,204 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`recursive > with array 1`] = `
+{
+  "$ref": "#/definitions/RecursiveTuple",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveTuple": {
+      "$ref": "#/definitions/RecursiveType0",
+    },
+    "RecursiveType0": {
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "$ref": "#/definitions/RecursiveType0",
+          },
+        ],
+      },
+      "type": "array",
+    },
+  },
+}
+`;
+
+exports[`recursive > with complex recursive schema 1`] = `
+{
+  "$ref": "#/definitions/RecursiveObject",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveObject": {
+      "$ref": "#/definitions/RecursiveType0",
+    },
+    "RecursiveType0": {
+      "properties": {
+        "array": {
+          "$ref": "#/definitions/RecursiveType2",
+        },
+        "recursiveProp": {
+          "properties": {
+            "test": {
+              "$ref": "#/definitions/RecursiveType0",
+            },
+          },
+          "required": [
+            "test",
+          ],
+          "type": "object",
+        },
+        "tuple": {
+          "$ref": "#/definitions/RecursiveType1",
+        },
+      },
+      "required": [
+        "recursiveProp",
+        "tuple",
+        "array",
+      ],
+      "type": "object",
+    },
+    "RecursiveType1": {
+      "additionalItems": false,
+      "items": [
+        {
+          "type": "string",
+        },
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/RecursiveType1",
+              },
+              {
+                "type": "string",
+              },
+            ],
+          },
+          "type": "array",
+        },
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+    },
+    "RecursiveType2": {
+      "items": {
+        "anyOf": [
+          {
+            "type": "string",
+          },
+          {
+            "$ref": "#/definitions/RecursiveType2",
+          },
+        ],
+      },
+      "type": "array",
+    },
+  },
+}
+`;
+
+exports[`recursive > with conflict identified object schema 1`] = `
+{
+  "$ref": "#/definitions/RecursiveObject",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveObject": {
+      "$ref": "#/definitions/Test",
+    },
+    "Test": {
+      "properties": {
+        "recursiveProp": {
+          "$ref": "#/definitions/Test",
+        },
+      },
+      "required": [
+        "recursiveProp",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`recursive > with identified objet schema  1`] = `
+{
+  "$ref": "#/definitions/RecursiveObject",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveObject": {
+      "properties": {
+        "recursiveProp": {
+          "$ref": "#/definitions/RecursiveObject",
+        },
+      },
+      "required": [
+        "recursiveProp",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`recursive > with tuple 1`] = `
+{
+  "$ref": "#/definitions/RecursiveTuple",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveTuple": {
+      "$ref": "#/definitions/RecursiveType0",
+    },
+    "RecursiveType0": {
+      "additionalItems": false,
+      "items": [
+        {
+          "type": "string",
+        },
+        {
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/RecursiveType0",
+              },
+              {
+                "type": "string",
+              },
+            ],
+          },
+          "type": "array",
+        },
+      ],
+      "maxItems": 2,
+      "minItems": 2,
+      "type": "array",
+    },
+  },
+}
+`;
+
+exports[`recursive > with unknown object schema 1`] = `
+{
+  "$ref": "#/definitions/RecursiveObject",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveObject": {
+      "$ref": "#/definitions/RecursiveType0",
+    },
+    "RecursiveType0": {
+      "properties": {
+        "recursiveProp": {
+          "$ref": "#/definitions/RecursiveType0",
+        },
+      },
+      "required": [
+        "recursiveProp",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;

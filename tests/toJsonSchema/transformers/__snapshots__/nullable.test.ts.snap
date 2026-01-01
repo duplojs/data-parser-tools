@@ -1,0 +1,32 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`nullable > in mode union with null 1`] = `
+{
+  "$ref": "#/definitions/NullableSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NullableSchema": {
+      "anyOf": [
+        {
+          "type": "string",
+        },
+        {
+          "type": "null",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`nullable > out mode keeps inner 1`] = `
+{
+  "$ref": "#/definitions/NullableSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NullableSchema": {
+      "type": "string",
+    },
+  },
+}
+`;

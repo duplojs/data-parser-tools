@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`object > drops optional properties from required list in input mode 1`] = `
+{
+  "$ref": "#/definitions/ObjectSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ObjectSchema": {
+      "properties": {
+        "nullable": {
+          "anyOf": [
+            {
+              "type": "string",
+            },
+            {
+              "type": "null",
+            },
+          ],
+        },
+        "optional": {
+          "type": "number",
+        },
+        "required": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "required",
+        "nullable",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`object > marks optional properties with undefined support 1`] = `
+{
+  "$ref": "#/definitions/ObjectSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ObjectSchema": {
+      "properties": {
+        "nullable": {
+          "type": "string",
+        },
+        "optional": {
+          "type": "number",
+        },
+        "required": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "required",
+        "optional",
+        "nullable",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`object > omits required field when every property is optional 1`] = `
+{
+  "$ref": "#/definitions/ObjectOptionalSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ObjectOptionalSchema": {
+      "properties": {
+        "foo": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+  },
+}
+`;

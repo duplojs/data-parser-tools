@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`pipe > uses input on in mode 1`] = `
+{
+  "$ref": "#/definitions/PipeSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "PipeSchema": {
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`pipe > uses output on out mode 1`] = `
+{
+  "$ref": "#/definitions/PipeSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "PipeSchema": {
+      "type": "number",
+    },
+  },
+}
+`;

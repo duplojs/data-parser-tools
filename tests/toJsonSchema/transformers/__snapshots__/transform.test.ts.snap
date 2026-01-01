@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transform > in mode uses inner 1`] = `
+{
+  "$ref": "#/definitions/TransformSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TransformSchema": {
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`transform > out mode becomes unknown 1`] = `
+{
+  "$ref": "#/definitions/TransformSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TransformSchema": {},
+  },
+}
+`;

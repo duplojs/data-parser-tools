@@ -21,6 +21,7 @@ export default defineConfig({
 			entryFileNames: "[name].cjs"
 		},
 	],
+	treeshake: false,
 	plugins: [
 		del({ targets: "dist" }),
 		typescript({ tsconfig: "tsconfig.build.json" }),

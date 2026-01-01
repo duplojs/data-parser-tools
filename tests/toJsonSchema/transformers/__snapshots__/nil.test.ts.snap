@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`nil > renders null type 1`] = `
+{
+  "$ref": "#/definitions/NilSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "NilSchema": {
+      "type": "null",
+    },
+  },
+}
+`;
