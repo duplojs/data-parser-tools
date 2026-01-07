@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`time > allows coercion on input 1`] = `
+{
+  "$ref": "#/definitions/TimeSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TimeSchema": {
+      "anyOf": [
+        {
+          "pattern": "^time-?(?<value>\\d{1,16})(?<sign>[+-])$",
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+        {
+          "format": "time",
+          "type": "string",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`time > renders out mode pattern 1`] = `
+{
+  "$ref": "#/definitions/TimeSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "TimeSchema": {
+      "pattern": "^time-?(?<value>\\d{1,16})(?<sign>[+-])$",
+      "type": "string",
+    },
+  },
+}
+`;

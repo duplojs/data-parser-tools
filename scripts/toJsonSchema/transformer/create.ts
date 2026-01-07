@@ -16,6 +16,7 @@ import type {
 	JsonSchemaTuple,
 	JsonSchemaUnion,
 	JsonSchemaUnknown,
+	JsonSchemaTime,
 } from "./defaults";
 
 export interface JsonSchemaRef {
@@ -44,7 +45,8 @@ export type JsonSchema =
 	| JsonSchemaTemplateLiteral
 	| JsonSchemaTuple
 	| JsonSchemaUnion
-	| JsonSchemaUnknown;
+	| JsonSchemaUnknown
+	| JsonSchemaTime;
 
 export interface TransformerSuccess {
 	readonly schema: JsonSchema;

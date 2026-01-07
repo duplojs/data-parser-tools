@@ -9,7 +9,7 @@ exports[`date > allows coercion on input 1`] = `
       "anyOf": [
         {
           "format": "date-time",
-          "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+          "pattern": "^date-?(?<value>\\d{1,16})(?<sign>[+-])$",
           "type": "string",
         },
         {
@@ -36,7 +36,7 @@ exports[`date > renders out mode pattern 1`] = `
   "definitions": {
     "DateSchema": {
       "format": "date-time",
-      "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+      "pattern": "^date-?(?<value>\\d{1,16})(?<sign>[+-])$",
       "type": "string",
     },
   },

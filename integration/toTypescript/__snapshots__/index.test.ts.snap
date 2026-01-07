@@ -30,5 +30,6 @@ exports[`integration 1`] = `
         number
     ];
     createdAt: \`date\${number}\${"-" | "+"}\`;
+    startAt: \`time\${number}\${"-" | "+"}\`;
 };"
 `;

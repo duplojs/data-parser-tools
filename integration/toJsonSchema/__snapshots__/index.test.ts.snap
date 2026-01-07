@@ -76,7 +76,7 @@ exports[`integration 1`] = `
           "anyOf": [
             {
               "format": "date-time",
-              "pattern": "^date(?<value>\\d{1,16})(?<sign>[+-])$",
+              "pattern": "^date-?(?<value>\\d{1,16})(?<sign>[+-])$",
               "type": "string",
             },
             {
@@ -196,6 +196,10 @@ exports[`integration 1`] = `
           "minItems": 1,
           "type": "array",
         },
+        "startAt": {
+          "pattern": "^time-?(?<value>\\d{1,16})(?<sign>[+-])$",
+          "type": "string",
+        },
       },
       "required": [
         "id",
@@ -209,6 +213,7 @@ exports[`integration 1`] = `
         "metadata",
         "location",
         "createdAt",
+        "startAt",
       ],
       "type": "object",
     },

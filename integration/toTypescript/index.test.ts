@@ -30,6 +30,7 @@ it("integration", () => {
 		metadata: DPE.record(DPE.string(), DPE.string(), { requireKey: null }),
 		location: DPE.tuple([DPE.number(), DPE.number()], { rest: DPE.number() }),
 		createdAt: DPE.date({ coerce: true }),
+		startAt: DPE.time(),
 	}).addIdentifier("UserProfile");
 
 	const result = render(

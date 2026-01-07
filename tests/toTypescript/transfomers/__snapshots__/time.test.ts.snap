@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`time > string array 1`] = `"export type Time = \`time\${number}\${"-" | "+"}\`;"`;
+
+exports[`time > string array 2`] = `"export type TimeIdentifier = \`time\${number}\${"-" | "+"}\`;"`;
