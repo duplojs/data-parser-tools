@@ -1,5 +1,45 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`recursive > when using an schema two time but non recursive 1`] = `
+{
+  "$ref": "#/definitions/noneRecursive",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "noneRecursive": {
+      "properties": {
+        "one": {
+          "properties": {
+            "prop": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "prop",
+          ],
+          "type": "object",
+        },
+        "two": {
+          "properties": {
+            "prop": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "prop",
+          ],
+          "type": "object",
+        },
+      },
+      "required": [
+        "one",
+        "two",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
 exports[`recursive > with array 1`] = `
 {
   "$ref": "#/definitions/RecursiveTuple",
@@ -175,6 +215,34 @@ exports[`recursive > with tuple 1`] = `
       "maxItems": 2,
       "minItems": 2,
       "type": "array",
+    },
+  },
+}
+`;
+
+exports[`recursive > with union 1`] = `
+{
+  "$ref": "#/definitions/RecursiveUnion",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecursiveType0": {
+      "anyOf": [
+        {
+          "type": "string",
+        },
+        {
+          "type": "number",
+        },
+        {
+          "items": {
+            "$ref": "#/definitions/RecursiveType0",
+          },
+          "type": "array",
+        },
+      ],
+    },
+    "RecursiveUnion": {
+      "$ref": "#/definitions/RecursiveType0",
     },
   },
 }

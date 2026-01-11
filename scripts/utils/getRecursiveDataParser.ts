@@ -1,4 +1,4 @@
-import { DP, A, G, pipe, P, O } from "@duplojs/utils";
+import { DP, A, G, pipe, P, O, hasSomeKinds } from "@duplojs/utils";
 
 export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] {
 	const countMap = new Map<DP.DataParser, number>();
@@ -6,29 +6,29 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 	void (function countDataParser(schema: DP.DataParsers) {
 		P.match(schema)
 			.when(
-				(value) => (
-					DP.stringKind.has(value)
-					|| DP.stringKind.has(value)
-					|| DP.numberKind.has(value)
-					|| DP.nilKind.has(value)
-					|| DP.dateKind.has(value)
-					|| DP.emptyKind.has(value)
-					|| DP.bigIntKind.has(value)
-					|| DP.booleanKind.has(value)
-					|| DP.literalKind.has(value)
-					|| DP.unknownKind.has(value)
-					|| DP.templateLiteralKind.has(value)
-					|| DP.recordKind.has(value)
-				),
+				hasSomeKinds([
+					DP.stringKind,
+					DP.stringKind,
+					DP.numberKind,
+					DP.nilKind,
+					DP.dateKind,
+					DP.emptyKind,
+					DP.bigIntKind,
+					DP.booleanKind,
+					DP.literalKind,
+					DP.unknownKind,
+					DP.templateLiteralKind,
+					DP.recordKind,
+				]),
 				() => void 0,
 			)
 			.when(
-				(value) => (
-					DP.nullableKind.has(value)
-					|| DP.optionalKind.has(value)
-					|| DP.recoverKind.has(value)
-					|| DP.transformKind.has(value)
-				),
+				hasSomeKinds([
+					DP.nullableKind,
+					DP.optionalKind,
+					DP.recoverKind,
+					DP.transformKind,
+				]),
 				(dataParser) => void countDataParser(dataParser.definition.inner),
 			)
 			.when(
@@ -44,10 +44,27 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 			)
 			.when(
 				DP.unionKind.has,
-				(dataParser) => A.map(
-					dataParser.definition.options,
-					countDataParser,
-				),
+				(dataParser) => {
+					const count = (countMap.get(dataParser) ?? 0) + 1;
+
+					countMap.set(
+						dataParser,
+						count,
+					);
+
+					if (count > 1) {
+						return;
+					}
+
+					A.map(
+						dataParser.definition.options,
+						countDataParser,
+					);
+
+					if (countMap.get(dataParser) === 1) {
+						countMap.delete(dataParser);
+					}
+				},
 			)
 			.when(
 				DP.arrayKind.has,
@@ -64,6 +81,10 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 					}
 
 					countDataParser(dataParser.definition.element);
+
+					if (countMap.get(dataParser) === 1) {
+						countMap.delete(dataParser);
+					}
 				},
 			)
 			.when(
@@ -85,6 +106,10 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 						O.entries,
 						A.map(([, value]) => void countDataParser(value)),
 					);
+
+					if (countMap.get(dataParser) === 1) {
+						countMap.delete(dataParser);
+					}
 				},
 			)
 			.when(
@@ -105,6 +130,10 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 						dataParser.definition.shape,
 						countDataParser,
 					);
+
+					if (countMap.get(dataParser) === 1) {
+						countMap.delete(dataParser);
+					}
 				},
 			)
 			.when(DP.dataParserKind.has, () => void 0)

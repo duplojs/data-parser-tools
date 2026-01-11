@@ -155,4 +155,49 @@ describe("recursive", () => {
 			),
 		).toMatchSnapshot();
 	});
+
+	it("with union", () => {
+			type RecursiveUnion = string | number | RecursiveUnion[];
+
+			const schema: DPE.Contract<RecursiveUnion> = DPE.union([
+				DPE.string(),
+				DPE.number(),
+				DPE.lazy(() => schema).array(),
+			]);
+
+			expect(
+				render(
+					schema,
+					{
+						identifier: "RecursiveUnion",
+						transformers: defaultTransformers,
+						mode: "out",
+						version: "jsonSchema7",
+					},
+				),
+			).toMatchSnapshot();
+	});
+
+	it("when using an schema two time but non recursive", () => {
+		const innerSchema = DPE.object({
+			prop: DPE.string(),
+		});
+
+		const schema = DPE.object({
+			one: innerSchema,
+			two: innerSchema,
+		});
+
+		expect(
+			render(
+				schema,
+				{
+					identifier: "noneRecursive",
+					transformers: defaultTransformers,
+					mode: "out",
+					version: "jsonSchema7",
+				},
+			),
+		).toMatchSnapshot();
+	});
 });

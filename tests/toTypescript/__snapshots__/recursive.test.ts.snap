@@ -1,5 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`recursive > when using an schema two time but non recursive 1`] = `
+"export type noneRecursive = {
+    one: {
+        prop: string;
+    };
+    two: {
+        prop: string;
+    };
+};"
+`;
+
 exports[`recursive > with array 1`] = `
 "export type RecursiveType0 = (string | RecursiveType0)[];
 
@@ -46,6 +57,12 @@ exports[`recursive > with tuple 1`] = `
 ];
 
 export type RecursiveTuple = RecursiveType0;"
+`;
+
+exports[`recursive > with union 1`] = `
+"export type RecursiveType0 = string | number | RecursiveType0[];
+
+export type RecursiveUnion = RecursiveType0;"
 `;
 
 exports[`recursive > with unknown object schema 1`] = `
