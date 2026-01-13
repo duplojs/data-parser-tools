@@ -85,8 +85,8 @@ export const supportedVersions = {
 	openApi31: "https://spec.openapis.org/oas/3.1.0",
 } as const;
 
-export type SupportedVersions = keyof typeof supportedVersions;
-export type SupportedVersionsUrl = typeof supportedVersions[SupportedVersions];
+export type SupportedVersions = typeof supportedVersions;
+export type SupportedVersionsUrl = typeof supportedVersions[keyof SupportedVersions];
 
 export interface TransformerParams {
 	readonly mode: TransformerMode;

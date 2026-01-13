@@ -20,19 +20,22 @@ export interface TransformerFunctionParams {
 	readonly recursiveDataParsers: DP.DataParser[];
 }
 
-function buildRef(
+export function buildRef(
 	name: string,
 	version: SupportedVersionsUrl,
-): JsonSchema {
-	if (version === "https://spec.openapis.org/oas/3.0.3" || version === "https://spec.openapis.org/oas/3.1.0") {
-		return { $ref: `#/components/schemas/${name}` };
+) {
+	if (
+		version === "https://spec.openapis.org/oas/3.0.3"
+		|| version === "https://spec.openapis.org/oas/3.1.0"
+	) {
+		return `#/components/schemas/${name}`;
 	}
 
 	if (version === "https://json-schema.org/draft/2020-12/schema") {
-		return { $ref: `#/$defs/${name}` };
+		return `#/$defs/${name}`;
 	}
 
-	return { $ref: `#/definitions/${name}` };
+	return `#/definitions/${name}`;
 }
 
 export function transformer(
@@ -65,7 +68,7 @@ export function transformer(
 		return E.right(
 			"buildSuccess",
 			{
-				schema: buildRef(currentDeclaration.name, params.version),
+				schema: { $ref: buildRef(currentDeclaration.name, params.version) },
 				canBeUndefined: currentDeclaration.canBeUndefined,
 			},
 		);
@@ -153,7 +156,7 @@ export function transformer(
 		);
 
 		return functionParams.success(
-			buildRef(currentIdentifier, params.version),
+			{ $ref: buildRef(currentIdentifier, params.version) },
 			canBeUndefined,
 		);
 	}

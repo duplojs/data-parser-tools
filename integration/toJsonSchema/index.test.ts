@@ -1,5 +1,5 @@
-import { render, defaultTransformers } from "@duplojs/data-parser-tools/toJsonSchema";
-import { DPE } from "@duplojs/utils";
+import { render, defaultTransformers, type JsonSchema } from "@duplojs/data-parser-tools/toJsonSchema";
+import { DPE, type ExpectType } from "@duplojs/utils";
 
 it("integration", () => {
 	const userSchema = DPE.object({
@@ -42,6 +42,16 @@ it("integration", () => {
 			version: "jsonSchema7",
 		},
 	);
+
+	type check = ExpectType<
+		typeof result,
+		{
+			$ref: `#/$defs/${string}`;
+			$schema: "http://json-schema.org/draft-07/schema#";
+			definitions: Record<string, JsonSchema>;
+		},
+		"strict"
+	>;
 
 	expect(result).toMatchSnapshot();
 });

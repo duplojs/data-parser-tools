@@ -1,4 +1,4 @@
-import { type DP, unwrap, E, kindHeritage, equal, or, G } from "@duplojs/utils";
+import { type DP, unwrap, E, kindHeritage, G, type Or, type IsEqual } from "@duplojs/utils";
 import {
 	type DataParserErrorEither,
 	type DataParserNotSupportedEither,
@@ -7,21 +7,13 @@ import {
 	type TransformerMode,
 	type TransformerHook,
 	type createTransformer,
-	supportedVersions,
-	type SupportedVersionsUrl,
 	type SupportedVersions,
+	type JsonSchema,
+	supportedVersions,
+	buildRef,
 } from "./transformer";
 import { createToJsonSchemaKind } from "./kind";
 import { getRecursiveDataParser } from "@scripts/utils/getRecursiveDataParser";
-
-export interface RenderParams {
-	readonly identifier: string;
-	readonly transformers: readonly ReturnType<typeof createTransformer>[];
-	readonly context?: MapContext;
-	readonly mode?: TransformerMode;
-	readonly hooks?: readonly TransformerHook[];
-	readonly version: SupportedVersions;
-}
 
 export class DataParserToJsonSchemaRenderError extends kindHeritage(
 	"data-parser-to-json-schema-render-error",
@@ -36,30 +28,53 @@ export class DataParserToJsonSchemaRenderError extends kindHeritage(
 	}
 }
 
-function buildRef(
-	name: string,
-	version: SupportedVersionsUrl,
-) {
-	if (version === supportedVersions.openApi3 || version === supportedVersions.openApi31) {
-		return { $ref: `#/components/schemas/${name}` };
-	}
-
-	if (version === supportedVersions.jsonSchema202012) {
-		return { $ref: `#/$defs/${name}` };
-	}
-
-	return { $ref: `#/definitions/${name}` };
+export interface RenderParams<
+	GenericVersion extends unknown,
+> {
+	readonly identifier: string;
+	readonly transformers: readonly ReturnType<typeof createTransformer>[];
+	readonly context?: MapContext;
+	readonly mode?: TransformerMode;
+	readonly hooks?: readonly TransformerHook[];
+	readonly version: GenericVersion;
 }
 
-function getDefinitionKey(version: SupportedVersionsUrl) {
-	if (version === supportedVersions.jsonSchema202012 || version === supportedVersions.openApi31) {
-		return "$defs";
+type RenderResult<
+	GenericVersion extends keyof SupportedVersions,
+> = Or<[
+	IsEqual<GenericVersion, "openApi3">,
+	IsEqual<GenericVersion, "openApi31">,
+]> extends true
+	? {
+		$ref: `#/components/schemas/${string}`;
+		openapi: SupportedVersions[GenericVersion];
+		components: {
+			schemas: Record<string, JsonSchema>;
+		};
 	}
+	: Or<[
+		IsEqual<GenericVersion, "jsonSchema7">,
+		IsEqual<GenericVersion, "jsonSchema4">,
+	]> extends true
+		? {
+			$ref: `#/$defs/${string}`;
+			$schema: SupportedVersions[GenericVersion];
+			definitions: Record<string, JsonSchema>;
+		}
+		: IsEqual<GenericVersion, "jsonSchema202012"> extends true
+			? {
+				$ref: `#/definitions/${string}`;
+				$schema: SupportedVersions[GenericVersion];
+				$defs: Record<string, JsonSchema>;
+			}
+			: never;
 
-	return "definitions";
-}
-
-export function render(schema: DP.DataParsers, params: RenderParams) {
+export function render<
+	GenericVersion extends keyof SupportedVersions,
+>(
+	schema: DP.DataParsers,
+	params: RenderParams<GenericVersion>,
+): RenderResult<GenericVersion> {
 	const context: MapContext = new Map(params.context);
 	const version = supportedVersions[params.version];
 
@@ -86,7 +101,7 @@ export function render(schema: DP.DataParsers, params: RenderParams) {
 
 	const definitions = G.reduce(
 		context.values(),
-		G.reduceFrom<Record<string, unknown>>({}),
+		G.reduceFrom<Record<string, JsonSchema>>({}),
 		({ element, lastValue, next }) => element.schema
 			? next({
 				...lastValue,
@@ -102,31 +117,30 @@ export function render(schema: DP.DataParsers, params: RenderParams) {
 			[params.identifier]: built.schema,
 		};
 
-	if (or(
-		version,
-		[
-			equal(supportedVersions.openApi3),
-			equal(supportedVersions.openApi31),
-		],
-	)) {
-		return JSON.stringify(
-			{
-				openapi: version,
-				components: {
-					schemas: definitionsWithIdentifier,
-				},
-				...buildRef(params.identifier, version),
+	if (
+		version === supportedVersions.openApi3
+		|| version === supportedVersions.openApi31
+	) {
+		return {
+			$ref: buildRef(params.identifier, version),
+			openapi: version,
+			components: {
+				schemas: definitionsWithIdentifier,
 			},
-			null,
-			4,
-		);
+		} as never;
 	}
 
-	const definitionKey = getDefinitionKey(version);
+	if (version === supportedVersions.jsonSchema202012) {
+		return {
+			$ref: buildRef(params.identifier, version),
+			$schema: version,
+			$defs: definitionsWithIdentifier,
+		} as never;
+	}
 
 	return {
+		$ref: buildRef(params.identifier, version),
 		$schema: version,
-		...buildRef(params.identifier, version),
-		[definitionKey]: definitionsWithIdentifier,
-	};
+		definitions: definitionsWithIdentifier,
+	} as never;
 }
