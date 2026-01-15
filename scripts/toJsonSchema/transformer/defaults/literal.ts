@@ -1,14 +1,35 @@
-import { A, DP, isType, P, pipe } from "@duplojs/utils";
-import { createTransformer, type JsonSchema } from "../create";
+import { A, DP, isType, justReturn, P, pipe } from "@duplojs/utils";
+import { createTransformer, type SupportedVersionsUrl } from "../create";
 
-export interface JsonSchemaLiteral {
-	const?: string | number | boolean | null;
-	type?: "string" | "number" | "integer" | "boolean" | "null";
-}
+type JsonPrimitive = string | number | boolean | null;
+type JsonType = "string" | "number" | "integer" | "boolean" | "null";
+
+export type JsonSchemaLiteral = {
+	const: JsonPrimitive;
+	type: JsonType;
+} | {
+	enum: readonly [JsonPrimitive];
+	type: JsonType;
+} | {
+	enum: readonly [null];
+};
 
 interface ReduceResult {
-	literals: JsonSchema[];
+	literals: JsonSchemaLiteral[];
 	canBeUndefined: boolean;
+}
+
+type OldVersions =
+	| "http://json-schema.org/draft-04/schema#"
+	| "https://spec.openapis.org/oas/3.0.3";
+
+function isOldVersion(
+	version: SupportedVersionsUrl,
+): version is OldVersions {
+	return (
+		version === "http://json-schema.org/draft-04/schema#"
+		|| version === "https://spec.openapis.org/oas/3.0.3"
+	);
 }
 
 export const literalTransformer = createTransformer(
@@ -17,6 +38,7 @@ export const literalTransformer = createTransformer(
 		schema,
 		{
 			success,
+			version,
 		},
 	) => {
 		const reduced = A.reduce(
@@ -45,10 +67,16 @@ export const literalTransformer = createTransformer(
 						{
 							literals: A.push(
 								lastValue.literals,
-								{
-									const: value.toString(),
-									type: "string",
-								},
+								isOldVersion(version)
+									? {
+										enum: [value.toString()],
+										type: "string",
+									}
+									: {
+										const: value.toString(),
+										type: "string",
+									},
+
 							),
 						},
 					),
@@ -60,10 +88,15 @@ export const literalTransformer = createTransformer(
 						{
 							literals: A.push(
 								lastValue.literals,
-								{
-									const: value,
-									type: "string",
-								},
+								isOldVersion(version)
+									? {
+										enum: [value],
+										type: "string",
+									}
+									: {
+										const: value,
+										type: "string",
+									},
 							),
 						},
 					),
@@ -75,10 +108,19 @@ export const literalTransformer = createTransformer(
 						{
 							literals: A.push(
 								lastValue.literals,
-								{
-									const: value,
-									type: Number.isInteger(value) ? "integer" : "number",
-								},
+								isOldVersion(version)
+									? {
+										enum: [value],
+										type: Number.isInteger(value)
+											? "integer"
+											: "number",
+									}
+									: {
+										const: value,
+										type: Number.isInteger(value)
+											? "integer"
+											: "number",
+									},
 							),
 						},
 					),
@@ -90,10 +132,15 @@ export const literalTransformer = createTransformer(
 						{
 							literals: A.push(
 								lastValue.literals,
-								{
-									const: value,
-									type: "boolean",
-								},
+								isOldVersion(version)
+									? {
+										enum: [value],
+										type: "boolean",
+									}
+									: {
+										const: value,
+										type: "boolean",
+									},
 							),
 						},
 					),
@@ -105,10 +152,24 @@ export const literalTransformer = createTransformer(
 						{
 							literals: A.push(
 								lastValue.literals,
-								{
-									const: null,
-									type: "null",
-								},
+								P.match(version)
+									.with(
+										"https://spec.openapis.org/oas/3.0.3",
+										justReturn(<const>{
+											enum: [null],
+										}),
+									)
+									.with(
+										"http://json-schema.org/draft-04/schema#",
+										justReturn(<const>{
+											type: "null",
+											enum: [null],
+										}),
+									)
+									.otherwise(justReturn({
+										type: "null",
+										const: null,
+									})),
 							),
 						},
 					),

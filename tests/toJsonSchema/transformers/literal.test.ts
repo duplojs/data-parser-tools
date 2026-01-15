@@ -3,9 +3,10 @@ import { DP, DPE } from "@duplojs/utils";
 
 describe("literal", () => {
 	it("single literal uses const", () => {
+		const schema = DPE.literal("value");
 		expect(
 			render(
-				DPE.literal("value"),
+				schema,
 				{
 					identifier: "LiteralSchema",
 					transformers: defaultTransformers,
@@ -13,16 +14,47 @@ describe("literal", () => {
 				},
 			),
 		).toMatchSnapshot();
+		expect(
+			render(
+				schema,
+				{
+					identifier: "LiteralSchema",
+					transformers: defaultTransformers,
+					version: "jsonSchema4",
+				},
+			),
+		).toMatchSnapshot();
 	});
 
 	it("array of literals builds anyOf and handles undefined", () => {
+		const schema = DPE.literal(["a", 2, 2.5, true, null, 10n, undefined]);
 		expect(
 			render(
-				DPE.literal(["a", 2, 2.5, true, null, 10n, undefined]),
+				schema,
 				{
 					identifier: "LiteralSchema",
 					transformers: defaultTransformers,
 					version: "jsonSchema7",
+				},
+			),
+		).toMatchSnapshot();
+		expect(
+			render(
+				schema,
+				{
+					identifier: "LiteralSchema",
+					transformers: defaultTransformers,
+					version: "jsonSchema4",
+				},
+			),
+		).toMatchSnapshot();
+		expect(
+			render(
+				schema,
+				{
+					identifier: "LiteralSchema",
+					transformers: defaultTransformers,
+					version: "openApi3",
 				},
 			),
 		).toMatchSnapshot();

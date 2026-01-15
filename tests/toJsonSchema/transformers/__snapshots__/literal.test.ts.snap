@@ -37,6 +37,105 @@ exports[`literal > array of literals builds anyOf and handles undefined 1`] = `
 }
 `;
 
+exports[`literal > array of literals builds anyOf and handles undefined 2`] = `
+{
+  "$ref": "#/definitions/LiteralSchema",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "LiteralSchema": {
+      "anyOf": [
+        {
+          "enum": [
+            "a",
+          ],
+          "type": "string",
+        },
+        {
+          "enum": [
+            2,
+          ],
+          "type": "integer",
+        },
+        {
+          "enum": [
+            2.5,
+          ],
+          "type": "number",
+        },
+        {
+          "enum": [
+            true,
+          ],
+          "type": "boolean",
+        },
+        {
+          "enum": [
+            null,
+          ],
+          "type": "null",
+        },
+        {
+          "enum": [
+            "10",
+          ],
+          "type": "string",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`literal > array of literals builds anyOf and handles undefined 3`] = `
+{
+  "$ref": "#/components/schemas/LiteralSchema",
+  "components": {
+    "schemas": {
+      "LiteralSchema": {
+        "anyOf": [
+          {
+            "enum": [
+              "a",
+            ],
+            "type": "string",
+          },
+          {
+            "enum": [
+              2,
+            ],
+            "type": "integer",
+          },
+          {
+            "enum": [
+              2.5,
+            ],
+            "type": "number",
+          },
+          {
+            "enum": [
+              true,
+            ],
+            "type": "boolean",
+          },
+          {
+            "enum": [
+              null,
+            ],
+          },
+          {
+            "enum": [
+              "10",
+            ],
+            "type": "string",
+          },
+        ],
+      },
+    },
+  },
+  "openapi": "https://spec.openapis.org/oas/3.0.3",
+}
+`;
+
 exports[`literal > handles only-undefined literal 1`] = `
 {
   "$ref": "#/definitions/LiteralSchemaOnlyUndefined",
@@ -64,6 +163,21 @@ exports[`literal > single literal uses const 1`] = `
   "definitions": {
     "LiteralSchema": {
       "const": "value",
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`literal > single literal uses const 2`] = `
+{
+  "$ref": "#/definitions/LiteralSchema",
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "definitions": {
+    "LiteralSchema": {
+      "enum": [
+        "value",
+      ],
       "type": "string",
     },
   },
