@@ -24,22 +24,32 @@ export const nullableTransformer = createTransformer(
 		const inner = unwrap(innerResult);
 
 		return pipe(
-			mode,
-			P.match(
-				"in",
-				() => ({
-					anyOf: [
-						inner.schema,
-						{ type: "null" },
-					],
-				}),
-			),
-			P.match(
-				"out",
-				() => inner.schema,
-			),
-			P.exhaustive,
-			(schema) => success(schema, inner.canBeUndefined),
+			{
+				mode,
+				coalescingValue: schema.definition.coalescingValue,
+			},
+			(value) => P.match(value)
+				.with(
+					P.union(
+						{ mode: "in" },
+						{
+							mode: "out",
+							coalescingValue: undefined,
+						},
+					),
+					() => ({
+						anyOf: [
+							inner.schema,
+							{ type: "null" },
+						],
+					}),
+				)
+				.with(
+					{ mode: "out" },
+					() => inner.schema,
+				)
+				.exhaustive(),
+			(schema) => success(schema, inner.isOptional),
 		);
 	},
 );

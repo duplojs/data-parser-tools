@@ -12,7 +12,7 @@ exports[`optional > in mode marks undefined 1`] = `
 }
 `;
 
-exports[`optional > out mode keeps required inner when canBeUndefined false 1`] = `
+exports[`optional > out mode keeps required inner when isOptional false 1`] = `
 {
   "$ref": "#/definitions/OptionalSchema",
   "$schema": "http://json-schema.org/draft-07/schema#",

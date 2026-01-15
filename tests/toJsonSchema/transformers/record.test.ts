@@ -5,6 +5,7 @@ import {
 	type TransformerParams,
 } from "@scripts/toJsonSchema/transformer/create";
 import { DP, DPE, E } from "@duplojs/utils";
+import { isOptionalEmpty } from "@duplojs/utils/either";
 
 function buildTransformerParams(
 	schema: DP.DataParser,
@@ -15,10 +16,10 @@ function buildTransformerParams(
 		context: new Map(),
 		version: supportedVersions.jsonSchema7,
 		transformer,
-		success(result, canBeUndefined = false) {
+		success(result, isOptional = false) {
 			return E.right("buildSuccess", {
 				schema: result,
-				canBeUndefined,
+				isOptional,
 			});
 		},
 		buildError() {
@@ -43,8 +44,23 @@ describe("record", () => {
 		).toMatchSnapshot();
 	});
 
+	it("with optional value", () => {
+		const schema = DPE.record(DPE.literal(["a", "b"]), DPE.number().optional());
+
+		expect(
+			render(
+				schema,
+				{
+					identifier: "RecordSchema",
+					transformers: defaultTransformers,
+					version: "jsonSchema7",
+				},
+			),
+		).toMatchSnapshot();
+	});
+
 	it("without requireKey keeps propertyNames/additionalProperties", () => {
-		const schema = DPE.record(DPE.string(), DPE.number(), { requireKey: null });
+		const schema = DPE.record(DPE.string(), DPE.number());
 
 		expect(
 			render(
@@ -77,7 +93,7 @@ describe("record", () => {
 			(inner) => DP.stringKind.has(inner)
 				? E.right("buildSuccess", {
 					schema: { type: "string" },
-					canBeUndefined: false,
+					isOptional: false,
 				})
 				: E.left("dataParserNotSupport", inner),
 		);

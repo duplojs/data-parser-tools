@@ -15,17 +15,27 @@ export const optionalTransformer = createTransformer(
 		transformer,
 		E.whenIsRight(
 			(inner) => pipe(
-				mode,
-				P.match(
-					"in",
-					() => true,
-				),
-				P.match(
-					"out",
-					() => inner.canBeUndefined,
-				),
-				P.exhaustive,
-				(value) => success(inner.schema, value),
+				{
+					mode,
+					coalescingValue: schema.definition.coalescingValue,
+				},
+				(value) => P.match(value)
+					.with(
+						P.union(
+							{ mode: "in" },
+							{
+								mode: "out",
+								coalescingValue: undefined,
+							},
+						),
+						() => true,
+					)
+					.with(
+						{ mode: "out" },
+						() => inner.isOptional,
+					)
+					.exhaustive(),
+				(isOptional) => success(inner.schema, isOptional),
 			),
 		),
 	),

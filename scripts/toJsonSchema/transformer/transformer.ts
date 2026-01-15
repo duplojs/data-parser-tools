@@ -69,7 +69,7 @@ export function transformer(
 			"buildSuccess",
 			{
 				schema: { $ref: buildRef(currentDeclaration.name, params.version) },
-				canBeUndefined: currentDeclaration.canBeUndefined,
+				isOptional: currentDeclaration.isOptional,
 			},
 		);
 	}
@@ -84,7 +84,7 @@ export function transformer(
 				currentSchema,
 				{
 					name: identifier,
-					canBeUndefined: false,
+					isOptional: false,
 				},
 			);
 
@@ -94,10 +94,10 @@ export function transformer(
 	);
 
 	const functionParams: TransformerParams = {
-		success(result, canBeUndefined = false) {
+		success(result, isOptional = false) {
 			return E.right("buildSuccess", {
 				schema: result,
-				canBeUndefined,
+				isOptional,
 			});
 		},
 		transformer(schema) {
@@ -144,20 +144,20 @@ export function transformer(
 	}
 
 	if (currentIdentifier) {
-		const { schema: builtSchema, canBeUndefined } = unwrap(result);
+		const { schema: builtSchema, isOptional } = unwrap(result);
 
 		params.context.set(
 			currentSchema,
 			{
 				name: currentIdentifier,
 				schema: builtSchema,
-				canBeUndefined,
+				isOptional,
 			},
 		);
 
 		return functionParams.success(
 			{ $ref: buildRef(currentIdentifier, params.version) },
-			canBeUndefined,
+			isOptional,
 		);
 	}
 

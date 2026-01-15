@@ -15,10 +15,10 @@ function buildTransformerParams(
 		context: new Map(),
 		version: supportedVersions.jsonSchema7,
 		transformer,
-		success(result, canBeUndefined = false) {
+		success(result, isOptional = false) {
 			return E.right("buildSuccess", {
 				schema: result,
-				canBeUndefined,
+				isOptional,
 			});
 		},
 		buildError() {
@@ -28,7 +28,7 @@ function buildTransformerParams(
 }
 
 describe("union", () => {
-	it("merges schemas and propagates canBeUndefined", () => {
+	it("merges schemas and propagates isOptional", () => {
 		expect(
 			render(
 				DPE.union([DPE.string(), DPE.optional(DPE.number())]),
@@ -49,7 +49,7 @@ describe("union", () => {
 				? E.left("dataParserNotSupport", inner)
 				: E.right("buildSuccess", {
 					schema: { type: "number" },
-					canBeUndefined: false,
+					isOptional: false,
 				}),
 		);
 

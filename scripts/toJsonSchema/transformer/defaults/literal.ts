@@ -16,7 +16,7 @@ export type JsonSchemaLiteral = {
 
 interface ReduceResult {
 	literals: JsonSchemaLiteral[];
-	canBeUndefined: boolean;
+	isOptional: boolean;
 }
 
 type OldVersions =
@@ -45,7 +45,7 @@ export const literalTransformer = createTransformer(
 			schema.definition.value,
 			A.reduceFrom<ReduceResult>({
 				literals: [],
-				canBeUndefined: false,
+				isOptional: false,
 			}),
 			({
 				element,
@@ -57,7 +57,7 @@ export const literalTransformer = createTransformer(
 					isType("undefined"),
 					() => nextWithObject(
 						lastValue,
-						{ canBeUndefined: true },
+						{ isOptional: true },
 					),
 				)
 				.when(
@@ -190,6 +190,6 @@ export const literalTransformer = createTransformer(
 			P.otherwise((value) => ({ anyOf: value })),
 		);
 
-		return success(schemaDefinition, reduced.canBeUndefined);
+		return success(schemaDefinition, reduced.isOptional);
 	},
 );

@@ -40,7 +40,7 @@ export const objectTransformer = createTransformer(
 									...lastValue.properties,
 									[key]: inner.schema,
 								},
-								required: inner.canBeUndefined
+								required: inner.isOptional
 									? lastValue.required
 									: A.push(lastValue.required ?? [], key),
 							},

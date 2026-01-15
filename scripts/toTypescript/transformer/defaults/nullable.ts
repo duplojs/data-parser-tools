@@ -21,23 +21,33 @@ export const nullableTransformer = createTransformer(
 		const innerType = unwrap(innerResult);
 
 		return pipe(
-			mode,
-			P.match(
-				"in",
-				() => pipe(
-					factory.createNull(),
-					factory.createLiteralTypeNode,
-					(value) => factory.createUnionTypeNode([
-						innerType,
-						value,
-					]),
-				),
-			),
-			P.match(
-				"out",
-				() => innerType,
-			),
-			P.exhaustive,
+			{
+				mode,
+				coalescingValue: schema.definition.coalescingValue,
+			},
+			(value) => P.match(value)
+				.with(
+					P.union(
+						{ mode: "in" },
+						{
+							mode: "out",
+							coalescingValue: undefined,
+						},
+					),
+					() => pipe(
+						factory.createNull(),
+						factory.createLiteralTypeNode,
+						(value) => factory.createUnionTypeNode([
+							innerType,
+							value,
+						]),
+					),
+				)
+				.with(
+					{ mode: "out" },
+					() => innerType,
+				)
+				.exhaustive(),
 			success,
 		);
 	},

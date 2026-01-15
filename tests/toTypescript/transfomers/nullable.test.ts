@@ -3,7 +3,7 @@ import { DP, DPE } from "@duplojs/utils";
 
 describe("nullable", () => {
 	it("mode in and out", () => {
-		const schema = DPE.nullable(DPE.string(), { coalescingValue: null });
+		const schema = DPE.nullable(DPE.string(), { coalescingValue: "test" });
 
 		expect(
 			render(

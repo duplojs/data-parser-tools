@@ -2,15 +2,15 @@
 
 exports[`object > optional detection by mode 1`] = `
 "export type ObjectOut = {
-    optionalOut: string;
+    optionalOut?: string | undefined;
     coalesced: number;
     empty?: undefined;
     literalUndefined?: "value" | undefined;
-    unionWithOptional: number | string;
+    unionWithOptional: number | (string | undefined);
     pipeToRequired: number;
     recoverUndefined: boolean;
     transformOptional: unknown;
-    lazyOptional: number;
+    lazyOptional?: number | undefined;
     required: string;
 };"
 `;

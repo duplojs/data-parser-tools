@@ -1,20 +1,7 @@
 import { A, DP, E, innerPipe, isType, O, P, pipe, S, when, whenElse } from "@duplojs/utils";
-import { factory, isUnionTypeNode, SyntaxKind, type TypeNode, type TypeElement } from "typescript";
+import { factory, SyntaxKind, type TypeElement } from "typescript";
 import { createTransformer } from "../create";
-
-function includesUndefinedTypeNode(typeNode: TypeNode): boolean {
-	if (typeNode.kind === SyntaxKind.UndefinedKeyword) {
-		return true;
-	}
-
-	if (isUnionTypeNode(typeNode)) {
-		return typeNode.types.some(
-			(subTypeNode) => includesUndefinedTypeNode(subTypeNode),
-		);
-	}
-
-	return false;
-}
+import { includesUndefinedTypeNode } from "../includesUndefinedTypeNode";
 
 const regexIdentifier = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 

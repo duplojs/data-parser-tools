@@ -14,7 +14,7 @@ export const unionTransformer = createTransformer(
 			success,
 		},
 	) => {
-		let canBeUndefined = false;
+		let isOptional = false;
 
 		const optionsResult = A.reduce(
 			schema.definition.options,
@@ -27,7 +27,7 @@ export const unionTransformer = createTransformer(
 				),
 				E.whenIsRight(
 					(option) => {
-						canBeUndefined ||= option.canBeUndefined;
+						isOptional ||= option.isOptional;
 						return nextPush(lastValue, option.schema);
 					},
 				),
@@ -42,7 +42,7 @@ export const unionTransformer = createTransformer(
 			{
 				anyOf: optionsResult,
 			},
-			canBeUndefined,
+			isOptional,
 		);
 	},
 );

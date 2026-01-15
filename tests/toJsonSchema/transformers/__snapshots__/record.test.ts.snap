@@ -1,5 +1,38 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`record > with optional value 1`] = `
+{
+  "$ref": "#/definitions/RecordSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "RecordSchema": {
+      "additionalProperties": false,
+      "maxProperties": 2,
+      "minProperties": 2,
+      "properties": {
+        "a": {
+          "type": "number",
+        },
+        "b": {
+          "type": "number",
+        },
+      },
+      "propertyNames": {
+        "enum": [
+          "a",
+          "b",
+        ],
+      },
+      "required": [
+        "a",
+        "b",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
 exports[`record > with requireKey enforces exact keys 1`] = `
 {
   "$ref": "#/definitions/RecordSchema",

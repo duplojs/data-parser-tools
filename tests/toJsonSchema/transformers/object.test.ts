@@ -15,10 +15,10 @@ function buildTransformerParams(
 		context: new Map(),
 		version: supportedVersions.jsonSchema7,
 		transformer,
-		success(result, canBeUndefined = false) {
+		success(result, isOptional = false) {
 			return E.right("buildSuccess", {
 				schema: result,
-				canBeUndefined,
+				isOptional,
 			});
 		},
 		buildError() {

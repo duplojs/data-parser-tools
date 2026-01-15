@@ -16,21 +16,31 @@ export const optionalTransformer = createTransformer(
 		transformer,
 		E.whenIsRight(
 			(innerType) => pipe(
-				mode,
-				P.match(
-					"in",
-					() => factory.createUnionTypeNode(
-						[
-							innerType,
-							factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
-						],
-					),
-				),
-				P.match(
-					"out",
-					() => innerType,
-				),
-				P.exhaustive,
+				{
+					mode,
+					coalescingValue: schema.definition.coalescingValue,
+				},
+				(value) => P.match(value)
+					.with(
+						P.union(
+							{ mode: "in" },
+							{
+								mode: "out",
+								coalescingValue: undefined,
+							},
+						),
+						() => factory.createUnionTypeNode(
+							[
+								innerType,
+								factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword),
+							],
+						),
+					)
+					.with(
+						{ mode: "out" },
+						() => innerType,
+					)
+					.exhaustive(),
 				success,
 			),
 		),

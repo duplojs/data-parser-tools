@@ -98,7 +98,7 @@ exports[`integration 1`] = `
           "type": "string",
         },
         "id": {
-          "pattern": "^(?:user\\-)(?:[0-9]+(\\.[0-9]+)?)(?:\\-db1)$",
+          "pattern": "^(?:user\\-)(?:-?[0-9]+(?:\\.[0-9]+)?)(?:\\-db1)$",
           "type": "string",
         },
         "location": {

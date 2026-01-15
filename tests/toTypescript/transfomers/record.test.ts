@@ -24,6 +24,17 @@ describe("record", () => {
 				},
 			),
 		).toMatchSnapshot();
+
+		expect(
+			render(
+				DPE.record(DPE.literal(["foo", "bar"]), DPE.string().optional()),
+				{
+					identifier: "RecordRequired",
+					transformers: defaultTransformers,
+					mode: "out",
+				},
+			),
+		).toMatchSnapshot();
 	});
 
 	it("throws when key type unsupported", () => {

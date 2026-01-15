@@ -6,7 +6,7 @@ exports[`templateLiteral > builds pattern 1`] = `
   "$schema": "http://json-schema.org/draft-07/schema#",
   "definitions": {
     "TemplateSchema": {
-      "pattern": "^(?:id\\-)(?:[0-9]+(\\.[0-9]+)?)(?:\\-ok)$",
+      "pattern": "^(?:id\\-)(?:-?[0-9]+(?:\\.[0-9]+)?)(?:\\-ok)$",
       "type": "string",
     },
   },

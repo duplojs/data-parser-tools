@@ -6,7 +6,7 @@ exports[`integration 1`] = `
     name: string;
     email: string;
     role: "admin" | "editor" | "viewer";
-    age: number;
+    age?: number | undefined;
     contact: {
         phone: string;
     } | {

@@ -3,3 +3,5 @@
 exports[`record > handles free and required keys 1`] = `"export type RecordFree = Record<string, number>;"`;
 
 exports[`record > handles free and required keys 2`] = `"export type RecordRequired = Record<"foo" | "bar", boolean>;"`;
+
+exports[`record > handles free and required keys 3`] = `"export type RecordRequired = Partial<Record<"foo" | "bar", string | undefined>>;"`;

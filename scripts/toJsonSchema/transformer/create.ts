@@ -50,7 +50,7 @@ export type JsonSchema =
 
 export interface TransformerSuccess {
 	readonly schema: JsonSchema;
-	readonly canBeUndefined: boolean;
+	readonly isOptional: boolean;
 }
 
 export type TransformerSuccessEither =
@@ -65,7 +65,7 @@ export type DataParserErrorEither =
 export interface MapContextValue {
 	readonly name: string;
 	readonly schema?: JsonSchema;
-	readonly canBeUndefined: boolean;
+	readonly isOptional: boolean;
 }
 
 export type MapContext = Map<DP.DataParsers, MapContextValue>;
@@ -99,7 +99,7 @@ export interface TransformerParams {
 
 	success(
 		result: JsonSchema,
-		canBeUndefined?: boolean,
+		isOptional?: boolean,
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
