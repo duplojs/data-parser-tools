@@ -71,7 +71,8 @@
     "vitest": "3.2.4"
   },
   "peerDependencies": {
-    "@duplojs/utils": ">=1.4.36 <2.0.0"
+    "@duplojs/utils": ">=1.4.58 <2.0.0",
+    "@duplojs/server-utils": ">=0.1.4 < 1.0.0"
   },
   "dependencies": {
     "typescript": "5.9.2"

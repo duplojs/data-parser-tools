@@ -1,5 +1,31 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`date > string array 1`] = `"export type Date = \`date\${number}\${"-" | "+"}\`;"`;
+exports[`date > mode in 1`] = `
+"import type { TheDate } from "@duplojs/utils/date";
 
-exports[`date > string array 2`] = `"export type DateIdentifier = \`date\${number}\${"-" | "+"}\`;"`;
+export type Date = TheDate | Date | \`date\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`date > mode in 2`] = `
+"import type { TheDate } from "@duplojs/utils/date";
+
+export type DateIdentifier = TheDate | Date | \`date\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`date > mode out 1`] = `
+"import type { TheDate } from "@duplojs/utils/date";
+
+export type Date = \`date\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`date > mode out 2`] = `
+"import type { TheDate } from "@duplojs/utils/date";
+
+export type DateIdentifier = \`date\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`date > with preset importType 1`] = `
+"import type { TheDate } from "@duplojs/utils/date";
+
+export type Date = TheDate | Date | \`date\${number}\${"-" | "+"}\`;"
+`;

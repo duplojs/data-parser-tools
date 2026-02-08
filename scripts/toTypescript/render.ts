@@ -1,8 +1,9 @@
 import { DP, unwrap, E, pipe, G, A, S, kindHeritage } from "@duplojs/utils";
-import { type DataParserErrorEither, type DataParserNotSupportedEither, transformer, type MapContext, type TransformerMode, type TransformerHook, type createTransformer } from "./transformer";
+import { type DataParserErrorEither, type DataParserNotSupportedEither, transformer, type MapContext, type TransformerMode, type TransformerHook, type createTransformer, type SupportedDataParsers, type MapImportType } from "./transformer";
 import { createPrinter, createSourceFile, EmitHint, factory, ScriptKind, ScriptTarget, SyntaxKind } from "typescript";
 import { createToTypescriptKind } from "./kind";
 import { getRecursiveDataParser } from "@scripts/utils/getRecursiveDataParser";
+import { importTypesTransformer } from "./transformer/importTypesTransformer";
 
 export interface RenderParams {
 	readonly identifier: string;
@@ -10,6 +11,7 @@ export interface RenderParams {
 	readonly context?: MapContext;
 	readonly mode?: TransformerMode;
 	readonly hooks?: readonly TransformerHook[];
+	readonly importType?: MapImportType;
 }
 
 export class DataParserToTypescriptRenderError extends kindHeritage(
@@ -18,15 +20,16 @@ export class DataParserToTypescriptRenderError extends kindHeritage(
 	Error,
 ) {
 	public constructor(
-		public schema: DP.DataParsers,
+		public schema: SupportedDataParsers,
 		public error: DataParserNotSupportedEither | DataParserErrorEither,
 	) {
 		super({}, ["Error during the render of dataParser in typescript type."]);
 	}
 }
 
-export function render(schema: DP.DataParsers, params: RenderParams) {
+export function render(schema: SupportedDataParsers, params: RenderParams) {
 	const context: MapContext = new Map(params.context);
+	const importType: MapImportType = new Map(params.importType);
 
 	const result = transformer(
 		schema,
@@ -36,6 +39,7 @@ export function render(schema: DP.DataParsers, params: RenderParams) {
 			mode: params.mode ?? "out",
 			hooks: params.hooks ?? [],
 			recursiveDataParsers: getRecursiveDataParser(schema),
+			importType,
 		},
 	);
 
@@ -74,7 +78,10 @@ export function render(schema: DP.DataParsers, params: RenderParams) {
 	const printer = createPrinter();
 
 	return pipe(
-		context.values(),
+		[
+			...importTypesTransformer(importType),
+			...context.values(),
+		],
 		G.map(
 			(value) => printer.printNode(
 				EmitHint.Unspecified,

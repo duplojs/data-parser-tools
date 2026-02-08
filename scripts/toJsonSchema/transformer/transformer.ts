@@ -6,7 +6,6 @@ import {
 	type createTransformer,
 	type TransformerMode,
 	type SupportedVersionsUrl,
-	type JsonSchema,
 	type DataParserErrorEither,
 } from "./create";
 import { type TransformerHook } from "./hook";

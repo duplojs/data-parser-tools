@@ -1,5 +1,31 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`time > string array 1`] = `"export type Time = \`time\${number}\${"-" | "+"}\`;"`;
+exports[`time > mode in 1`] = `
+"import type { TheTime } from "@duplojs/utils/date";
 
-exports[`time > string array 2`] = `"export type TimeIdentifier = \`time\${number}\${"-" | "+"}\`;"`;
+export type Time = \`time\${number}\${"-" | "+"}\` | number | TheTime;"
+`;
+
+exports[`time > mode in 2`] = `
+"import type { TheTime } from "@duplojs/utils/date";
+
+export type TimeIdentifier = \`time\${number}\${"-" | "+"}\` | number | TheTime;"
+`;
+
+exports[`time > mode out 1`] = `
+"import type { TheTime } from "@duplojs/utils/date";
+
+export type Time = \`time\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`time > mode out 2`] = `
+"import type { TheTime } from "@duplojs/utils/date";
+
+export type TimeIdentifier = \`time\${number}\${"-" | "+"}\`;"
+`;
+
+exports[`time > with preset importType 1`] = `
+"import type { TheTime } from "@duplojs/utils/date";
+
+export type Time = \`time\${number}\${"-" | "+"}\` | number | TheTime;"
+`;

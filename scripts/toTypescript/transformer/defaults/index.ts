@@ -44,6 +44,7 @@ import { unionTransformer } from "./union";
 import { unknownTransformer } from "./unknown";
 import { dateTransformer } from "./date";
 import { timeTransformer } from "./time";
+import { fileTransformer } from "./file";
 
 export const defaultTransformers = [
 	arrayTransformer,
@@ -68,4 +69,5 @@ export const defaultTransformers = [
 	unknownTransformer,
 	dateTransformer,
 	timeTransformer,
+	fileTransformer,
 ] as const satisfies readonly ReturnType<typeof createTransformer>[];

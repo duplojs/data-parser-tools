@@ -1,5 +1,5 @@
 import { DP, E, pipe, unwrap, when } from "@duplojs/utils";
-import { factory, type TypeNode } from "typescript";
+import { factory } from "typescript";
 import { createTransformer } from "../create";
 import { includesUndefinedTypeNode } from "../includesUndefinedTypeNode";
 
