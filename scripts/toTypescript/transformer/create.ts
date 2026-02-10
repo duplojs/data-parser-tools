@@ -1,16 +1,21 @@
 import { type TypeAliasDeclaration, type TypeNode } from "typescript";
 import { type DP, E } from "@duplojs/utils";
+import { type SDP } from "@duplojs/server-utils";
 
 export type TransformerSuccessEither<
-> = E.EitherRight<"buildSuccess", TypeNode>;
+> = E.Right<"buildSuccess", TypeNode>;
 
 export type DataParserNotSupportedEither<
-> = E.EitherLeft<"dataParserNotSupport", DP.DataParser>;
+> = E.Left<"dataParserNotSupport", DP.DataParser>;
 
 export type DataParserErrorEither<
-> = E.EitherLeft<"buildDataParserError", DP.DataParser>;
+> = E.Left<"buildDataParserError", DP.DataParser>;
 
-export type MapContext = Map<DP.DataParsers, TypeAliasDeclaration>;
+export type SupportedDataParsers = DP.DataParsers | SDP.DataParserFile;
+
+export type MapContext = Map<SupportedDataParsers, TypeAliasDeclaration>;
+
+export type MapImportType = Map<string, string[]>;
 
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
@@ -22,6 +27,7 @@ export type TransformerMode = "in" | "out";
 export interface TransformerParams {
 	readonly mode: TransformerMode;
 	readonly context: MapContext;
+	readonly importType: MapImportType;
 
 	transformer(
 		schema: DP.DataParser,
@@ -32,19 +38,20 @@ export interface TransformerParams {
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
+	addImport(path: string, typeName: string): void;
 }
 
 export function createTransformer<
-	GenericDataParser extends DP.DataParsers,
+	GenericDataParser extends SupportedDataParsers,
 >(
-	support: (schema: DP.DataParsers) => schema is GenericDataParser,
+	support: (schema: SupportedDataParsers) => schema is GenericDataParser,
 	builder: (
 		schema: GenericDataParser,
 		params: TransformerParams,
 	) => MaybeTransformerEither,
 ) {
 	return (
-		schema: DP.DataParsers,
+		schema: SupportedDataParsers,
 		params: TransformerParams,
 	): MaybeTransformerEither => support(schema)
 		? builder(

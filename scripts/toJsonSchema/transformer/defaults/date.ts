@@ -18,7 +18,7 @@ export const dateTransformer = createTransformer(
 	) => {
 		const base = {
 			type: "string",
-			pattern: D.theDateRegex.source,
+			pattern: D.serializeTheDateRegex.source,
 			format: "date-time",
 		};
 

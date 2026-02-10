@@ -3,7 +3,7 @@ import { DPE } from "@duplojs/utils";
 
 describe("recover", () => {
 	it("keeps inner for input and recovered for output", () => {
-		const schema = DPE.recover(DPE.string(), { message: "ko" });
+		const schema = DPE.recover(DPE.string(), "ko");
 
 		expect(
 			render(
