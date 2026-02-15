@@ -18,7 +18,7 @@ export const timeTransformer = createTransformer(
 	) => {
 		const base = {
 			type: "string",
-			pattern: D.theTimeRegex.source,
+			pattern: D.serializeTheTimeRegex.source,
 		};
 
 		if (mode === "in" && schema.definition.coerce) {

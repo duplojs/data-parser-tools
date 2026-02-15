@@ -18,6 +18,7 @@ import type {
 	JsonSchemaUnknown,
 	JsonSchemaTime,
 } from "./defaults";
+import { type OpenapiJsonSchemaFile } from "./defaults/file";
 
 export interface JsonSchemaRef {
 	$ref: string;
@@ -46,7 +47,8 @@ export type JsonSchema =
 	| JsonSchemaTuple
 	| JsonSchemaUnion
 	| JsonSchemaUnknown
-	| JsonSchemaTime;
+	| JsonSchemaTime
+	| OpenapiJsonSchemaFile;
 
 export interface TransformerSuccess {
 	readonly schema: JsonSchema;
@@ -85,13 +87,14 @@ export const supportedVersions = {
 	openApi31: "https://spec.openapis.org/oas/3.1.0",
 } as const;
 
-export type SupportedVersions = typeof supportedVersions;
-export type SupportedVersionsUrl = typeof supportedVersions[keyof SupportedVersions];
+export type MapperSupportedVersions = typeof supportedVersions;
+export type SupportedVersions = keyof typeof supportedVersions;
+export type SupportedVersionsUrl = typeof supportedVersions[SupportedVersions];
 
 export interface TransformerParams {
 	readonly mode: TransformerMode;
 	readonly context: MapContext;
-	readonly version: SupportedVersionsUrl;
+	readonly version: SupportedVersions;
 
 	transformer(
 		schema: DP.DataParser,

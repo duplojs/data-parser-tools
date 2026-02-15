@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`file > renders schema 1`] = `
+{
+  "$ref": "#/components/schemas/FileSchema",
+  "components": {
+    "schemas": {
+      "FileSchema": {
+        "format": "binary",
+        "type": "string",
+      },
+    },
+  },
+  "openapi": "https://spec.openapis.org/oas/3.0.3",
+}
+`;

@@ -10,7 +10,7 @@ describe("object", () => {
 			literalUndefined: DPE.literal(["value", undefined]),
 			unionWithOptional: DPE.union([DPE.number(), DPE.optional(DPE.string())]),
 			pipeToRequired: DPE.pipe(DPE.optional(DPE.string()), DPE.number()),
-			recoverUndefined: DPE.recover(DPE.boolean(), undefined),
+			recoverUndefined: DPE.recover(DPE.boolean(), false),
 			transformOptional: DPE.transform(
 				DPE.optional(DPE.string()),
 				(value: string | undefined) => value ?? "",

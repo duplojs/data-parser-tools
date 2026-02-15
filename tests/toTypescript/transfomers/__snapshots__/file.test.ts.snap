@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`file > basic 1`] = `
+"import type { FileInterface } from "@duplojs/server-utils/file";
+
+export type File = FileInterface;"
+`;
+
+exports[`file > basic 2`] = `
+"import type { FileInterface } from "@duplojs/server-utils/file";
+
+export type FileIdentifier = FileInterface;"
+`;
+
+exports[`file > with preset importType 1`] = `
+"import type { FileInterface } from "@duplojs/server-utils/file";
+
+export type File = FileInterface;"
+`;

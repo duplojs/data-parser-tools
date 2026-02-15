@@ -75,7 +75,6 @@ exports[`integration 1`] = `
         "createdAt": {
           "anyOf": [
             {
-              "format": "date-time",
               "pattern": "^date-?(?<value>\\d{1,16})(?<sign>[+-])$",
               "type": "string",
             },

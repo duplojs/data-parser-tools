@@ -7,10 +7,11 @@ import {
 	type TransformerMode,
 	type TransformerHook,
 	type createTransformer,
-	type SupportedVersions,
+	type MapperSupportedVersions,
 	type JsonSchema,
 	supportedVersions,
 	buildRef,
+	type SupportedVersions,
 } from "./transformer";
 import { createToJsonSchemaKind } from "./kind";
 import { getRecursiveDataParser } from "@scripts/utils/getRecursiveDataParser";
@@ -29,7 +30,7 @@ export class DataParserToJsonSchemaRenderError extends kindHeritage(
 }
 
 export interface RenderParams<
-	GenericVersion extends unknown,
+	GenericVersion extends SupportedVersions,
 > {
 	readonly identifier: string;
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
@@ -40,14 +41,14 @@ export interface RenderParams<
 }
 
 type RenderResult<
-	GenericVersion extends keyof SupportedVersions,
+	GenericVersion extends SupportedVersions,
 > = Or<[
 	IsEqual<GenericVersion, "openApi3">,
 	IsEqual<GenericVersion, "openApi31">,
 ]> extends true
 	? {
 		$ref: `#/components/schemas/${string}`;
-		openapi: SupportedVersions[GenericVersion];
+		openapi: MapperSupportedVersions[GenericVersion];
 		components: {
 			schemas: Record<string, JsonSchema>;
 		};
@@ -58,25 +59,24 @@ type RenderResult<
 	]> extends true
 		? {
 			$ref: `#/$defs/${string}`;
-			$schema: SupportedVersions[GenericVersion];
+			$schema: MapperSupportedVersions[GenericVersion];
 			definitions: Record<string, JsonSchema>;
 		}
 		: IsEqual<GenericVersion, "jsonSchema202012"> extends true
 			? {
 				$ref: `#/definitions/${string}`;
-				$schema: SupportedVersions[GenericVersion];
+				$schema: MapperSupportedVersions[GenericVersion];
 				$defs: Record<string, JsonSchema>;
 			}
 			: never;
 
 export function render<
-	GenericVersion extends keyof SupportedVersions,
+	GenericVersion extends SupportedVersions,
 >(
 	schema: DP.DataParsers,
 	params: RenderParams<GenericVersion>,
 ): RenderResult<GenericVersion> {
 	const context: MapContext = new Map(params.context);
-	const version = supportedVersions[params.version];
 
 	const result = transformer(
 		schema,
@@ -85,7 +85,7 @@ export function render<
 			context,
 			mode: params.mode ?? "out",
 			hooks: params.hooks ?? [],
-			version,
+			version: params.version,
 			recursiveDataParsers: getRecursiveDataParser(schema),
 		},
 	);
@@ -118,29 +118,29 @@ export function render<
 		};
 
 	if (
-		version === supportedVersions.openApi3
-		|| version === supportedVersions.openApi31
+		params.version === "openApi3"
+		|| params.version === "openApi31"
 	) {
 		return {
-			$ref: buildRef(params.identifier, version),
-			openapi: version,
+			$ref: buildRef(params.identifier, params.version),
+			openapi: supportedVersions[params.version],
 			components: {
 				schemas: definitionsWithIdentifier,
 			},
 		} as never;
 	}
 
-	if (version === supportedVersions.jsonSchema202012) {
+	if (params.version === "jsonSchema202012") {
 		return {
-			$ref: buildRef(params.identifier, version),
-			$schema: version,
+			$ref: buildRef(params.identifier, params.version),
+			$schema: params.version,
 			$defs: definitionsWithIdentifier,
 		} as never;
 	}
 
 	return {
-		$ref: buildRef(params.identifier, version),
-		$schema: version,
+		$ref: buildRef(params.identifier, params.version),
+		$schema: supportedVersions[params.version],
 		definitions: definitionsWithIdentifier,
 	} as never;
 }

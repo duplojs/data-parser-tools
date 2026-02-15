@@ -5,9 +5,9 @@ import {
 	type TransformerParams,
 	type createTransformer,
 	type TransformerMode,
-	type SupportedVersionsUrl,
-	type JsonSchema,
 	type DataParserErrorEither,
+	type SupportedVersions,
+	supportedVersions,
 } from "./create";
 import { type TransformerHook } from "./hook";
 
@@ -15,23 +15,23 @@ export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
 	readonly context: MapContext;
 	readonly mode: TransformerMode;
-	readonly version: SupportedVersionsUrl;
+	readonly version: SupportedVersions;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DP.DataParser[];
 }
 
 export function buildRef(
 	name: string,
-	version: SupportedVersionsUrl,
+	version: SupportedVersions,
 ) {
 	if (
-		version === "https://spec.openapis.org/oas/3.0.3"
-		|| version === "https://spec.openapis.org/oas/3.1.0"
+		version === "openApi3"
+		|| version === "openApi31"
 	) {
 		return `#/components/schemas/${name}`;
 	}
 
-	if (version === "https://json-schema.org/draft/2020-12/schema") {
+	if (version === "jsonSchema202012") {
 		return `#/$defs/${name}`;
 	}
 

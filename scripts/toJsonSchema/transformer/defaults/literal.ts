@@ -1,5 +1,5 @@
 import { A, DP, isType, justReturn, P, pipe } from "@duplojs/utils";
-import { createTransformer, type SupportedVersionsUrl } from "../create";
+import { createTransformer, type SupportedVersions, type SupportedVersionsUrl } from "../create";
 
 type JsonPrimitive = string | number | boolean | null;
 type JsonType = "string" | "number" | "integer" | "boolean" | "null";
@@ -20,15 +20,15 @@ interface ReduceResult {
 }
 
 type OldVersions =
-	| "http://json-schema.org/draft-04/schema#"
-	| "https://spec.openapis.org/oas/3.0.3";
+	| "jsonSchema4"
+	| "openApi3";
 
 function isOldVersion(
-	version: SupportedVersionsUrl,
+	version: SupportedVersions,
 ): version is OldVersions {
 	return (
-		version === "http://json-schema.org/draft-04/schema#"
-		|| version === "https://spec.openapis.org/oas/3.0.3"
+		version === "jsonSchema4"
+		|| version === "openApi3"
 	);
 }
 
@@ -154,13 +154,13 @@ export const literalTransformer = createTransformer(
 								lastValue.literals,
 								P.match(version)
 									.with(
-										"https://spec.openapis.org/oas/3.0.3",
+										"openApi3",
 										justReturn(<const>{
 											enum: [null],
 										}),
 									)
 									.with(
-										"http://json-schema.org/draft-04/schema#",
+										"jsonSchema4",
 										justReturn(<const>{
 											type: "null",
 											enum: [null],

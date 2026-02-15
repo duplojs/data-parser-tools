@@ -87,6 +87,10 @@ describe("templateLiteral", () => {
 				buildError: () => E.left("buildDataParserError"),
 				mode: "out",
 				context: new Map(),
+				importType: new Map(),
+				addImport(path, typeName) {
+					return;
+				},
 			},
 		);
 
@@ -107,6 +111,10 @@ describe("templateLiteral", () => {
 				buildError: () => E.left("buildDataParserError"),
 				mode: "out",
 				context: new Map(),
+				importType: new Map(),
+				addImport(path, typeName) {
+					return;
+				},
 			},
 		);
 

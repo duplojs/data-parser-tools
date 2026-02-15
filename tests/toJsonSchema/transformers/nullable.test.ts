@@ -1,7 +1,6 @@
 import { render, defaultTransformers } from "@scripts/toJsonSchema";
 import { nullableTransformer } from "@scripts/toJsonSchema/transformer/defaults";
 import {
-	supportedVersions,
 	type TransformerParams,
 } from "@scripts/toJsonSchema/transformer/create";
 import { type DP, DPE, E } from "@duplojs/utils";
@@ -13,7 +12,7 @@ function buildTransformerParams(
 	return {
 		mode: "out",
 		context: new Map(),
-		version: supportedVersions.jsonSchema7,
+		version: "jsonSchema7",
 		transformer,
 		success(result, isOptional = false) {
 			return E.right("buildSuccess", {

@@ -13,7 +13,7 @@ function buildTransformerParams(
 	return {
 		mode: "out",
 		context: new Map(),
-		version: supportedVersions.jsonSchema7,
+		version: "jsonSchema7",
 		transformer,
 		success(result, isOptional = false) {
 			return E.right("buildSuccess", {

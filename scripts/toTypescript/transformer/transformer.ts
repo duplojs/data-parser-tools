@@ -1,14 +1,15 @@
 import { A, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
-import { type MapContext, type DataParserNotSupportedEither, type TransformerParams, type createTransformer, type TransformerMode, type DataParserErrorEither } from "./create";
+import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType, SupportedDataParsers } from "./create";
 import { factory, SyntaxKind } from "typescript";
-import { type TransformerHook } from "./hook";
+import type { TransformerHook } from "./hook";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
 	readonly context: MapContext;
 	readonly mode: TransformerMode;
 	readonly hooks: readonly TransformerHook[];
-	readonly recursiveDataParsers: DP.DataParser[];
+	readonly recursiveDataParsers: SupportedDataParsers[];
+	readonly importType: MapImportType;
 }
 
 export function transformer(
@@ -22,6 +23,7 @@ export function transformer(
 			const result = hook({
 				schema: lastValue,
 				context: params.context,
+				importType: params.importType,
 				output: (action, schema) => ({
 					schema,
 					action,
@@ -83,6 +85,14 @@ export function transformer(
 		mode: params.mode,
 		buildError() {
 			return E.left("buildDataParserError");
+		},
+		importType: params.importType,
+		addImport(path, typeName) {
+			const types = params.importType.get(path) ?? [];
+
+			if (!A.includes(types, typeName)) {
+				params.importType.set(path, A.push(types, typeName));
+			}
 		},
 	};
 

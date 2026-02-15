@@ -13,7 +13,7 @@ function buildTransformerParams(
 	return {
 		mode: "out",
 		context: new Map(),
-		version: supportedVersions.jsonSchema7,
+		version: "jsonSchema7",
 		transformer,
 		success(result, isOptional = false) {
 			return E.right("buildSuccess", {
@@ -31,7 +31,7 @@ describe("recover", () => {
 	it("in mode produces unknown", () => {
 		expect(
 			render(
-				DPE.recover(DPE.string(), undefined),
+				DPE.recover(DPE.string(), "value"),
 				{
 					identifier: "RecoverSchema",
 					transformers: defaultTransformers,
@@ -45,7 +45,7 @@ describe("recover", () => {
 	it("out mode uses inner schema", () => {
 		expect(
 			render(
-				DPE.recover(DPE.string(), undefined),
+				DPE.recover(DPE.string(), "value"),
 				{
 					identifier: "RecoverSchema",
 					transformers: defaultTransformers,
@@ -57,7 +57,7 @@ describe("recover", () => {
 	});
 
 	it("returns left when inner transform fails", () => {
-		const schema = DPE.recover(DPE.string(), "");
+		const schema = DPE.recover(DPE.string(), "value");
 		const params = buildTransformerParams(
 			schema,
 			() => E.left("dataParserNotSupport", schema.definition.inner),
