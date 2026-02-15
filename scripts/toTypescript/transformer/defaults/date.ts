@@ -1,35 +1,13 @@
 import { DP, P } from "@duplojs/utils";
-import { factory, SyntaxKind } from "typescript";
+import { factory } from "typescript";
 import { createTransformer } from "../create";
 
 const theDate = factory.createTypeReferenceNode(
 	factory.createIdentifier("TheDate"),
 );
 
-const serializedTheDate = factory.createTemplateLiteralType(
-	factory.createTemplateHead(
-		"date",
-		"date",
-	),
-	[
-		factory.createTemplateLiteralTypeSpan(
-			factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-			factory.createTemplateMiddle(
-				"",
-				"",
-			),
-		),
-		factory.createTemplateLiteralTypeSpan(
-			factory.createUnionTypeNode([
-				factory.createLiteralTypeNode(factory.createStringLiteral("-")),
-				factory.createLiteralTypeNode(factory.createStringLiteral("+")),
-			]),
-			factory.createTemplateTail(
-				"",
-				"",
-			),
-		),
-	],
+const serializedTheDate = factory.createTypeReferenceNode(
+	factory.createIdentifier("SerializedTheDate"),
 );
 
 const nativeDate = factory.createTypeReferenceNode(
@@ -52,17 +30,21 @@ export const dateTransformer = createTransformer(
 		return P.match(mode)
 			.with(
 				"out",
-				() => success(serializedTheDate),
+				() => success(theDate),
 			)
 			.with(
 				"in",
-				() => success(
-					factory.createUnionTypeNode([
-						theDate,
-						nativeDate,
-						serializedTheDate,
-					]),
-				),
+				() => {
+					addImport("@duplojs/utils/date", "SerializedTheDate");
+
+					return success(
+						factory.createUnionTypeNode([
+							theDate,
+							nativeDate,
+							serializedTheDate,
+						]),
+					);
+				},
 			)
 			.exhaustive();
 	},

@@ -31,7 +31,7 @@ export type UserProfile = {
         number,
         number
     ];
-    createdAt: \`date\${number}\${"-" | "+"}\`;
-    startAt: \`time\${number}\${"-" | "+"}\`;
+    createdAt: TheDate;
+    startAt: TheTime;
 };"
 `;

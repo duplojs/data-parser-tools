@@ -19,7 +19,6 @@ export const dateTransformer = createTransformer(
 		const base = {
 			type: "string",
 			pattern: D.serializeTheDateRegex.source,
-			format: "date-time",
 		};
 
 		if (mode === "in" && schema.definition.coerce) {

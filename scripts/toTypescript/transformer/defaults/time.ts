@@ -6,30 +6,8 @@ const theTime = factory.createTypeReferenceNode(
 	factory.createIdentifier("TheTime"),
 );
 
-const serializedTheTime = factory.createTemplateLiteralType(
-	factory.createTemplateHead(
-		"time",
-		"time",
-	),
-	[
-		factory.createTemplateLiteralTypeSpan(
-			factory.createKeywordTypeNode(SyntaxKind.NumberKeyword),
-			factory.createTemplateMiddle(
-				"",
-				"",
-			),
-		),
-		factory.createTemplateLiteralTypeSpan(
-			factory.createUnionTypeNode([
-				factory.createLiteralTypeNode(factory.createStringLiteral("-")),
-				factory.createLiteralTypeNode(factory.createStringLiteral("+")),
-			]),
-			factory.createTemplateTail(
-				"",
-				"",
-			),
-		),
-	],
+const serializedTheTime = factory.createTypeReferenceNode(
+	factory.createIdentifier("SerializedTheTime"),
 );
 
 const number = factory.createKeywordTypeNode(SyntaxKind.NumberKeyword);
@@ -49,17 +27,21 @@ export const timeTransformer = createTransformer(
 		return P.match(mode)
 			.with(
 				"out",
-				() => success(serializedTheTime),
+				() => success(theTime),
 			)
 			.with(
 				"in",
-				() => success(
-					factory.createUnionTypeNode([
-						serializedTheTime,
-						number,
-						theTime,
-					]),
-				),
+				() => {
+					addImport("@duplojs/utils/date", "SerializedTheTime");
+
+					return success(
+						factory.createUnionTypeNode([
+							serializedTheTime,
+							number,
+							theTime,
+						]),
+					);
+				},
 			)
 			.exhaustive();
 	},
