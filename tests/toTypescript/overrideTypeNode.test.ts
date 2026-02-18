@@ -1,12 +1,12 @@
 import { DPE } from "@duplojs/utils";
 import { defaultTransformers, render } from "@scripts/toTypescript";
-import { factory } from "typescript";
+import { factory, SyntaxKind } from "typescript";
 
 describe("override type node", () => {
 	it("simple change", () => {
 		expect(
 			render(
-				DPE.boolean().addOverrideTypeNode(factory.createTypeReferenceNode("Date")),
+				DPE.boolean().addOverrideTypescriptTransformer(factory.createTypeReferenceNode("Date")),
 				{
 					identifier: "Boolean",
 					transformers: defaultTransformers,
@@ -17,7 +17,11 @@ describe("override type node", () => {
 	});
 
 	it("mode in", () => {
-		const schema = DPE.boolean().addOverrideTypeNode({ in: factory.createTypeReferenceNode("Date") });
+		const schema = DPE.boolean().addOverrideTypescriptTransformer(
+			(dataParser, { success, mode, transformer }) => mode === "in"
+				? success(factory.createTypeReferenceNode("Date"))
+				: transformer(dataParser),
+		);
 		expect(
 			render(
 				schema,
@@ -42,7 +46,13 @@ describe("override type node", () => {
 	});
 
 	it("out", () => {
-		const schema = DPE.object({ date: DPE.boolean().addOverrideTypeNode({ out: factory.createTypeReferenceNode("Date") }) });
+		const schema = DPE.object({
+			date: DPE.boolean().addOverrideTypescriptTransformer(
+				(dataParser, { success, transformer, mode }) => mode === "out"
+					? success(factory.createTypeReferenceNode("Date"))
+					: transformer(dataParser),
+			),
+		});
 		expect(
 			render(
 				schema,

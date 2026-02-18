@@ -14,7 +14,7 @@ import {
 	type SupportedVersions,
 } from "./transformer";
 import { createToJsonSchemaKind } from "./kind";
-import { getRecursiveDataParser } from "@scripts/utils/getRecursiveDataParser";
+import { getRecursiveDataParser } from "@scripts/utils";
 
 export class DataParserToJsonSchemaRenderError extends kindHeritage(
 	"data-parser-to-json-schema-render-error",

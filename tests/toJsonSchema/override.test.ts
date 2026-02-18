@@ -1,6 +1,6 @@
 import "@scripts/toJsonSchema/override";
 import { DP, justReturn } from "@duplojs/utils";
-import { type JsonSchema } from "@scripts/toJsonSchema/transformer/create";
+import { type JsonSchema, type TransformerBuildFunction } from "@scripts/toJsonSchema/transformer/create";
 
 describe("override", () => {
 	it("setIdentifier", () => {
@@ -30,70 +30,44 @@ describe("override", () => {
 		expect(newSchemaWithoutIdentifier.definition.identifier).toBe("test");
 	});
 
-	it("setOverrideJsonSchema", () => {
+	it("setOverrideJsonSchemaTransformer", () => {
 		const schema = DP.string();
 		const overrideSchema: JsonSchema = {
 			type: "string",
 			format: "email",
 		};
 
-		expect(schema.definition.overrideJsonSchema).toBe(undefined);
+		expect(schema.definition.overrideJsonSchemaTransformer).toBe(undefined);
 
-		schema.setOverrideJsonSchema({
+		schema.setOverrideJsonSchemaTransformer({
 			schema: overrideSchema,
 			isOptional: true,
 		});
 
-		expect(schema.definition.overrideJsonSchema).toStrictEqual({
-			in: {
-				schema: {
-					type: "string",
-					format: "email",
-				},
-				isOptional: true,
-			},
-			out: {
-				schema: {
-					type: "string",
-					format: "email",
-				},
-				isOptional: true,
-			},
-		});
+		expect(typeof schema.definition.overrideJsonSchemaTransformer).toBe("function");
 	});
 
-	it("addOverrideJsonSchema", () => {
+	it("addOverrideJsonSchemaTransformer", () => {
 		const schema = DP.string();
+		const overrideTransformer: TransformerBuildFunction = (__, { success }) => success(
+			{ type: "integer" },
+			false,
+		);
 
-		expect(schema.definition.overrideJsonSchema).toBe(undefined);
+		expect(schema.definition.overrideJsonSchemaTransformer).toBe(undefined);
 
-		const newSchema = schema.addOverrideJsonSchema({
-			in: {
-				schema: { type: "integer" },
-				isOptional: false,
-			},
-		});
+		const newSchema = schema.addOverrideJsonSchemaTransformer(overrideTransformer);
 
-		expect(schema.definition.overrideJsonSchema).toBe(undefined);
-		expect(newSchema.definition.overrideJsonSchema).toStrictEqual({
-			in: {
-				schema: { type: "integer" },
-				isOptional: false,
-			},
-		});
+		expect(schema.definition.overrideJsonSchemaTransformer).toBe(undefined);
+		expect(newSchema.definition.overrideJsonSchemaTransformer).toBe(overrideTransformer);
 
 		const newSchemaWithChecker = newSchema.addChecker(DP.checkerRefine(justReturn(true)));
 
-		schema.setOverrideJsonSchema({
+		schema.setOverrideJsonSchemaTransformer({
 			schema: { type: "string" },
 			isOptional: true,
 		});
 
-		expect(newSchemaWithChecker.definition.overrideJsonSchema).toStrictEqual({
-			in: {
-				schema: { type: "integer" },
-				isOptional: false,
-			},
-		});
+		expect(newSchemaWithChecker.definition.overrideJsonSchemaTransformer).toBe(overrideTransformer);
 	});
 });

@@ -1,5 +1,5 @@
-import { A, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
-import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType, SupportedDataParsers } from "./create";
+import { A, type DDataParser, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
+import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
 
@@ -8,7 +8,7 @@ export interface TransformerFunctionParams {
 	readonly context: MapContext;
 	readonly mode: TransformerMode;
 	readonly hooks: readonly TransformerHook[];
-	readonly recursiveDataParsers: SupportedDataParsers[];
+	readonly recursiveDataParsers: DDataParser.DataParser[];
 	readonly importType: MapImportType;
 }
 
@@ -16,13 +16,6 @@ export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
 ) {
-	if (schema.definition.overrideTypeNode?.[params.mode]) {
-		return E.right(
-			"buildSuccess",
-			schema.definition.overrideTypeNode[params.mode],
-		);
-	}
-
 	const currentSchema = A.reduce(
 		params.hooks,
 		A.reduceFrom<DP.DataParser>(schema),
@@ -103,30 +96,35 @@ export function transformer(
 		},
 	};
 
-	const result = A.reduce(
-		params.transformers,
-		A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
-			E.left("dataParserNotSupport", currentSchema),
-		),
-		({
-			element: functionBuilder,
-			lastValue,
-			next,
-			exit,
-		}) => {
-			const result = functionBuilder(currentSchema, functionParams);
+	const result = currentSchema.definition.overrideTypescriptTransformer
+		? currentSchema.definition.overrideTypescriptTransformer(
+			currentSchema.addOverrideTypescriptTransformer(null),
+			functionParams,
+		)
+		: A.reduce(
+			params.transformers,
+			A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
+				E.left("dataParserNotSupport", currentSchema),
+			),
+			({
+				element: functionBuilder,
+				lastValue,
+				next,
+				exit,
+			}) => {
+				const result = functionBuilder(currentSchema, functionParams);
 
-			if (E.isLeft(result)) {
-				if (unwrap(result) !== currentSchema) {
-					return exit(result);
+				if (E.isLeft(result)) {
+					if (unwrap(result) !== currentSchema) {
+						return exit(result);
+					}
+
+					return next(lastValue);
 				}
 
-				return next(lastValue);
-			}
-
-			return exit(result);
-		},
-	);
+				return exit(result);
+			},
+		);
 
 	if (E.isLeft(result)) {
 		return result;

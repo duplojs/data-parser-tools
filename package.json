@@ -24,7 +24,7 @@
     "test:tu:bench": "vitest bench",
     "test:tu:watch": "vitest --coverage --watch",
     "test:tu:update": "vitest --coverage --update",
-    "test:types": "tsc -p tsconfig.test.json",
+    "test:types": "tsc -p tsconfig.test.json && npm -w integration run test:types",
     "test:lint": "eslint",
     "test:lint:fix": "eslint --fix",
     "prepare": "husky"
@@ -71,7 +71,7 @@
     "vitest": "3.2.4"
   },
   "peerDependencies": {
-    "@duplojs/utils": ">=1.5.1 <2.0.0",
+    "@duplojs/utils": ">=1.5.3 <2.0.0",
     "@duplojs/server-utils": ">=0.1.4 < 1.0.0"
   },
   "dependencies": {

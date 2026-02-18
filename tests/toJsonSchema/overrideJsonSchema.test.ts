@@ -5,7 +5,7 @@ describe("override json schema", () => {
 	it("simple change", () => {
 		expect(
 			render(
-				DPE.boolean().addOverrideJsonSchema({
+				DPE.boolean().addOverrideJsonSchemaTransformer({
 					schema: {
 						type: "string",
 						format: "email",
@@ -23,15 +23,17 @@ describe("override json schema", () => {
 	});
 
 	it("mode in", () => {
-		const schema = DPE.boolean().addOverrideJsonSchema({
-			in: {
-				isOptional: false,
-				schema: {
-					type: "string",
-					minLength: 1,
-				},
-			},
-		});
+		const schema = DPE.boolean().addOverrideJsonSchemaTransformer(
+			(dataParser, { success, mode, transformer }) => mode === "in"
+				? success(
+					{
+						type: "string",
+						minLength: 1,
+					},
+					false,
+				)
+				: transformer(dataParser),
+		);
 
 		expect(
 			render(
@@ -60,14 +62,16 @@ describe("override json schema", () => {
 
 	it("out", () => {
 		const schema = DPE.object({
-			value: DPE.boolean().addOverrideJsonSchema({
-				out: {
-					isOptional: false,
-					schema: {
-						type: "integer",
-					},
-				},
-			}),
+			value: DPE.boolean().addOverrideJsonSchemaTransformer(
+				(dataParser, { success, mode, transformer }) => mode === "out"
+					? success(
+						{
+							type: "integer",
+						},
+						false,
+					)
+					: transformer(dataParser),
+			),
 		});
 
 		expect(

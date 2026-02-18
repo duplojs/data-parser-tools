@@ -11,9 +11,7 @@ export type DataParserNotSupportedEither<
 export type DataParserErrorEither<
 > = E.Left<"buildDataParserError", DP.DataParser>;
 
-export type SupportedDataParsers = DP.DataParsers | SDP.DataParserFile;
-
-export type MapContext = Map<SupportedDataParsers, TypeAliasDeclaration>;
+export type MapContext = Map<DP.DataParsers, TypeAliasDeclaration>;
 
 export type MapImportType = Map<string, string[]>;
 
@@ -41,17 +39,21 @@ export interface TransformerParams {
 	addImport(path: string, typeName: string): void;
 }
 
+export type TransformerBuildFunction<
+	GenericDataParser extends DP.DataParsers = DP.DataParsers,
+> = (
+	schema: GenericDataParser,
+	params: TransformerParams,
+) => MaybeTransformerEither;
+
 export function createTransformer<
-	GenericDataParser extends SupportedDataParsers,
+	GenericDataParser extends DP.DataParsers,
 >(
-	support: (schema: SupportedDataParsers) => schema is GenericDataParser,
-	builder: (
-		schema: GenericDataParser,
-		params: TransformerParams,
-	) => MaybeTransformerEither,
+	support: (schema: DP.DataParsers) => schema is GenericDataParser,
+	builder: TransformerBuildFunction<GenericDataParser>,
 ) {
 	return (
-		schema: SupportedDataParsers,
+		schema: DP.DataParsers,
 		params: TransformerParams,
 	): MaybeTransformerEither => support(schema)
 		? builder(

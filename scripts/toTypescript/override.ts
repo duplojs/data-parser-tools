@@ -1,10 +1,6 @@
 import { dataParserInit } from "@duplojs/utils/dataParser";
 import { type TypeNode } from "typescript";
-import { type TransformerMode } from "./transformer";
-
-export type OverrideTypeNodeDataParser = Partial<
-	Record<TransformerMode, TypeNode>
->;
+import { type TransformerBuildFunction } from "./transformer";
 
 declare module "@duplojs/utils/dataParser" {
 	interface DataParser {
@@ -16,15 +12,15 @@ declare module "@duplojs/utils/dataParser" {
 		addIdentifier(input: string): this;
 
 		/**
-		 * @deprecated this method mutated the dataParser by adding an override type node
+		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
-		setOverrideTypeNode(typeNode: TypeNode | OverrideTypeNodeDataParser): this;
-		addOverrideTypeNode(typeNode: TypeNode | OverrideTypeNodeDataParser): this;
+		setOverrideTypescriptTransformer(typeNode: TypeNode | TransformerBuildFunction<this> | null): this;
+		addOverrideTypescriptTransformer(typeNode: TypeNode | TransformerBuildFunction<this> | null): this;
 	}
 
 	interface DataParserDefinition {
 		identifier?: string;
-		overrideTypeNode?: OverrideTypeNodeDataParser;
+		overrideTypescriptTransformer?: TransformerBuildFunction;
 	}
 }
 
@@ -49,25 +45,26 @@ dataParserInit.overrideHandler.setMethod(
 );
 
 dataParserInit.overrideHandler.setMethod(
-	"setOverrideTypeNode",
-	(schema, overrideTypeNode) => {
-		schema.definition.overrideTypeNode = "kind" in overrideTypeNode
-			? {
-				in: overrideTypeNode,
-				out: overrideTypeNode,
-			}
-			: overrideTypeNode;
+	"setOverrideTypescriptTransformer",
+	(schema, overrideTransformer) => {
+		if (overrideTransformer) {
+			schema.definition.overrideTypescriptTransformer = typeof overrideTransformer === "function"
+				? overrideTransformer
+				: (__, { success }) => success(overrideTransformer);
+		} else {
+			schema.definition.overrideTypescriptTransformer = undefined;
+		}
 
 		return schema;
 	},
 );
 
 dataParserInit.overrideHandler.setMethod(
-	"addOverrideTypeNode",
+	"addOverrideTypescriptTransformer",
 	(schema, overrideTypeNode) => {
 		const newSchema = schema.clone();
 
-		newSchema.setOverrideTypeNode(overrideTypeNode);
+		newSchema.setOverrideTypescriptTransformer(overrideTypeNode);
 
 		return newSchema;
 	},

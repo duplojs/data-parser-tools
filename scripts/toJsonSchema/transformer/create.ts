@@ -108,14 +108,18 @@ export interface TransformerParams {
 	buildError(): DataParserErrorEither;
 }
 
+export type TransformerBuildFunction<
+	GenericDataParser extends DP.DataParsers = DP.DataParsers,
+> = (
+	schema: GenericDataParser,
+	params: TransformerParams,
+) => MaybeTransformerEither;
+
 export function createTransformer<
 	GenericDataParser extends DP.DataParsers,
 >(
 	support: (schema: DP.DataParsers) => schema is GenericDataParser,
-	builder: (
-		schema: GenericDataParser,
-		params: TransformerParams,
-	) => MaybeTransformerEither,
+	builder: TransformerBuildFunction<GenericDataParser>,
 ) {
 	return (
 		schema: DP.DataParsers,

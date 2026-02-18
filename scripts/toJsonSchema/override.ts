@@ -1,9 +1,5 @@
 import { dataParserInit } from "@duplojs/utils/dataParser";
-import { type TransformerMode, type TransformerSuccess } from "./transformer/create";
-
-export type OverrideJsonSchemaDataParser = Partial<
-	Record<TransformerMode, TransformerSuccess>
->;
+import { type TransformerBuildFunction, type TransformerSuccess } from "./transformer/create";
 
 declare module "@duplojs/utils/dataParser" {
 	interface DataParser {
@@ -15,15 +11,19 @@ declare module "@duplojs/utils/dataParser" {
 		addIdentifier(input: string): this;
 
 		/**
-		 * @deprecated this method mutated the dataParser by adding an override json schema
+		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
-		setOverrideJsonSchema(schema: TransformerSuccess | OverrideJsonSchemaDataParser): this;
-		addOverrideJsonSchema(schema: TransformerSuccess | OverrideJsonSchemaDataParser): this;
+		setOverrideJsonSchemaTransformer(
+			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
+		): this;
+		addOverrideJsonSchemaTransformer(
+			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
+		): this;
 	}
 
 	interface DataParserDefinition {
 		identifier?: string;
-		overrideJsonSchema?: OverrideJsonSchemaDataParser;
+		overrideJsonSchemaTransformer?: TransformerBuildFunction;
 	}
 }
 
@@ -48,25 +48,26 @@ dataParserInit.overrideHandler.setMethod(
 );
 
 dataParserInit.overrideHandler.setMethod(
-	"setOverrideJsonSchema",
-	(schema, overrideJsonSchema) => {
-		schema.definition.overrideJsonSchema = "schema" in overrideJsonSchema
-			? {
-				in: overrideJsonSchema,
-				out: overrideJsonSchema,
-			}
-			: overrideJsonSchema;
+	"setOverrideJsonSchemaTransformer",
+	(schema, overrideTransformer) => {
+		if (overrideTransformer) {
+			schema.definition.overrideJsonSchemaTransformer = typeof overrideTransformer === "function"
+				? overrideTransformer
+				: (__, { success }) => success(overrideTransformer.schema, overrideTransformer.isOptional);
+		} else {
+			schema.definition.overrideJsonSchemaTransformer = undefined;
+		}
 
 		return schema;
 	},
 );
 
 dataParserInit.overrideHandler.setMethod(
-	"addOverrideJsonSchema",
-	(schema, overrideJsonSchema) => {
+	"addOverrideJsonSchemaTransformer",
+	(schema, overrideTransformer) => {
 		const newSchema = schema.clone();
 
-		newSchema.setOverrideJsonSchema(overrideJsonSchema);
+		newSchema.setOverrideJsonSchemaTransformer(overrideTransformer);
 
 		return newSchema;
 	},

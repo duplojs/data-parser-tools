@@ -1,8 +1,8 @@
 import { DP, unwrap, E, pipe, G, A, S, kindHeritage } from "@duplojs/utils";
-import { type DataParserErrorEither, type DataParserNotSupportedEither, transformer, type MapContext, type TransformerMode, type TransformerHook, type createTransformer, type SupportedDataParsers, type MapImportType } from "./transformer";
+import { type DataParserErrorEither, type DataParserNotSupportedEither, transformer, type MapContext, type TransformerMode, type TransformerHook, type createTransformer, type MapImportType } from "./transformer";
 import { createPrinter, createSourceFile, EmitHint, factory, ScriptKind, ScriptTarget, SyntaxKind } from "typescript";
 import { createToTypescriptKind } from "./kind";
-import { getRecursiveDataParser } from "@scripts/utils/getRecursiveDataParser";
+import { getRecursiveDataParser } from "@scripts/utils";
 import { importTypesTransformer } from "./transformer/importTypesTransformer";
 
 export interface RenderParams {
@@ -20,14 +20,14 @@ export class DataParserToTypescriptRenderError extends kindHeritage(
 	Error,
 ) {
 	public constructor(
-		public schema: SupportedDataParsers,
+		public schema: DP.DataParser,
 		public error: DataParserNotSupportedEither | DataParserErrorEither,
 	) {
 		super({}, ["Error during the render of dataParser in typescript type."]);
 	}
 }
 
-export function render(schema: SupportedDataParsers, params: RenderParams) {
+export function render(schema: DP.DataParser, params: RenderParams) {
 	const context: MapContext = new Map(params.context);
 	const importType: MapImportType = new Map(params.importType);
 

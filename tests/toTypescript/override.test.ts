@@ -1,6 +1,7 @@
 import "@scripts/toTypescript/override";
 import { DP, justReturn } from "@duplojs/utils";
 import { factory } from "typescript";
+import { type TransformerBuildFunction } from "@scripts/toTypescript/transformer";
 
 describe("override", () => {
 	it("setIdentifier", () => {
@@ -33,34 +34,30 @@ describe("override", () => {
 	it("setOverrideTypeNode", () => {
 		const schema = DP.string();
 
-		expect(schema.definition.overrideTypeNode).toBe(undefined);
+		expect(schema.definition.overrideTypescriptTransformer).toBe(undefined);
 
-		schema.setOverrideTypeNode(factory.createTypeReferenceNode("test"));
+		schema.setOverrideTypescriptTransformer(factory.createTypeReferenceNode("test"));
 
-		expect(schema.definition.overrideTypeNode).toStrictEqual({
-			in: factory.createTypeReferenceNode("test"),
-			out: factory.createTypeReferenceNode("test"),
-		});
+		expect(typeof schema.definition.overrideTypescriptTransformer).toBe("function");
 	});
 
 	it("addOverrideTypeNode", () => {
 		const schema = DP.string();
+		const overrideTransformer: TransformerBuildFunction = (__, { success }) => success(
+			factory.createTypeReferenceNode("test"),
+		);
 
-		expect(schema.definition.overrideTypeNode).toBe(undefined);
+		expect(schema.definition.overrideTypescriptTransformer).toBe(undefined);
 
-		const newSchema = schema.addOverrideTypeNode({ in: factory.createTypeReferenceNode("test") });
+		const newSchema = schema.addOverrideTypescriptTransformer(overrideTransformer);
 
-		expect(schema.definition.overrideTypeNode).toBe(undefined);
-		expect(newSchema.definition.overrideTypeNode).toStrictEqual({
-			in: factory.createTypeReferenceNode("test"),
-		});
+		expect(schema.definition.overrideTypescriptTransformer).toBe(undefined);
+		expect(newSchema.definition.overrideTypescriptTransformer).toBe(overrideTransformer);
 
 		const newSchemaWithoutIdentifier = newSchema.addChecker(DP.checkerRefine(justReturn(true)));
 
-		schema.setOverrideTypeNode(factory.createTypeReferenceNode("test1"));
+		schema.setOverrideTypescriptTransformer(factory.createTypeReferenceNode("test1"));
 
-		expect(newSchemaWithoutIdentifier.definition.overrideTypeNode).toStrictEqual({
-			in: factory.createTypeReferenceNode("test"),
-		});
+		expect(newSchemaWithoutIdentifier.definition.overrideTypescriptTransformer).toBe(overrideTransformer);
 	});
 });

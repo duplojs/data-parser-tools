@@ -41,13 +41,6 @@ export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
 ) {
-	if (schema.definition.overrideJsonSchema?.[params.mode]) {
-		return E.right(
-			"buildSuccess",
-			schema.definition.overrideJsonSchema[params.mode],
-		);
-	}
-
 	const currentSchema = A.reduce(
 		params.hooks,
 		A.reduceFrom<DP.DataParser>(schema),
@@ -120,30 +113,35 @@ export function transformer(
 		},
 	};
 
-	const result = A.reduce(
-		params.transformers,
-		A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
-			E.left("dataParserNotSupport", currentSchema),
-		),
-		({
-			element: functionBuilder,
-			lastValue,
-			next,
-			exit,
-		}) => {
-			const result = functionBuilder(currentSchema, functionParams);
+	const result = currentSchema.definition.overrideJsonSchemaTransformer
+		? currentSchema.definition.overrideJsonSchemaTransformer(
+			currentSchema.addOverrideJsonSchemaTransformer(null),
+			functionParams,
+		)
+		: A.reduce(
+			params.transformers,
+			A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
+				E.left("dataParserNotSupport", currentSchema),
+			),
+			({
+				element: functionBuilder,
+				lastValue,
+				next,
+				exit,
+			}) => {
+				const result = functionBuilder(currentSchema, functionParams);
 
-			if (E.isLeft(result)) {
-				if (unwrap(result) !== currentSchema) {
-					return exit(result);
+				if (E.isLeft(result)) {
+					if (unwrap(result) !== currentSchema) {
+						return exit(result);
+					}
+
+					return next(lastValue);
 				}
 
-				return next(lastValue);
-			}
-
-			return exit(result);
-		},
-	);
+				return exit(result);
+			},
+		);
 
 	if (E.isLeft(result)) {
 		return result;
