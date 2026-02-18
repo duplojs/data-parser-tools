@@ -16,6 +16,13 @@ export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
 ) {
+	if (schema.definition.overrideTypeNode?.[params.mode]) {
+		return E.right(
+			"buildSuccess",
+			schema.definition.overrideTypeNode[params.mode],
+		);
+	}
+
 	const currentSchema = A.reduce(
 		params.hooks,
 		A.reduceFrom<DP.DataParser>(schema),

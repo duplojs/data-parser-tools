@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`override type node > mode in 1`] = `"export type Boolean = Date;"`;
+
+exports[`override type node > mode in 2`] = `"export type Boolean = boolean;"`;
+
+exports[`override type node > out 1`] = `
+"export type Boolean = {
+    date: boolean;
+};"
+`;
+
+exports[`override type node > out 2`] = `
+"export type Boolean = {
+    date: Date;
+};"
+`;
+
+exports[`override type node > simple change 1`] = `"export type Boolean = Date;"`;

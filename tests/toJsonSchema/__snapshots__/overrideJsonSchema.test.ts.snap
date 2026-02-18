@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`override json schema > mode in 1`] = `
+{
+  "$ref": "#/definitions/BooleanSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BooleanSchema": {
+      "minLength": 1,
+      "type": "string",
+    },
+  },
+}
+`;
+
+exports[`override json schema > mode in 2`] = `
+{
+  "$ref": "#/definitions/BooleanSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BooleanSchema": {
+      "type": "boolean",
+    },
+  },
+}
+`;
+
+exports[`override json schema > out 1`] = `
+{
+  "$ref": "#/definitions/ObjectSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ObjectSchema": {
+      "properties": {
+        "value": {
+          "type": "boolean",
+        },
+      },
+      "required": [
+        "value",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`override json schema > out 2`] = `
+{
+  "$ref": "#/definitions/ObjectSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "ObjectSchema": {
+      "properties": {
+        "value": {
+          "type": "integer",
+        },
+      },
+      "required": [
+        "value",
+      ],
+      "type": "object",
+    },
+  },
+}
+`;
+
+exports[`override json schema > simple change 1`] = `
+{
+  "$ref": "#/definitions/BooleanSchema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "BooleanSchema": {
+      "format": "email",
+      "type": "string",
+    },
+  },
+}
+`;

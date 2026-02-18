@@ -56,13 +56,13 @@ export interface TransformerSuccess {
 }
 
 export type TransformerSuccessEither =
-	E.EitherRight<"buildSuccess", TransformerSuccess>;
+	E.Right<"buildSuccess", TransformerSuccess>;
 
 export type DataParserNotSupportedEither =
-	E.EitherLeft<"dataParserNotSupport", DP.DataParser>;
+	E.Left<"dataParserNotSupport", DP.DataParser>;
 
 export type DataParserErrorEither =
-	E.EitherLeft<"buildDataParserError", DP.DataParser>;
+	E.Left<"buildDataParserError", DP.DataParser>;
 
 export interface MapContextValue {
 	readonly name: string;

@@ -7,7 +7,6 @@ import {
 	type TransformerMode,
 	type DataParserErrorEither,
 	type SupportedVersions,
-	supportedVersions,
 } from "./create";
 import { type TransformerHook } from "./hook";
 
@@ -42,6 +41,13 @@ export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
 ) {
+	if (schema.definition.overrideJsonSchema?.[params.mode]) {
+		return E.right(
+			"buildSuccess",
+			schema.definition.overrideJsonSchema[params.mode],
+		);
+	}
+
 	const currentSchema = A.reduce(
 		params.hooks,
 		A.reduceFrom<DP.DataParser>(schema),
