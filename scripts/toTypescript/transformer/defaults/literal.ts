@@ -37,7 +37,11 @@ export const literalTransformer = createTransformer(
 				)
 				.exhaustive(),
 		),
-		factory.createUnionTypeNode,
+		P.when(
+			A.lengthEqual(1),
+			A.at(0),
+		),
+		P.otherwise(factory.createUnionTypeNode),
 		success,
 	),
 );

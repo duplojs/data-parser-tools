@@ -1,4 +1,4 @@
-import { A, type DDataParser, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
+import { A, type DDataParser, E, unwrap, type DP, justExec } from "@duplojs/utils";
 import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
@@ -48,28 +48,30 @@ export function transformer(
 		);
 	}
 
-	const currentIdentifier = whenElse(
-		params.recursiveDataParsers,
-		A.includes(currentSchema),
-		() => {
-			const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
+	const currentIdentifier = justExec(() => {
+		if (
+			!A.includes(params.recursiveDataParsers, currentSchema)
+			&& !currentSchema.definition.identifier
+		) {
+			return undefined;
+		}
 
-			params.context.set(
-				currentSchema,
-				factory.createTypeAliasDeclaration(
-					[factory.createToken(SyntaxKind.ExportKeyword)],
-					factory.createIdentifier(identifier),
-					undefined,
-					factory.createTypeReferenceNode(
-						identifier,
-					),
+		const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
+
+		params.context.set(
+			currentSchema,
+			factory.createTypeAliasDeclaration(
+				[factory.createToken(SyntaxKind.ExportKeyword)],
+				factory.createIdentifier(identifier),
+				undefined,
+				factory.createTypeReferenceNode(
+					identifier,
 				),
-			);
+			),
+		);
 
-			return identifier;
-		},
-		justReturn(currentSchema.definition.identifier),
-	);
+		return identifier;
+	});
 
 	const functionParams: TransformerParams = {
 		success(result) {

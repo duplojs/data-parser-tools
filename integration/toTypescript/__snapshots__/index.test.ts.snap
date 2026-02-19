@@ -24,7 +24,7 @@ export type UserProfile = {
     preferences: {
         theme: "light" | "dark";
         newsletter: boolean;
-    };
+    } | null;
     metadata: Record<string, string>;
     location: [
         number,

@@ -1,6 +1,5 @@
 import { type TypeAliasDeclaration, type TypeNode } from "typescript";
 import { type DP, E } from "@duplojs/utils";
-import { type SDP } from "@duplojs/server-utils";
 
 export type TransformerSuccessEither<
 > = E.Right<"buildSuccess", TypeNode>;

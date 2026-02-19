@@ -33,7 +33,24 @@ export function getRecursiveDataParser(schema: DP.DataParsers): DP.DataParser[] 
 			)
 			.when(
 				DP.lazyKind.has,
-				(dataParser) => void countDataParser(dataParser.definition.getter.value),
+				(dataParser) => {
+					const count = (countMap.get(dataParser) ?? 0) + 1;
+
+					countMap.set(
+						dataParser,
+						count,
+					);
+
+					if (count > 1) {
+						return;
+					}
+
+					countDataParser(dataParser.definition.getter.value);
+
+					if (countMap.get(dataParser) === 1) {
+						countMap.delete(dataParser);
+					}
+				},
 			)
 			.when(
 				DP.pipeKind.has,

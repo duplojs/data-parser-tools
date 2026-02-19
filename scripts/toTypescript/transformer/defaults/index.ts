@@ -20,6 +20,7 @@ export * from "./union";
 export * from "./unknown";
 export * from "./date";
 export * from "./time";
+export * from "./file";
 
 import { type createTransformer } from "../create";
 import { arrayTransformer } from "./array";

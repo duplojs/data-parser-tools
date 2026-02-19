@@ -82,14 +82,13 @@ export function render(schema: DP.DataParser, params: RenderParams) {
 			...importTypesTransformer(importType),
 			...context.values(),
 		],
-		G.map(
+		A.map(
 			(value) => printer.printNode(
 				EmitHint.Unspecified,
 				value,
 				sourceFile,
 			),
 		),
-		A.from,
 		A.join("\n\n"),
 		S.trim,
 	);

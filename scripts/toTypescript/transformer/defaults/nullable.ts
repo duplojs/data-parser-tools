@@ -31,7 +31,7 @@ export const nullableTransformer = createTransformer(
 						{ mode: "in" },
 						{
 							mode: "out",
-							coalescingValue: undefined,
+							coalescingValue: null,
 						},
 					),
 					() => pipe(
