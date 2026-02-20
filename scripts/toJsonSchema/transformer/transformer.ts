@@ -1,4 +1,4 @@
-import { A, E, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
+import { A, E, justExec, justReturn, unwrap, whenElse, type DP } from "@duplojs/utils";
 import {
 	type MapContext,
 	type DataParserNotSupportedEither,
@@ -73,24 +73,26 @@ export function transformer(
 		);
 	}
 
-	const currentIdentifier = whenElse(
-		params.recursiveDataParsers,
-		A.includes(currentSchema),
-		() => {
-			const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
+	const currentIdentifier = justExec(() => {
+		if (
+			!A.includes(params.recursiveDataParsers, currentSchema)
+			&& !currentSchema.definition.identifier
+		) {
+			return undefined;
+		}
 
-			params.context.set(
-				currentSchema,
-				{
-					name: identifier,
-					isOptional: false,
-				},
-			);
+		const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
 
-			return identifier;
-		},
-		justReturn(currentSchema.definition.identifier),
-	);
+		params.context.set(
+			currentSchema,
+			{
+				name: identifier,
+				isOptional: false,
+			},
+		);
+
+		return identifier;
+	});
 
 	const functionParams: TransformerParams = {
 		success(result, isOptional = false) {
