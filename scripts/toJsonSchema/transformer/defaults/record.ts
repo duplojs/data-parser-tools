@@ -1,4 +1,4 @@
-import { A, DP, E, unwrap } from "@duplojs/utils";
+import { A, DP, E, O, unwrap } from "@duplojs/utils";
 import { createTransformer, type JsonSchema } from "../create";
 
 export interface JsonSchemaRecord {
@@ -14,7 +14,7 @@ export interface JsonSchemaRecord {
 export const recordTransformer = createTransformer(
 	DP.recordKind.has,
 	(
-		{ definition: { key, value, requireKey } },
+		{ definition: { key, value, baseData } },
 		{
 			transformer,
 			success,
@@ -35,7 +35,9 @@ export const recordTransformer = createTransformer(
 		const keySchema = unwrap(keyResult).schema;
 		const valueSchema = unwrap(valueResult).schema;
 
-		if (requireKey) {
+		const requireKey = O.keys(baseData);
+
+		if (A.minElements(requireKey, 1)) {
 			const properties = A.reduce(
 				requireKey,
 				A.reduceFrom<Record<string, JsonSchema>>({}),
@@ -52,7 +54,6 @@ export const recordTransformer = createTransformer(
 				additionalProperties: false,
 				propertyNames: { enum: requireKey },
 				minProperties: requireKey.length,
-				maxProperties: requireKey.length,
 			});
 		}
 

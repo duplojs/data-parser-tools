@@ -7,7 +7,6 @@ exports[`record > with optional value 1`] = `
   "definitions": {
     "RecordSchema": {
       "additionalProperties": false,
-      "maxProperties": 2,
       "minProperties": 2,
       "properties": {
         "a": {
@@ -40,7 +39,6 @@ exports[`record > with requireKey enforces exact keys 1`] = `
   "definitions": {
     "RecordSchema": {
       "additionalProperties": false,
-      "maxProperties": 2,
       "minProperties": 2,
       "properties": {
         "a": {

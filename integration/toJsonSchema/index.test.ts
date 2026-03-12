@@ -27,7 +27,7 @@ it("integration", () => {
 			theme: DPE.literal(["light", "dark"]),
 			newsletter: DPE.boolean(),
 		}).nullable(),
-		metadata: DPE.record(DPE.string(), DPE.string(), { requireKey: null }),
+		metadata: DPE.record(DPE.string(), DPE.string()),
 		location: DPE.tuple([DPE.number(), DPE.number()], { rest: DPE.number() }),
 		createdAt: DPE.date({ coerce: true }),
 		startAt: DPE.time(),

@@ -38,8 +38,10 @@ describe("record", () => {
 	});
 
 	it("throws when key type unsupported", () => {
+		const input: any = [];
+		input.definition = {};
 		expect(() => render(
-			DPE.record({ definition: {} } as never, DPE.string()),
+			DPE.record(input, DPE.string()),
 			{
 				identifier: "RecordError",
 				transformers: defaultTransformers,

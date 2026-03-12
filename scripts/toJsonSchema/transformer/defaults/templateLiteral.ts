@@ -1,4 +1,4 @@
-import { DP } from "@duplojs/utils";
+import { A, DP } from "@duplojs/utils";
 import { createTransformer } from "../create";
 
 export interface JsonSchemaTemplateLiteral {
@@ -17,7 +17,7 @@ export const templateLiteralTransformer = createTransformer(
 	) => {
 		const result = DP.findRecordRequiredKeyOnTemplateLiteralPart(schema.definition.template);
 
-		if (result) {
+		if (A.minElements(result, 1)) {
 			return transformer(DP.literal(result));
 		}
 
