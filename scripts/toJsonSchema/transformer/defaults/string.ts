@@ -37,7 +37,7 @@ export const stringTransformer = createTransformer(
 					),
 				)
 				.when(
-					DP.checkerStringRegexKind.has,
+					DP.checkerRegexKind.has,
 					({ definition }) => nextWithObject(
 						lastValue,
 						{ pattern: definition.regex.source },
@@ -56,7 +56,7 @@ export const stringTransformer = createTransformer(
 						lastValue,
 						{
 							format: "email",
-							pattern: lastValue.pattern ?? definition.pattern.source,
+							pattern: lastValue.pattern ?? definition.regex.source,
 						},
 					),
 				)

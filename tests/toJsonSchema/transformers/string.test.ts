@@ -5,7 +5,7 @@ describe("string", () => {
 	it("applies string checkers", () => {
 		const schema = DPE.string()
 			.addChecker(DP.checkerStringMin(2))
-			.addChecker(DP.checkerStringRegex(/^[a-z]+$/));
+			.addChecker(DP.checkerRegex(/^[a-z]+$/));
 
 		expect(
 			render(

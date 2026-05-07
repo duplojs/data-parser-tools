@@ -7,9 +7,9 @@ describe("recursive", () => {
 			recursiveProp: RecursiveObject;
 		}
 
-		const schema: DPE.Contract<RecursiveObject> = DPE.object({
+		const schema: DPE.DataParser<RecursiveObject> = DPE.object({
 			recursiveProp: DPE.lazy(() => schema),
-		}).addIdentifier("RecursiveObject");
+		}).addIdentifier("RecursiveObject").contract();
 
 		expect(
 			render(
@@ -28,9 +28,9 @@ describe("recursive", () => {
 			recursiveProp: RecursiveObject;
 		}
 
-		const schema: DPE.Contract<RecursiveObject> = DPE.object({
+		const schema: DPE.DataParser<RecursiveObject> = DPE.object({
 			recursiveProp: DPE.lazy(() => schema),
-		});
+		}).contract();
 
 		expect(
 			render(
@@ -48,9 +48,9 @@ describe("recursive", () => {
 			recursiveProp: RecursiveObject;
 		}
 
-		const schema: DPE.Contract<RecursiveObject> = DPE.object({
+		const schema: DPE.DataParser<RecursiveObject> = DPE.object({
 			recursiveProp: DPE.lazy(() => schema),
-		}).addIdentifier("Test");
+		}).addIdentifier("Test").contract();
 
 		expect(
 			render(
@@ -67,10 +67,10 @@ describe("recursive", () => {
 	it("with tuple", () => {
 		type RecursiveTuple = [string, (RecursiveTuple | string)[]];
 
-		const schema: DPE.Contract<RecursiveTuple> = DPE.tuple([
+		const schema: DPE.DataParser<RecursiveTuple> = DPE.tuple([
 			DPE.string(),
 			DPE.lazy(() => schema).or(DPE.string()).array(),
-		]);
+		]).contract();
 
 		expect(
 			render(
@@ -87,9 +87,9 @@ describe("recursive", () => {
 	it("with array", () => {
 		type RecursiveArray = (RecursiveArray | string)[];
 
-		const schema: DPE.Contract<RecursiveArray> = DPE.array(
+		const schema: DPE.DataParser<RecursiveArray> = DPE.array(
 			DPE.string().or(DPE.lazy(() => schema)),
-		);
+		).contract();
 
 		expect(
 			render(
@@ -116,22 +116,22 @@ describe("recursive", () => {
 			array: RecursiveArray;
 		}
 
-		const schemaArray: DPE.Contract<RecursiveArray> = DPE.array(
+		const schemaArray: DPE.DataParser<RecursiveArray> = DPE.array(
 			DPE.string().or(DPE.lazy(() => schemaArray)),
-		);
+		).contract();
 
-		const schemaTuple: DPE.Contract<RecursiveTuple> = DPE.tuple([
+		const schemaTuple: DPE.DataParser<RecursiveTuple> = DPE.tuple([
 			DPE.string(),
 			DPE.lazy(() => schemaTuple).or(DPE.string()).array(),
-		]);
+		]).contract();
 
-		const schema: DPE.Contract<RecursiveObject> = DPE.object({
+		const schema: DPE.DataParser<RecursiveObject> = DPE.object({
 			recursiveProp: DPE.object({
 				test: DPE.lazy(() => schema),
 			}),
 			tuple: schemaTuple,
 			array: schemaArray,
-		});
+		}).contract();
 
 		expect(
 			render(
@@ -148,11 +148,11 @@ describe("recursive", () => {
 	it("with union", () => {
 		type RecursiveUnion = string | number | RecursiveUnion[];
 
-		const schema: DPE.Contract<RecursiveUnion> = DPE.union([
+		const schema: DPE.DataParser<RecursiveUnion> = DPE.union([
 			DPE.string(),
 			DPE.number(),
 			DPE.lazy(() => schema).array(),
-		]);
+		]).contract();
 
 		expect(
 			render(

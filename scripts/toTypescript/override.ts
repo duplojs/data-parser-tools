@@ -1,9 +1,9 @@
-import { dataParserInit } from "@duplojs/utils/dataParser";
+import { dataParserBaseInit } from "@duplojs/utils/dataParser";
 import { type TypeNode } from "typescript";
 import { type TransformerBuildFunction } from "./transformer";
 
 declare module "@duplojs/utils/dataParser" {
-	interface DataParser {
+	interface DataParserBase {
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding an identifier
@@ -24,7 +24,7 @@ declare module "@duplojs/utils/dataParser" {
 	}
 }
 
-dataParserInit.overrideHandler.setMethod(
+dataParserBaseInit.overrideHandler.setMethod(
 	"setIdentifier",
 	(schema, identifier) => {
 		schema.definition.identifier = identifier;
@@ -33,7 +33,7 @@ dataParserInit.overrideHandler.setMethod(
 	},
 );
 
-dataParserInit.overrideHandler.setMethod(
+dataParserBaseInit.overrideHandler.setMethod(
 	"addIdentifier",
 	(schema, identifier) => {
 		const newSchema = schema.clone();
@@ -44,7 +44,7 @@ dataParserInit.overrideHandler.setMethod(
 	},
 );
 
-dataParserInit.overrideHandler.setMethod(
+dataParserBaseInit.overrideHandler.setMethod(
 	"setOverrideTypescriptTransformer",
 	(schema, overrideTransformer) => {
 		if (overrideTransformer) {
@@ -59,7 +59,7 @@ dataParserInit.overrideHandler.setMethod(
 	},
 );
 
-dataParserInit.overrideHandler.setMethod(
+dataParserBaseInit.overrideHandler.setMethod(
 	"addOverrideTypescriptTransformer",
 	(schema, overrideTypeNode) => {
 		const newSchema = schema.clone();
