@@ -1,4 +1,4 @@
-import { DP, unwrap, E, pipe, G, A, S, kindHeritage } from "@duplojs/utils";
+import { DP, unwrap, E, pipe, A, S, kindHeritage } from "@duplojs/utils";
 import { type DataParserErrorEither, type DataParserNotSupportedEither, transformer, type MapContext, type TransformerMode, type TransformerHook, type createTransformer, type MapImportType } from "./transformer";
 import { createPrinter, createSourceFile, EmitHint, factory, ScriptKind, ScriptTarget, SyntaxKind } from "typescript";
 import { createToTypescriptKind } from "./kind";
