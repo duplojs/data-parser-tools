@@ -1,0 +1,80 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`render > renders anonymous recursive dataParser with a temporary const 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export type RecursiveType0 = {
+    next: RecursiveType0;
+};
+
+export type RecursiveNode = RecursiveType0;
+
+export const recursiveDataParser0: DP.DataParser<RecursiveNode> = DP.object({ next: DP.lazy(() => recursiveDataParser0) });
+
+export const recursiveNodeParser = recursiveDataParser0;"
+`;
+
+exports[`render > renders checked dataParsers in normal and extended modes 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as DDate from "@duplojs/utils/date";
+
+export const checkedParser = DP.object({ startAt: DP.time({ checkers: [DP.checkerTimeMin(DDate.createTime(1000, "millisecond")), DP.checkerTimeMax(DDate.createTime(5000, "millisecond"))] }), name: DP.string({ checkers: [DP.checkerStringMin(2)] }), count: DP.number({ checkers: [DP.checkerInt(), DP.checkerNumberMin(1)] }) });"
+`;
+
+exports[`render > renders checked dataParsers in normal and extended modes 2`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as DPE from "@duplojs/utils/dataParserExtended";
+
+import * as DDate from "@duplojs/utils/date";
+
+export const checkedExtendedParser = DPE.object({ startAt: DPE.time({ checkers: [DP.checkerTimeMin(DDate.createTime(250, "millisecond"))] }), tags: DPE.array(DPE.string({ checkers: [DP.checkerStringMin(1)] }), { checkers: [DP.checkerArrayMin(1)] }) });"
+`;
+
+exports[`render > renders complex nested recursive dataParsers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export type RecursiveType0 = {
+    recursiveProp: {
+        self: RecursiveType0;
+        array: RecursiveType1;
+        tuple: RecursiveType2;
+        union: RecursiveType3;
+    };
+    children: RecursiveType0[];
+    tuple: RecursiveType2;
+    array: RecursiveType1;
+    union: RecursiveType3;
+};
+
+export type RecursiveType1 = (string | RecursiveType1 | RecursiveType0)[];
+
+export type RecursiveType2 = [
+    string,
+    RecursiveType0,
+    (RecursiveType2 | RecursiveType3 | string)[]
+];
+
+export type RecursiveType3 = string | RecursiveType0 | RecursiveType2 | RecursiveType3[];
+
+export type ComplexRecursive = RecursiveType0;
+
+export const recursiveDataParser1: DP.DataParser<RecursiveType1> = DP.array(DP.union([DP.string(), DP.lazy(() => recursiveDataParser1), DP.lazy(() => recursiveDataParser0)]));
+
+export const recursiveDataParser3: DP.DataParser<RecursiveType3> = DP.union([DP.string(), DP.lazy(() => recursiveDataParser0), DP.lazy(() => recursiveDataParser2), DP.array(DP.lazy(() => recursiveDataParser3))]);
+
+export const recursiveDataParser2: DP.DataParser<RecursiveType2> = DP.tuple([DP.string(), DP.lazy(() => recursiveDataParser0), DP.array(DP.union([DP.lazy(() => recursiveDataParser2), DP.lazy(() => recursiveDataParser3), DP.string()]))]);
+
+export const recursiveDataParser0: DP.DataParser<ComplexRecursive> = DP.object({ recursiveProp: DP.object({ self: DP.lazy(() => recursiveDataParser0), array: recursiveDataParser1, tuple: recursiveDataParser2, union: recursiveDataParser3 }), children: DP.array(DP.lazy(() => recursiveDataParser0)), tuple: recursiveDataParser2, array: recursiveDataParser1, union: recursiveDataParser3 });
+
+export const complexRecursiveParser = recursiveDataParser0;"
+`;
+
+exports[`render > renders named dependencies before their consumers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const childParser = DP.string();
+
+export const parentParser = DP.object({ child: childParser });"
+`;

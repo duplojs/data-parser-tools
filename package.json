@@ -45,6 +45,11 @@
       "import": "./dist/toJsonSchema/index.mjs",
       "require": "./dist/toJsonSchema/index.cjs",
       "types": "./dist/toJsonSchema/index.d.ts"
+    },
+    "./toDataParser": {
+      "import": "./dist/toDataParser/index.mjs",
+      "require": "./dist/toDataParser/index.cjs",
+      "types": "./dist/toDataParser/index.d.ts"
     }
   },
   "files": [
