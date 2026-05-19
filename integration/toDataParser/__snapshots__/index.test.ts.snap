@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`integration 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const userProfileParser = DP.object({ id: DP.templateLiteral(["user-", DP.number(), "-db1"]), name: DP.string({ checkers: [DP.checkerStringMin(2)] }), email: DP.string({ checkers: [DP.checkerEmail()] }), role: DP.literal(["admin", "editor", "viewer"]), age: DP.optional(DP.number({ coerce: true, checkers: [DP.checkerNumberMin(0)] })), contact: DP.union([DP.object({ phone: DP.string({ checkers: [DP.checkerRegex(/^[+\\d][\\d\\s-]{5,}$/)] }) }), DP.object({ email: DP.string({ checkers: [DP.checkerEmail()] }) })]), address: DP.object({ street: DP.string(), city: DP.string(), zip: DP.string({ checkers: [DP.checkerRegex(/^\\d{5}$/)] }), country: DP.literal(["FR"]) }), roles: DP.array(DP.literal(["admin", "editor", "viewer"]), { checkers: [DP.checkerArrayMin(1)] }), preferences: DP.nullable(DP.object({ theme: DP.literal(["light", "dark"]), newsletter: DP.boolean() })), metadata: DP.record(DP.string(), DP.string()), location: DP.tuple([DP.number(), DP.number()], { rest: DP.number() }), createdAt: DP.date({ coerce: true }), startAt: DP.time() });"
+`;
