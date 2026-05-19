@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`boolean > renders boolean parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const booleanParser = DP.boolean({ coerce: true });"
+`;
+
+exports[`boolean > renders boolean parser without coerce 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const booleanParserNoCoerce = DP.boolean();"
+`;

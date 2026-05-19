@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`nil > renders nil parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const nilParser = DP.nil({ coerce: true });"
+`;
+
+exports[`nil > renders nil parser without coerce 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const nilParserNoCoerce = DP.nil();"
+`;

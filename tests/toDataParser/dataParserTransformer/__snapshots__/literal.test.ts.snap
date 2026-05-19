@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`literal > renders literal parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const literalParser = DP.literal(["foo", 1, 1n, true, false, null, undefined]);"
+`;

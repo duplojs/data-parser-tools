@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`file > renders extended file parser namespace 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as DPE from "@duplojs/utils/dataParserExtended";
+
+import * as SDPE from "@duplojs/server-utils/dataParserExtended";
+
+export const fileParserExtended = SDPE.file({});"
+`;
+
+exports[`file > renders file parser with async constraints 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as SDP from "@duplojs/server-utils/dataParser";
+
+export const fileParser = SDP.file({ coerce: true, checkExist: true, maxSize: 10, minSize: 5, mimeType: /image\\/png/ });"
+`;
+
+exports[`file > renders file parser without options 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as SDP from "@duplojs/server-utils/dataParser";
+
+export const fileParserNoOptions = SDP.file({});"
+`;

@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`optional > renders optional parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const optionalParser = DP.optional(DP.string());"
+`;

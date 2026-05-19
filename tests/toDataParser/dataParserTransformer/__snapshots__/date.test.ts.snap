@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`date > renders date parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const dateParser = DP.date({ coerce: true });"
+`;
+
+exports[`date > renders date parser without coerce 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const dateParserNoCoerce = DP.date();"
+`;
