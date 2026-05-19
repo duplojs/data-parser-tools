@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerNumberMin > exclusive 1`] = `"DP.checkerNumberMin(1, { exclusive: true })"`;
+
+exports[`checkerNumberMin > non exclusive 1`] = `"DP.checkerNumberMin(1)"`;

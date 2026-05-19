@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerTimeMax > basic 1`] = `"DP.checkerTimeMax(DDate.createTime(2000, "millisecond"))"`;

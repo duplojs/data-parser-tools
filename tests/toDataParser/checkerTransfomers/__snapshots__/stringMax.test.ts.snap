@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerStringMax > basic 1`] = `"DP.checkerStringMax(10)"`;
