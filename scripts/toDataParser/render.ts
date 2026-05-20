@@ -41,6 +41,7 @@ export interface RenderParams {
 	readonly context?: MapContext;
 	readonly hooks?: readonly TransformerHook[];
 	readonly importClause?: MapImportClause;
+	readonly indent?: boolean;
 
 	readonly toTypescript: {
 		readonly identifier: string;
@@ -149,6 +150,7 @@ export function render(dataParser: DP.DataParser, params: RenderParams) {
 			importClause,
 			dependencyIdentifier,
 			hooks: params.hooks ?? [],
+			indent: params.indent ?? true,
 		},
 	);
 

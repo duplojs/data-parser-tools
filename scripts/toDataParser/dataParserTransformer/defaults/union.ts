@@ -11,6 +11,7 @@ export const unionTransformer = createTransformer(
 			getDefinition,
 			success,
 			transformer,
+			indent,
 		},
 	) => {
 		const options = A.reduce(
@@ -45,7 +46,10 @@ export const unionTransformer = createTransformer(
 				),
 				undefined,
 				[
-					factory.createArrayLiteralExpression(options),
+					factory.createArrayLiteralExpression(
+						options,
+						indent,
+					),
 					...definition,
 				],
 			),

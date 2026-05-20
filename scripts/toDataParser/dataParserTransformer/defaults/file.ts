@@ -1,4 +1,4 @@
-import { E, justExec, pipe } from "@duplojs/utils";
+import { A, E, justExec, pipe } from "@duplojs/utils";
 import { createTransformer } from "../create";
 import { factory, type PropertyAssignment } from "typescript";
 import { SDP } from "@duplojs/server-utils";
@@ -12,6 +12,7 @@ export const fileTransformer = createTransformer(
 			dependencyIdentifier,
 			getDefinition,
 			addImportClause,
+			indent,
 		},
 	) => {
 		const definition = getDefinition();
@@ -85,7 +86,10 @@ export const fileTransformer = createTransformer(
 				),
 				undefined,
 				[
-					factory.createObjectLiteralExpression(dataParserFileParams),
+					factory.createObjectLiteralExpression(
+						dataParserFileParams,
+						indent && A.minElements(dataParserFileParams, 2),
+					),
 					...definition,
 				],
 			),

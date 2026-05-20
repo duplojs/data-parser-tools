@@ -11,6 +11,7 @@ export const tupleTransformer = createTransformer(
 			dependencyIdentifier,
 			getDefinition,
 			transformer,
+			indent,
 		},
 	) => {
 		const shape = A.reduce(
@@ -64,7 +65,10 @@ export const tupleTransformer = createTransformer(
 				),
 				undefined,
 				[
-					factory.createArrayLiteralExpression(shape),
+					factory.createArrayLiteralExpression(
+						shape,
+						indent && A.minElements(shape, 3),
+					),
 					...definition,
 				],
 			),

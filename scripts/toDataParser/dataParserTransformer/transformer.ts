@@ -4,30 +4,33 @@ import { factory, type PropertyAssignment, type CallExpression, type Identifier 
 import type { TransformerHook } from "./hook";
 import { type createCheckerTransformer, checkerTransformer } from "../checkerTransformer";
 
-export function getDefinitionDataParser(
-	dataParser: DP.DataParser,
-	checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[],
-	customProperties?: readonly PropertyAssignment[],
-) {
+export interface getDefinitionDataParserParams {
+	readonly dataParser: DP.DataParser;
+	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
+	readonly customProperties: readonly PropertyAssignment[];
+	readonly indent: boolean;
+}
+
+export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
 	const propertyAssignments: PropertyAssignment[] = [];
 
-	if (dataParser.definition.errorMessage) {
+	if (params.dataParser.definition.errorMessage) {
 		propertyAssignments.push(
 			factory.createPropertyAssignment(
 				factory.createIdentifier("errorMessage"),
-				factory.createStringLiteral(dataParser.definition.errorMessage),
+				factory.createStringLiteral(params.dataParser.definition.errorMessage),
 			),
 		);
 	}
-	if (customProperties) {
-		propertyAssignments.push(...customProperties);
+	if (A.minElements(params.customProperties, 1)) {
+		propertyAssignments.push(...params.customProperties);
 	}
-	if (A.minElements(dataParser.definition.checkers, 1)) {
+	if (A.minElements(params.dataParser.definition.checkers, 1)) {
 		const checkers = A.reduce(
-			dataParser.definition.checkers,
+			params.dataParser.definition.checkers,
 			A.reduceFrom<CallExpression[]>([]),
 			({ element, lastValue, nextPush, exit }) => pipe(
-				checkerTransformer(element, { transformers: checkerTransformers }),
+				checkerTransformer(element, { transformers: params.checkerTransformers }),
 				E.whenIsRight(
 					(value) => nextPush(lastValue, value),
 				),
@@ -40,7 +43,7 @@ export function getDefinitionDataParser(
 
 		if (E.isLeft(checkers)) {
 			return E.left("buildDataParserGetDefinitionError", {
-				dataParser,
+				dataParser: params.dataParser,
 				error: checkers,
 			});
 		}
@@ -48,13 +51,21 @@ export function getDefinitionDataParser(
 		propertyAssignments.push(
 			factory.createPropertyAssignment(
 				factory.createIdentifier("checkers"),
-				factory.createArrayLiteralExpression(checkers),
+				factory.createArrayLiteralExpression(
+					checkers,
+					params.indent && A.minElements(checkers, 2),
+				),
 			),
 		);
 	}
 
 	return A.minElements(propertyAssignments, 1)
-		? <const>[factory.createObjectLiteralExpression(propertyAssignments)]
+		? <const>[
+			factory.createObjectLiteralExpression(
+				propertyAssignments,
+				params.indent && A.minElements(propertyAssignments, 2),
+			),
+		]
 		: <const>[];
 }
 
@@ -67,6 +78,7 @@ export interface TransformerFunctionParams {
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DP.DataParser[];
 	readonly importClause: MapImportClause;
+	readonly indent: boolean;
 }
 
 export function transformer(
@@ -140,12 +152,18 @@ export function transformer(
 		},
 		context: params.context,
 		dependencyIdentifier: params.dependencyIdentifier,
+		indent: params.indent,
 		buildError() {
 			return E.left("buildDataParserError", currentDataParser);
 		},
 		importClause: params.importClause,
-		getDefinition(customProperties) {
-			return getDefinitionDataParser(currentDataParser, params.checkerTransformers, customProperties);
+		getDefinition(customProperties = [], indent = true) {
+			return getDefinitionDataParser({
+				dataParser: currentDataParser,
+				checkerTransformers: params.checkerTransformers,
+				customProperties,
+				indent: indent && params.indent,
+			});
 		},
 		addImportClause(path, clause) {
 			params.importClause.set(path, clause);
@@ -206,5 +224,8 @@ export function transformer(
 		);
 	}
 
-	return result;
+	return E.right(
+		"buildSuccess",
+		unwrap(result),
+	);
 }

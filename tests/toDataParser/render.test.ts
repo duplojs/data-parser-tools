@@ -184,4 +184,35 @@ describe("render", () => {
 			),
 		).toMatchSnapshot();
 	});
+
+	it("renders dataParser in compact mode when indent is false", () => {
+		const compactSchema = DPE.object({
+			name: DPE.string().min(2),
+			roles: DPE.literal(["admin", "editor"]).array().min(1),
+			contact: DPE.union([
+				DPE.object({
+					email: DPE.email(),
+				}),
+				DPE.object({
+					phone: DPE.string().regex(/^[+\d][\d\s-]{5,}$/),
+				}),
+			]),
+		});
+
+		expect(
+			render(
+				compactSchema,
+				{
+					constName: "compactParser",
+					indent: false,
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					toTypescript: {
+						identifier: "CompactSchema",
+						transformers: tsDefaultTransformers,
+					},
+				},
+			),
+		).toMatchSnapshot();
+	});
 });

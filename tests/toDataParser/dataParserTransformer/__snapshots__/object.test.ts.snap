@@ -3,5 +3,8 @@
 exports[`object > renders object parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const objectParser = DP.object({ foo: DP.string(), bar: DP.number() });"
+export const objectParser = DP.object({
+    foo: DP.string(),
+    bar: DP.number()
+});"
 `;

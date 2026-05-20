@@ -15,7 +15,13 @@ exports[`file > renders file parser with async constraints 1`] = `
 
 import * as SDP from "@duplojs/server-utils/dataParser";
 
-export const fileParser = SDP.file({ coerce: true, checkExist: true, maxSize: 10, minSize: 5, mimeType: /image\\/png/ });"
+export const fileParser = SDP.file({
+    coerce: true,
+    checkExist: true,
+    maxSize: 10,
+    minSize: 5,
+    mimeType: /image\\/png/
+});"
 `;
 
 exports[`file > renders file parser without options 1`] = `

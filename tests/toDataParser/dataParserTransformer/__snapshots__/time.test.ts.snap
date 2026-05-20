@@ -5,7 +5,10 @@ exports[`time > renders time parser with checker imports 1`] = `
 
 import * as DDate from "@duplojs/utils/date";
 
-export const timeParser = DP.time({ coerce: true, checkers: [DP.checkerTimeMin(DDate.createTime(1, "millisecond"))] });"
+export const timeParser = DP.time({
+    coerce: true,
+    checkers: [DP.checkerTimeMin(DDate.createTime(1, "millisecond"))]
+});"
 `;
 
 exports[`time > renders time parser without coerce and without checkers 1`] = `

@@ -11,6 +11,7 @@ export const templateLiteralTransformer = createTransformer(
 			dependencyIdentifier,
 			getDefinition,
 			transformer,
+			indent,
 		},
 	) => {
 		const parts = A.reduce(
@@ -78,7 +79,10 @@ export const templateLiteralTransformer = createTransformer(
 				),
 				undefined,
 				[
-					factory.createArrayLiteralExpression(parts),
+					factory.createArrayLiteralExpression(
+						parts,
+						indent && A.minElements(parts, 4),
+					),
 					...definition,
 				],
 			),

@@ -1,6 +1,6 @@
 import { dataParserBaseInit } from "@duplojs/utils/dataParser";
-import { type CallExpression } from "typescript";
-import { type TransformerBuildFunction } from "./dataParserTransformer";
+import type { CallExpression, Identifier } from "typescript";
+import type { TransformerBuildFunction } from "./dataParserTransformer";
 
 declare module "@duplojs/utils/dataParser" {
 	interface DataParserBase {
@@ -15,10 +15,10 @@ declare module "@duplojs/utils/dataParser" {
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
 		setOverrideDataParserTransformer(
-			transformer: CallExpression | TransformerBuildFunction<this> | null,
+			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
 		): this;
 		addOverrideDataParserTransformer(
-			transformer: CallExpression | TransformerBuildFunction<this> | null,
+			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
 		): this;
 	}
 

@@ -3,5 +3,22 @@
 exports[`templateLiteral > renders template literal parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const templateLiteralParser = DP.templateLiteral(["pre-", 1n, "mid-", true, "-false-", false, "-str-", "abc", "-num-", 42, "-null-", null, "-undef-", undefined, "-dp-", DP.string()]);"
+export const templateLiteralParser = DP.templateLiteral([
+    "pre-",
+    1n,
+    "mid-",
+    true,
+    "-false-",
+    false,
+    "-str-",
+    "abc",
+    "-num-",
+    42,
+    "-null-",
+    null,
+    "-undef-",
+    undefined,
+    "-dp-",
+    DP.string()
+]);"
 `;

@@ -35,19 +35,21 @@ export interface TransformerParams {
 	readonly dependencyIdentifier: Identifier;
 	readonly context: MapContext;
 	readonly importClause: MapImportClause;
+	readonly indent: boolean;
 
 	transformer(
 		dataParser: DP.DataParser,
 	): MaybeTransformerEither;
 
 	success(
-		result: CallExpression,
+		result: CallExpression | Identifier,
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
 	addImportClause(path: string, clause: string): void;
 	getDefinition(
-		customProperties?: readonly PropertyAssignment[]
+		customProperties?: readonly PropertyAssignment[],
+		indent?: boolean,
 	): readonly [ObjectLiteralExpression] | readonly [] | DataParserGetDefinitionErrorEither;
 }
 
