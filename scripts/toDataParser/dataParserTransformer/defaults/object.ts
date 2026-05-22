@@ -11,7 +11,6 @@ export const objectTransformer = createTransformer(
 			dependencyIdentifier,
 			getDefinition,
 			transformer,
-			indent,
 		},
 	) => {
 		const shape = pipe(
@@ -59,7 +58,7 @@ export const objectTransformer = createTransformer(
 				[
 					factory.createObjectLiteralExpression(
 						shape,
-						indent,
+						true,
 					),
 					...definition,
 				],

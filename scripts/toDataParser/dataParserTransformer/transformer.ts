@@ -1,84 +1,26 @@
-import { A, E, type DP, pipe, unwrap, when } from "@duplojs/utils";
-import type { MapContext, TransformerParams, createTransformer, MapImportClause, MaybeTransformerEither } from "./create";
-import { factory, type PropertyAssignment, type CallExpression, type Identifier } from "typescript";
+import { A, E, type DP, unwrap, S, justExec, pipe, whenNot, isType, equal } from "@duplojs/utils";
+import * as TST from "@scripts/toTypescript";
+import type { MapContext, TransformerParams, createTransformer, MaybeTransformerEither } from "./create";
+import { factory, type Identifier } from "typescript";
 import type { TransformerHook } from "./hook";
-import { type createCheckerTransformer, checkerTransformer } from "../checkerTransformer";
-
-export interface getDefinitionDataParserParams {
-	readonly dataParser: DP.DataParser;
-	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
-	readonly customProperties: readonly PropertyAssignment[];
-	readonly indent: boolean;
-}
-
-export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
-	const propertyAssignments: PropertyAssignment[] = [];
-
-	if (params.dataParser.definition.errorMessage) {
-		propertyAssignments.push(
-			factory.createPropertyAssignment(
-				factory.createIdentifier("errorMessage"),
-				factory.createStringLiteral(params.dataParser.definition.errorMessage),
-			),
-		);
-	}
-	if (A.minElements(params.customProperties, 1)) {
-		propertyAssignments.push(...params.customProperties);
-	}
-	if (A.minElements(params.dataParser.definition.checkers, 1)) {
-		const checkers = A.reduce(
-			params.dataParser.definition.checkers,
-			A.reduceFrom<CallExpression[]>([]),
-			({ element, lastValue, nextPush, exit }) => pipe(
-				checkerTransformer(element, { transformers: params.checkerTransformers }),
-				E.whenIsRight(
-					(value) => nextPush(lastValue, value),
-				),
-				when(
-					E.isLeft,
-					exit,
-				),
-			),
-		);
-
-		if (E.isLeft(checkers)) {
-			return E.left("buildDataParserGetDefinitionError", {
-				dataParser: params.dataParser,
-				error: checkers,
-			});
-		}
-
-		propertyAssignments.push(
-			factory.createPropertyAssignment(
-				factory.createIdentifier("checkers"),
-				factory.createArrayLiteralExpression(
-					checkers,
-					params.indent && A.minElements(checkers, 2),
-				),
-			),
-		);
-	}
-
-	return A.minElements(propertyAssignments, 1)
-		? <const>[
-			factory.createObjectLiteralExpression(
-				propertyAssignments,
-				params.indent && A.minElements(propertyAssignments, 2),
-			),
-		]
-		: <const>[];
-}
+import { type createCheckerTransformer } from "../checkerTransformer";
+import { getDefinitionDataParser } from "./getDefinitionDataParser";
+import { success } from "@duplojs/utils/either";
 
 export interface TransformerFunctionParams {
 	readonly dataParserTransformers: readonly ReturnType<typeof createTransformer>[];
 	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
+	readonly typescriptTransformers: readonly ReturnType<typeof TST.createTransformer>[];
 	readonly context: MapContext;
-	readonly buildingConstNames: Map<DP.DataParser, Identifier>;
+	readonly typescriptContext: TST.MapContext;
+	readonly importContext: TST.MapImportContext;
 	readonly dependencyIdentifier: Identifier;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DP.DataParser[];
-	readonly importClause: MapImportClause;
-	readonly indent: boolean;
+	readonly toTypescript?: {
+		readonly mode?: TST.TransformerMode;
+		readonly hooks?: readonly TST.TransformerHook[];
+	};
 }
 
 export function transformer(
@@ -92,7 +34,7 @@ export function transformer(
 			const result = hook({
 				dataParser: lastValue,
 				context: params.context,
-				importDataParser: params.importClause,
+				importContext: params.importContext,
 				output: (action, dataParser) => ({
 					dataParser,
 					action,
@@ -111,32 +53,28 @@ export function transformer(
 	if (contextValue) {
 		return E.right(
 			"buildSuccess",
-			contextValue.constName,
-		);
-	}
-
-	const currentBuildingConstName = params.buildingConstNames.get(currentDataParser);
-
-	if (currentBuildingConstName) {
-		return E.right(
-			"buildSuccess",
-			currentBuildingConstName,
+			contextValue.identifier,
 		);
 	}
 
 	const shouldCreateConstDeclaration = A.includes(params.recursiveDataParsers, currentDataParser)
-		|| !!currentDataParser.definition.constName;
-	const currentConstName = shouldCreateConstDeclaration
+		|| !!currentDataParser.definition.identifier;
+	const currentIdentifier = shouldCreateConstDeclaration
 		? factory.createIdentifier(
-			currentDataParser.definition.constName
-			?? `recursiveDataParser${params.context.size + params.buildingConstNames.size}`,
+			currentDataParser.definition.identifier !== undefined
+				? `${S.uncapitalize(currentDataParser.definition.identifier)}DataParser`
+				: `recursiveDataParser${params.context.size + params.context.size}`,
 		)
 		: undefined;
 
-	if (currentConstName) {
-		params.buildingConstNames.set(
+	if (currentIdentifier) {
+		params.context.set(
 			currentDataParser,
-			currentConstName,
+			{
+				identifier: currentIdentifier,
+				expression: factory.createIdentifier("undefined"),
+				typeIdentifier: null,
+			},
 		);
 	}
 
@@ -152,21 +90,36 @@ export function transformer(
 		},
 		context: params.context,
 		dependencyIdentifier: params.dependencyIdentifier,
-		indent: params.indent,
 		buildError() {
 			return E.left("buildDataParserError", currentDataParser);
 		},
-		importClause: params.importClause,
-		getDefinition(customProperties = [], indent = true) {
+		importContext: params.importContext,
+		getDefinition(customProperties = []) {
 			return getDefinitionDataParser({
 				dataParser: currentDataParser,
 				checkerTransformers: params.checkerTransformers,
 				customProperties,
-				indent: indent && params.indent,
 			});
 		},
-		addImportClause(path, clause) {
-			params.importClause.set(path, clause);
+		addImport(path, typeName, type) {
+			if (equal(type, ["clause", "default"])) {
+				params.importContext.set(path, {
+					type,
+					identifier: typeName,
+				});
+			}
+
+			const types = pipe(
+				params.importContext.get(path),
+				whenNot(
+					isType("array"),
+					() => [],
+				),
+			);
+
+			if (!A.includes(types, typeName)) {
+				params.importContext.set(path, A.push(types, typeName));
+			}
 		},
 	};
 
@@ -201,26 +154,58 @@ export function transformer(
 		);
 
 	if (E.isLeft(result)) {
-		if (currentConstName) {
-			params.buildingConstNames.delete(currentDataParser);
-		}
-
 		return result;
 	}
 
-	if (currentConstName) {
-		params.buildingConstNames.delete(currentDataParser);
+	if (currentIdentifier) {
+		const typeIdentifier = justExec(() => {
+			if (!A.includes(params.recursiveDataParsers, currentDataParser)) {
+				return undefined;
+			}
+			const identifier = `$${currentIdentifier.text}`;
+
+			const result = TST.buildContext(
+				currentDataParser,
+				{
+					identifier,
+					transformers: params.typescriptTransformers,
+					context: params.typescriptContext,
+					importContext: params.importContext,
+					...params.toTypescript,
+				},
+			);
+			return E.matchInformationOtherwise(
+				result,
+				{
+					buildDataParserError: (dataParser) => E.left(
+						"toTypescriptBuildDataParserError",
+						dataParser,
+					),
+					dataParserNotSupport: (dataParser) => E.left(
+						"toTypescriptDataParserNotSupport",
+						dataParser,
+					),
+				},
+				() => factory.createIdentifier(identifier),
+			);
+		});
+
+		if (E.isLeft(typeIdentifier)) {
+			return typeIdentifier;
+		}
+
 		params.context.set(
 			currentDataParser,
 			{
-				constName: currentConstName,
+				identifier: currentIdentifier,
 				expression: unwrap(result),
+				typeIdentifier: typeIdentifier ?? null,
 			},
 		);
 
 		return E.right(
 			"buildSuccess",
-			currentConstName,
+			currentIdentifier,
 		);
 	}
 

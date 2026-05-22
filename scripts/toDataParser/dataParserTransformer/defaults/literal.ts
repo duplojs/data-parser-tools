@@ -10,7 +10,6 @@ export const literalTransformer = createTransformer(
 			success,
 			dependencyIdentifier,
 			getDefinition,
-			indent,
 		},
 	) => {
 		const definition = getDefinition();
@@ -61,7 +60,7 @@ export const literalTransformer = createTransformer(
 				[
 					factory.createArrayLiteralExpression(
 						values,
-						indent && A.minElements(values, 4),
+						A.minElements(values, 4),
 					),
 					...definition,
 				],

@@ -1,5 +1,6 @@
 import type { DP } from "@duplojs/utils";
-import type { MapContext, MapImportClause } from "./create";
+import type * as TST from "@scripts/toTypescript";
+import type { MapContext } from "./create";
 
 export type TransformerHookAction = "stop" | "next";
 
@@ -11,7 +12,7 @@ export interface TransformerHookOutput {
 export interface TransformerHookParams {
 	dataParser: DP.DataParsers;
 	context: MapContext;
-	importDataParser: MapImportClause;
+	importContext: TST.MapImportContext;
 
 	output(
 		action: TransformerHookAction,

@@ -12,7 +12,19 @@ export type DataParserErrorEither<
 
 export type MapContext = Map<DP.DataParsers, TypeAliasDeclaration>;
 
-export type MapImportType = Map<string, string[]>;
+export type MapImportContext = Map<
+	string,
+	| string[]
+	| {
+		type: "default" | "clause";
+		identifier: string;
+	}
+>;
+
+/**
+ * @deprecated use MapImportContext
+ */
+export type MapImportType = MapImportContext;
 
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
@@ -24,7 +36,12 @@ export type TransformerMode = "in" | "out";
 export interface TransformerParams {
 	readonly mode: TransformerMode;
 	readonly context: MapContext;
-	readonly importType: MapImportType;
+	readonly importContext: MapImportContext;
+
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType: MapImportContext;
 
 	transformer(
 		schema: DP.DataParser,
@@ -35,7 +52,7 @@ export interface TransformerParams {
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
-	addImport(path: string, typeName: string): void;
+	addImport(path: string, typeName: string, type?: "default" | "clause"): void;
 }
 
 export type TransformerBuildFunction<

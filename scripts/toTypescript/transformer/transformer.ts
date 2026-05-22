@@ -1,5 +1,5 @@
-import { A, type DDataParser, E, unwrap, type DP, justExec } from "@duplojs/utils";
-import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType } from "./create";
+import { A, type DDataParser, E, unwrap, type DP, justExec, equal, pipe, isType, whenNot } from "@duplojs/utils";
+import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
 
@@ -9,7 +9,12 @@ export interface TransformerFunctionParams {
 	readonly mode: TransformerMode;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DDataParser.DataParser[];
-	readonly importType: MapImportType;
+	readonly importContext: MapImportContext;
+
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType?: MapImportContext;
 }
 
 export function transformer(
@@ -23,7 +28,8 @@ export function transformer(
 			const result = hook({
 				schema: lastValue,
 				context: params.context,
-				importType: params.importType,
+				importContext: params.importContext,
+				importType: params.importContext,
 				output: (action, schema) => ({
 					schema,
 					action,
@@ -88,12 +94,26 @@ export function transformer(
 		buildError() {
 			return E.left("buildDataParserError");
 		},
-		importType: params.importType,
-		addImport(path, typeName) {
-			const types = params.importType.get(path) ?? [];
+		importContext: params.importContext,
+		importType: params.importContext,
+		addImport(path, typeName, type) {
+			if (equal(type, ["clause", "default"])) {
+				params.importContext.set(path, {
+					type,
+					identifier: typeName,
+				});
+			}
+
+			const types = pipe(
+				params.importContext.get(path),
+				whenNot(
+					isType("array"),
+					() => [],
+				),
+			);
 
 			if (!A.includes(types, typeName)) {
-				params.importType.set(path, A.push(types, typeName));
+				params.importContext.set(path, A.push(types, typeName));
 			}
 		},
 	};

@@ -48,7 +48,7 @@ describe("file", () => {
 				SDP.file(),
 				{
 					constName: "fileParserExtended",
-					exportMode: "extended",
+					importMode: "extended",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
 					toTypescript,

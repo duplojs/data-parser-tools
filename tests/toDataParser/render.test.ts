@@ -173,7 +173,7 @@ describe("render", () => {
 				checkedExtendedSchema,
 				{
 					constName: "checkedExtendedParser",
-					exportMode: "extended",
+					importMode: "extended",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
 					toTypescript: {

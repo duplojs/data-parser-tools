@@ -11,8 +11,7 @@ export const fileTransformer = createTransformer(
 			success,
 			dependencyIdentifier,
 			getDefinition,
-			addImportClause,
-			indent,
+			addImport,
 		},
 	) => {
 		const definition = getDefinition();
@@ -67,13 +66,13 @@ export const fileTransformer = createTransformer(
 		const namespace = dependencyIdentifier.text === "DP"
 			? justExec(
 				() => {
-					addImportClause("@duplojs/server-utils/dataParser", "SDP");
+					addImport("@duplojs/server-utils/dataParser", "SDP", "clause");
 					return "SDP";
 				},
 			)
 			: justExec(
 				() => {
-					addImportClause("@duplojs/server-utils/dataParserExtended", "SDPE");
+					addImport("@duplojs/server-utils/dataParserExtended", "SDPE", "clause");
 					return "SDPE";
 				},
 			);
@@ -88,7 +87,7 @@ export const fileTransformer = createTransformer(
 				[
 					factory.createObjectLiteralExpression(
 						dataParserFileParams,
-						indent && A.minElements(dataParserFileParams, 2),
+						A.minElements(dataParserFileParams, 2),
 					),
 					...definition,
 				],

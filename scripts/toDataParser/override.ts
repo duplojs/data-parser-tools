@@ -8,8 +8,8 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the dataParser by adding an identifier
 		 */
-		setConstName(input: string): this;
-		addConstName(input: string): this;
+		setIdentifier(input: string): this;
+		addIdentifier(input: string): this;
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding an override transformer
@@ -23,26 +23,26 @@ declare module "@duplojs/utils/dataParser" {
 	}
 
 	interface DataParserDefinition {
-		constName?: string;
+		identifier?: string;
 		overrideDataParserTransformer?: TransformerBuildFunction;
 	}
 }
 
 dataParserBaseInit.overrideHandler.setMethod(
-	"setConstName",
-	(schema, constName) => {
-		schema.definition.constName = constName;
+	"setIdentifier",
+	(schema, identifier) => {
+		schema.definition.identifier = identifier;
 
 		return schema;
 	},
 );
 
 dataParserBaseInit.overrideHandler.setMethod(
-	"addConstName",
+	"addIdentifier",
 	(schema, identifier) => {
 		const newSchema = schema.clone();
 
-		newSchema.setConstName(identifier);
+		newSchema.setIdentifier(identifier);
 
 		return newSchema;
 	},

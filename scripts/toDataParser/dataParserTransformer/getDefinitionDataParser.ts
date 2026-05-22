@@ -1,0 +1,67 @@
+import { A, type DP, E, pipe, when } from "@duplojs/utils";
+import { checkerTransformer, type createCheckerTransformer } from "../checkerTransformer";
+import { type CallExpression, factory, type PropertyAssignment } from "typescript";
+
+export interface getDefinitionDataParserParams {
+	readonly dataParser: DP.DataParser;
+	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
+	readonly customProperties: readonly PropertyAssignment[];
+}
+
+export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
+	const propertyAssignments: PropertyAssignment[] = [];
+
+	if (params.dataParser.definition.errorMessage) {
+		propertyAssignments.push(
+			factory.createPropertyAssignment(
+				factory.createIdentifier("errorMessage"),
+				factory.createStringLiteral(params.dataParser.definition.errorMessage),
+			),
+		);
+	}
+	if (A.minElements(params.customProperties, 1)) {
+		propertyAssignments.push(...params.customProperties);
+	}
+	if (A.minElements(params.dataParser.definition.checkers, 1)) {
+		const checkers = A.reduce(
+			params.dataParser.definition.checkers,
+			A.reduceFrom<CallExpression[]>([]),
+			({ element, lastValue, nextPush, exit }) => pipe(
+				checkerTransformer(element, { transformers: params.checkerTransformers }),
+				E.whenIsRight(
+					(value) => nextPush(lastValue, value),
+				),
+				when(
+					E.isLeft,
+					exit,
+				),
+			),
+		);
+
+		if (E.isLeft(checkers)) {
+			return E.left("buildDataParserGetDefinitionError", {
+				dataParser: params.dataParser,
+				error: checkers,
+			});
+		}
+
+		propertyAssignments.push(
+			factory.createPropertyAssignment(
+				factory.createIdentifier("checkers"),
+				factory.createArrayLiteralExpression(
+					checkers,
+					A.minElements(checkers, 2),
+				),
+			),
+		);
+	}
+
+	return A.minElements(propertyAssignments, 1)
+		? <const>[
+			factory.createObjectLiteralExpression(
+				propertyAssignments,
+				A.minElements(propertyAssignments, 2),
+			),
+		]
+		: <const>[];
+}

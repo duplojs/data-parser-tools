@@ -10,7 +10,7 @@ export const timeTransformer = createTransformer(
 			success,
 			dependencyIdentifier,
 			getDefinition,
-			addImportClause,
+			addImport,
 		},
 	) => {
 		const definition = getDefinition(
@@ -29,7 +29,7 @@ export const timeTransformer = createTransformer(
 		}
 
 		if (A.minElements(dataParser.definition.checkers, 1)) {
-			addImportClause("@duplojs/utils/date", "DDate");
+			addImport("@duplojs/utils/date", "DDate", "clause");
 		}
 
 		return pipe(

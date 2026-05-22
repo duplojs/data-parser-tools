@@ -1,5 +1,6 @@
-import type { CallExpression, Identifier, ObjectLiteralExpression, PropertyAssignment } from "typescript";
 import { type DP, E } from "@duplojs/utils";
+import type * as TST from "@scripts/toTypescript";
+import type { CallExpression, Identifier, ObjectLiteralExpression, PropertyAssignment } from "typescript";
 import type { CheckerTransformerBuildErrorEither, CheckerTransformerCheckerNotSupportedEither } from "../checkerTransformer";
 
 export type TransformerSuccessEither = E.Right<"buildSuccess", CallExpression | Identifier>;
@@ -7,6 +8,10 @@ export type TransformerSuccessEither = E.Right<"buildSuccess", CallExpression | 
 export type DataParserNotSupportedEither = E.Left<"dataParserNotSupport", DP.DataParser>;
 
 export type DataParserErrorEither = E.Left<"buildDataParserError", DP.DataParser>;
+
+export type ToTypescriptDataParserNotSupportedEither = E.Left<"toTypescriptDataParserNotSupport", DP.DataParser>;
+
+export type ToTypescriptDataParserErrorEither = E.Left<"toTypescriptBuildDataParserError", DP.DataParser>;
 
 export type DataParserGetDefinitionErrorEither = E.Left<
 	"buildDataParserGetDefinitionError",
@@ -17,25 +22,25 @@ export type DataParserGetDefinitionErrorEither = E.Left<
 >;
 
 export interface MapContextValue {
-	readonly constName: Identifier;
+	readonly identifier: Identifier;
 	readonly expression: CallExpression | Identifier;
+	readonly typeIdentifier: Identifier | null;
 }
 
 export type MapContext = Map<DP.DataParsers, MapContextValue>;
-
-export type MapImportClause = Map<string, string>;
 
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
 	| DataParserNotSupportedEither
 	| DataParserErrorEither
-	| DataParserGetDefinitionErrorEither;
+	| DataParserGetDefinitionErrorEither
+	| ToTypescriptDataParserNotSupportedEither
+	| ToTypescriptDataParserErrorEither;
 
 export interface TransformerParams {
 	readonly dependencyIdentifier: Identifier;
 	readonly context: MapContext;
-	readonly importClause: MapImportClause;
-	readonly indent: boolean;
+	readonly importContext: TST.MapImportContext;
 
 	transformer(
 		dataParser: DP.DataParser,
@@ -46,10 +51,9 @@ export interface TransformerParams {
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
-	addImportClause(path: string, clause: string): void;
+	addImport(path: string, typeName: string, type?: "default" | "clause"): void;
 	getDefinition(
 		customProperties?: readonly PropertyAssignment[],
-		indent?: boolean,
 	): readonly [ObjectLiteralExpression] | readonly [] | DataParserGetDefinitionErrorEither;
 }
 
