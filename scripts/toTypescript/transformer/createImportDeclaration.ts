@@ -1,37 +1,16 @@
-import { pipe, G, A, P, isType } from "@duplojs/utils";
+import { A } from "@duplojs/utils";
 import type { MapImportContext } from "./create";
-import { factory, SyntaxKind } from "typescript";
+import { factory, type ImportDeclaration } from "typescript";
 
 export function createImportDeclaration(importContext: MapImportContext) {
-	return pipe(
-		importContext,
-		G.map(
-			([path, types]) => P.match(types)
-				.when(
-					isType("array"),
-					(identifiers) => factory.createImportDeclaration(
-						undefined,
-						factory.createImportClause(
-							SyntaxKind.TypeKeyword,
-							undefined,
-							factory.createNamedImports(
-								A.map(
-									identifiers,
-									(identifier) => factory.createImportSpecifier(
-										false,
-										undefined,
-										factory.createIdentifier(identifier),
-									),
-								),
-							),
-						),
-						factory.createStringLiteral(path),
-						undefined,
-					),
-				)
-				.with(
-					{ type: "clause" },
-					({ identifier }) => factory.createImportDeclaration(
+	return A.reduce(
+		A.from(importContext),
+		A.reduceFrom<ImportDeclaration[]>([]),
+		({ element: [path, imports], lastValue, next }) => {
+			const declarations = A.concat(
+				A.map(
+					imports.namespace ?? [],
+					(identifier) => factory.createImportDeclaration(
 						undefined,
 						factory.createImportClause(
 							undefined,
@@ -41,10 +20,10 @@ export function createImportDeclaration(importContext: MapImportContext) {
 						factory.createStringLiteral(path),
 						undefined,
 					),
-				)
-				.with(
-					{ type: "default" },
-					({ identifier }) => factory.createImportDeclaration(
+				),
+				A.map(
+					imports.default ?? [],
+					(identifier) => factory.createImportDeclaration(
 						undefined,
 						factory.createImportClause(
 							undefined,
@@ -54,8 +33,38 @@ export function createImportDeclaration(importContext: MapImportContext) {
 						factory.createStringLiteral(path),
 						undefined,
 					),
-				)
-				.exhaustive(),
-		),
+				),
+			);
+
+			return next(
+				A.concat(
+					lastValue,
+					imports.direct?.length
+						? A.push(
+							declarations,
+							factory.createImportDeclaration(
+								undefined,
+								factory.createImportClause(
+									undefined,
+									undefined,
+									factory.createNamedImports(
+										A.map(
+											imports.direct,
+											(identifier) => factory.createImportSpecifier(
+												false,
+												undefined,
+												factory.createIdentifier(identifier),
+											),
+										),
+									),
+								),
+								factory.createStringLiteral(path),
+								undefined,
+							),
+						)
+						: declarations,
+				),
+			);
+		},
 	);
 }

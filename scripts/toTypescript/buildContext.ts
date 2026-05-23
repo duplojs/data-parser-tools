@@ -1,5 +1,5 @@
 import { DP, E, unwrap } from "@duplojs/utils";
-import { type createTransformer, transformer, type MapContext, type MapImportContext, type TransformerHook, type TransformerMode, type DataParserErrorEither, type DataParserNotSupportedEither } from "./transformer";
+import { type createTransformer, transformer, type MapContext, type MapImportContext, type MapImportType, type TransformerHook, type TransformerMode, type DataParserErrorEither, type DataParserNotSupportedEither, createImportContext } from "./transformer";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory, SyntaxKind } from "typescript";
 
@@ -15,6 +15,11 @@ export interface BuildContextParams {
 	readonly mode?: TransformerMode;
 	readonly hooks?: readonly TransformerHook[];
 	readonly importContext?: MapImportContext;
+
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType?: MapImportType;
 }
 
 export function buildContext(
@@ -26,7 +31,10 @@ export function buildContext(
 	| DataParserErrorEither
 	) {
 	const context: MapContext = params.context ?? new Map();
-	const importContext: MapImportContext = params.importContext ?? new Map();
+	const importContext: MapImportContext = createImportContext(
+		params.importContext,
+		params.importType,
+	);
 
 	const result = transformer(
 		schema,
@@ -34,6 +42,7 @@ export function buildContext(
 			...params,
 			context,
 			importContext,
+			importType: importContext,
 			mode: params.mode ?? "out",
 			hooks: params.hooks ?? [],
 			recursiveDataParsers: getRecursiveDataParser(schema),

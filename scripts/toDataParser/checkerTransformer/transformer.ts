@@ -1,9 +1,11 @@
 import { A, E, type DP } from "@duplojs/utils";
 import type { CheckerTransformerParams, createCheckerTransformer, CheckerTransformerEither } from "./create";
 import { factory, type PropertyAssignment } from "typescript";
+import * as TST from "@scripts/toTypescript";
 
 export interface CheckerTransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createCheckerTransformer>[];
+	readonly importContext: TST.MapImportContext;
 }
 
 export function getCheckerDefinition(checker: DP.DataParserChecker, customProperties?: readonly PropertyAssignment[]) {
@@ -32,12 +34,15 @@ export function checkerTransformer(
 	params: CheckerTransformerFunctionParams,
 ) {
 	const functionParams: CheckerTransformerParams = {
+		importContext: params.importContext,
+		importType: params.importContext,
 		success(result) {
 			return E.right("buildSuccess", result);
 		},
 		buildError() {
 			return E.left("buildCheckerError", checker);
 		},
+		addImport: TST.createAddImport(params.importContext),
 		getDefinition(customProperties) {
 			return getCheckerDefinition(checker, customProperties);
 		},
@@ -68,4 +73,3 @@ export function checkerTransformer(
 		},
 	);
 }
-

@@ -9,8 +9,11 @@ export const checkerTimeMaxTransformer = createCheckerTransformer(
 		{
 			success,
 			getDefinition,
+			addImport,
 		},
 	) => {
+		addImport("@duplojs/utils/date", "D", "namespace");
+
 		const expression = factory.createCallExpression(
 			factory.createPropertyAccessExpression(
 				factory.createIdentifier("DP"),
@@ -20,7 +23,7 @@ export const checkerTimeMaxTransformer = createCheckerTransformer(
 			[
 				factory.createCallExpression(
 					factory.createPropertyAccessExpression(
-						factory.createIdentifier("DDate"),
+						factory.createIdentifier("D"),
 						factory.createIdentifier("createTime"),
 					),
 					undefined,

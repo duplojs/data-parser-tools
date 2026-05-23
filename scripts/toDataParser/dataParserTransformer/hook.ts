@@ -14,6 +14,11 @@ export interface TransformerHookParams {
 	context: MapContext;
 	importContext: TST.MapImportContext;
 
+	/**
+	 * @deprecated use importContext
+	 */
+	importType: TST.MapImportContext;
+
 	output(
 		action: TransformerHookAction,
 		dataParser: DP.DataParsers

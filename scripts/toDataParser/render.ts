@@ -1,12 +1,11 @@
-import type * as TST from "@scripts/toTypescript";
+import * as TST from "@scripts/toTypescript";
 import { type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type DataParserErrorEither, type MapContext, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
 import { createToDataParserKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
-import { type DP, E, kindHeritage } from "@duplojs/utils";
+import { type DP, E, kindClass } from "@duplojs/utils";
 import { printer } from "./printer";
 
-export class DataParserToDataParserRenderError extends kindHeritage(
-	"data-parser-to-data-parser-render-error",
+export class DataParserToDataParserRenderError extends kindClass(
 	createToDataParserKind("data-parser-to-data-parser-render-error"),
 	Error,
 ) {
@@ -14,12 +13,11 @@ export class DataParserToDataParserRenderError extends kindHeritage(
 		public dataParser: DP.DataParser,
 		public error: DataParserNotSupportedEither | DataParserErrorEither | DataParserGetDefinitionErrorEither,
 	) {
-		super({}, ["Error during the render of dataParser in dataParser."]);
+		super({}, "Error during the render of dataParser in dataParser.");
 	}
 }
 
-export class DataParserToDataParserTypeRenderError extends kindHeritage(
-	"data-parser-to-data-parser-type-render-error",
+export class DataParserToDataParserTypeRenderError extends kindClass(
 	createToDataParserKind("data-parser-to-data-parser-type-render-error"),
 	Error,
 ) {
@@ -27,17 +25,25 @@ export class DataParserToDataParserTypeRenderError extends kindHeritage(
 		public dataParser: DP.DataParser,
 		public error: ToTypescriptDataParserNotSupportedEither | ToTypescriptDataParserErrorEither,
 	) {
-		super({}, ["Error during the render of recursive dataParser type."]);
+		super({}, "Error during the render of recursive dataParser type.");
 	}
 }
 
 export interface RenderParams extends BuildContextParams {
+
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType?: TST.MapImportType;
 }
 
 export function render(dataParser: DP.DataParser, params: RenderParams) {
 	const context: MapContext = new Map(params.context);
 	const typescriptContext = new Map(params.typescriptContext);
-	const importContext: TST.MapImportContext = new Map(params.importContext);
+	const importContext: TST.MapImportContext = TST.createImportContext(
+		params.importContext,
+		params.importType,
+	);
 
 	const result = buildContext(dataParser, {
 		...params,

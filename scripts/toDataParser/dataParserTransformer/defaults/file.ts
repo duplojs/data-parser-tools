@@ -66,13 +66,13 @@ export const fileTransformer = createTransformer(
 		const namespace = dependencyIdentifier.text === "DP"
 			? justExec(
 				() => {
-					addImport("@duplojs/server-utils/dataParser", "SDP", "clause");
+					addImport("@duplojs/server-utils/dataParser", "SDP", "namespace");
 					return "SDP";
 				},
 			)
 			: justExec(
 				() => {
-					addImport("@duplojs/server-utils/dataParserExtended", "SDPE", "clause");
+					addImport("@duplojs/server-utils/dataParserExtended", "SDPE", "namespace");
 					return "SDPE";
 				},
 			);

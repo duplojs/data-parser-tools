@@ -1,10 +1,12 @@
 import { A, type DP, E, pipe, when } from "@duplojs/utils";
 import { checkerTransformer, type createCheckerTransformer } from "../checkerTransformer";
 import { type CallExpression, factory, type PropertyAssignment } from "typescript";
+import type * as TST from "@scripts/toTypescript";
 
 export interface getDefinitionDataParserParams {
 	readonly dataParser: DP.DataParser;
 	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
+	readonly importContext: TST.MapImportContext;
 	readonly customProperties: readonly PropertyAssignment[];
 }
 
@@ -27,7 +29,13 @@ export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
 			params.dataParser.definition.checkers,
 			A.reduceFrom<CallExpression[]>([]),
 			({ element, lastValue, nextPush, exit }) => pipe(
-				checkerTransformer(element, { transformers: params.checkerTransformers }),
+				checkerTransformer(
+					element,
+					{
+						transformers: params.checkerTransformers,
+						importContext: params.importContext,
+					},
+				),
 				E.whenIsRight(
 					(value) => nextPush(lastValue, value),
 				),

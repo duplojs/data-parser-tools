@@ -42,6 +42,11 @@ export interface TransformerParams {
 	readonly context: MapContext;
 	readonly importContext: TST.MapImportContext;
 
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType: TST.MapImportContext;
+
 	transformer(
 		dataParser: DP.DataParser,
 	): MaybeTransformerEither;
@@ -51,7 +56,7 @@ export interface TransformerParams {
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
-	addImport(path: string, typeName: string, type?: "default" | "clause"): void;
+	addImport(path: string, typeName: string, type?: "default" | "namespace" | "direct"): void;
 	getDefinition(
 		customProperties?: readonly PropertyAssignment[],
 	): readonly [ObjectLiteralExpression] | readonly [] | DataParserGetDefinitionErrorEither;

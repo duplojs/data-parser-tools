@@ -14,17 +14,17 @@ export type MapContext = Map<DP.DataParsers, TypeAliasDeclaration>;
 
 export type MapImportContext = Map<
 	string,
-	| string[]
-	| {
-		type: "default" | "clause";
-		identifier: string;
+	{
+		namespace?: string[];
+		default?: string[];
+		direct?: string[];
 	}
 >;
 
 /**
  * @deprecated use MapImportContext
  */
-export type MapImportType = MapImportContext;
+export type MapImportType = Map<string, string[]>;
 
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
@@ -52,7 +52,7 @@ export interface TransformerParams {
 	): TransformerSuccessEither;
 
 	buildError(): DataParserErrorEither;
-	addImport(path: string, typeName: string, type?: "default" | "clause"): void;
+	addImport(path: string, typeName: string, type?: "default" | "namespace" | "direct"): void;
 }
 
 export type TransformerBuildFunction<

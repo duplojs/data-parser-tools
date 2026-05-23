@@ -1,7 +1,8 @@
-import { A, type DDataParser, E, unwrap, type DP, justExec, equal, pipe, isType, whenNot } from "@duplojs/utils";
+import { A, type DDataParser, E, unwrap, type DP, justExec } from "@duplojs/utils";
 import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
+import { createAddImport } from "./addImport";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
@@ -16,7 +17,6 @@ export interface TransformerFunctionParams {
 	 */
 	readonly importType?: MapImportContext;
 }
-
 export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
@@ -96,26 +96,7 @@ export function transformer(
 		},
 		importContext: params.importContext,
 		importType: params.importContext,
-		addImport(path, typeName, type) {
-			if (equal(type, ["clause", "default"])) {
-				params.importContext.set(path, {
-					type,
-					identifier: typeName,
-				});
-			}
-
-			const types = pipe(
-				params.importContext.get(path),
-				whenNot(
-					isType("array"),
-					() => [],
-				),
-			);
-
-			if (!A.includes(types, typeName)) {
-				params.importContext.set(path, A.push(types, typeName));
-			}
-		},
+		addImport: createAddImport(params.importContext),
 	};
 
 	const result = currentSchema.definition.overrideTypescriptTransformer
@@ -173,4 +154,3 @@ export function transformer(
 
 	return result;
 }
-

@@ -1,5 +1,6 @@
 import type { CallExpression, ObjectLiteralExpression, PropertyAssignment } from "typescript";
 import { type DP, E } from "@duplojs/utils";
+import type * as TST from "@scripts/toTypescript";
 
 export type CheckerTransformerSuccessEither = E.Right<"buildSuccess", CallExpression>;
 
@@ -13,10 +14,18 @@ export type CheckerTransformerEither =
 	| CheckerTransformerBuildErrorEither;
 
 export interface CheckerTransformerParams {
+	readonly importContext: TST.MapImportContext;
+
+	/**
+	 * @deprecated use importContext
+	 */
+	readonly importType: TST.MapImportContext;
+
 	success(
 		result: CallExpression,
 	): CheckerTransformerSuccessEither;
 	buildError(): CheckerTransformerBuildErrorEither;
+	addImport(path: string, typeName: string, type?: "default" | "namespace" | "direct"): void;
 	getDefinition(
 		customProperties?: readonly PropertyAssignment[]
 	): readonly [ObjectLiteralExpression] | readonly [];

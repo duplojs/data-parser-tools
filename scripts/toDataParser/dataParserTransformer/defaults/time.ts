@@ -1,4 +1,4 @@
-import { A, DP, E, pipe } from "@duplojs/utils";
+import { DP, E, pipe } from "@duplojs/utils";
 import { createTransformer } from "../create";
 import { factory } from "typescript";
 
@@ -10,7 +10,6 @@ export const timeTransformer = createTransformer(
 			success,
 			dependencyIdentifier,
 			getDefinition,
-			addImport,
 		},
 	) => {
 		const definition = getDefinition(
@@ -26,10 +25,6 @@ export const timeTransformer = createTransformer(
 
 		if (E.isLeft(definition)) {
 			return definition;
-		}
-
-		if (A.minElements(dataParser.definition.checkers, 1)) {
-			addImport("@duplojs/utils/date", "DDate", "clause");
 		}
 
 		return pipe(

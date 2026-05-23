@@ -1,11 +1,10 @@
-import { A, E, type DP, unwrap, S, justExec, pipe, whenNot, isType, equal } from "@duplojs/utils";
+import { A, E, type DP, unwrap, S, justExec } from "@duplojs/utils";
 import * as TST from "@scripts/toTypescript";
 import type { MapContext, TransformerParams, createTransformer, MaybeTransformerEither } from "./create";
 import { factory, type Identifier } from "typescript";
 import type { TransformerHook } from "./hook";
-import { type createCheckerTransformer } from "../checkerTransformer";
+import type { createCheckerTransformer } from "../checkerTransformer";
 import { getDefinitionDataParser } from "./getDefinitionDataParser";
-import { success } from "@duplojs/utils/either";
 
 export interface TransformerFunctionParams {
 	readonly dataParserTransformers: readonly ReturnType<typeof createTransformer>[];
@@ -35,6 +34,7 @@ export function transformer(
 				dataParser: lastValue,
 				context: params.context,
 				importContext: params.importContext,
+				importType: params.importContext,
 				output: (action, dataParser) => ({
 					dataParser,
 					action,
@@ -94,33 +94,16 @@ export function transformer(
 			return E.left("buildDataParserError", currentDataParser);
 		},
 		importContext: params.importContext,
+		importType: params.importContext,
 		getDefinition(customProperties = []) {
 			return getDefinitionDataParser({
 				dataParser: currentDataParser,
 				checkerTransformers: params.checkerTransformers,
+				importContext: params.importContext,
 				customProperties,
 			});
 		},
-		addImport(path, typeName, type) {
-			if (equal(type, ["clause", "default"])) {
-				params.importContext.set(path, {
-					type,
-					identifier: typeName,
-				});
-			}
-
-			const types = pipe(
-				params.importContext.get(path),
-				whenNot(
-					isType("array"),
-					() => [],
-				),
-			);
-
-			if (!A.includes(types, typeName)) {
-				params.importContext.set(path, A.push(types, typeName));
-			}
-		},
+		addImport: TST.createAddImport(params.importContext),
 	};
 
 	const result = currentDataParser.definition.overrideDataParserTransformer
