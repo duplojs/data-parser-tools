@@ -7,7 +7,7 @@ import * as DPE from "@duplojs/utils/dataParserExtended";
 
 import * as SDPE from "@duplojs/server-utils/dataParserExtended";
 
-export const fileParserExtended = SDPE.file({});"
+export const fileParserExtendedDataParser = SDPE.file({});"
 `;
 
 exports[`file > renders file parser with async constraints 1`] = `
@@ -15,7 +15,7 @@ exports[`file > renders file parser with async constraints 1`] = `
 
 import * as SDP from "@duplojs/server-utils/dataParser";
 
-export const fileParser = SDP.file({
+export const fileParserDataParser = SDP.file({
     coerce: true,
     checkExist: true,
     maxSize: 10,
@@ -29,5 +29,5 @@ exports[`file > renders file parser without options 1`] = `
 
 import * as SDP from "@duplojs/server-utils/dataParser";
 
-export const fileParserNoOptions = SDP.file({});"
+export const fileParserNoOptionsDataParser = SDP.file({});"
 `;

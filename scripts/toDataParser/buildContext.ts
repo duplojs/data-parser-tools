@@ -1,5 +1,5 @@
 import { DP, E, unwrap } from "@duplojs/utils";
-import { type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
+import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
 import * as TST from "@scripts/toTypescript";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory } from "typescript";
@@ -86,7 +86,7 @@ export function buildContext(
 		context.set(
 			DP.empty(),
 			{
-				identifier: factory.createIdentifier(params.identifier),
+				identifier: factory.createIdentifier(createIdentifier(params.identifier)),
 				expression: unwrap(result),
 				typeIdentifier: null,
 			},
@@ -95,8 +95,8 @@ export function buildContext(
 		context.set(
 			DP.empty(),
 			{
-				identifier: factory.createIdentifier(params.identifier),
-				expression: factory.createIdentifier(schema.definition.identifier),
+				identifier: factory.createIdentifier(createIdentifier(params.identifier)),
+				expression: factory.createIdentifier(createIdentifier(schema.definition.identifier)),
 				typeIdentifier: null,
 			},
 		);

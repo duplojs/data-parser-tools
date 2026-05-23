@@ -3,5 +3,5 @@
 exports[`record > renders record parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const recordParser = DP.record(DP.string(), DP.number());"
+export const recordParserDataParser = DP.record(DP.string(), DP.number());"
 `;

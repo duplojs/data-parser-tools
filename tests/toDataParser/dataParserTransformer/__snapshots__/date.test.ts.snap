@@ -3,11 +3,11 @@
 exports[`date > renders date parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const dateParser = DP.date({ coerce: true });"
+export const dateParserDataParser = DP.date({ coerce: true });"
 `;
 
 exports[`date > renders date parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const dateParserNoCoerce = DP.date();"
+export const dateParserNoCoerceDataParser = DP.date();"
 `;

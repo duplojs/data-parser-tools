@@ -3,6 +3,7 @@ import type { MapContext, DataParserNotSupportedEither, TransformerParams, creat
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
 import { createAddImport } from "./addImport";
+import { createIdentifier } from "./createIdentifier";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
@@ -62,7 +63,9 @@ export function transformer(
 			return undefined;
 		}
 
-		const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
+		const identifier = currentSchema.definition.identifier !== undefined
+			? createIdentifier(currentSchema.definition.identifier)
+			: `RecursiveType${params.context.size}`;
 
 		params.context.set(
 			currentSchema,

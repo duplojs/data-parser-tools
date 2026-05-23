@@ -3,5 +3,5 @@
 exports[`array > renders array parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const arrayParser = DP.array(DP.string());"
+export const arrayParserDataParser = DP.array(DP.string());"
 `;

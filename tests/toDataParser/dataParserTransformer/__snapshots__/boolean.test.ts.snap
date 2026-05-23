@@ -3,11 +3,11 @@
 exports[`boolean > renders boolean parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const booleanParser = DP.boolean({ coerce: true });"
+export const booleanParserDataParser = DP.boolean({ coerce: true });"
 `;
 
 exports[`boolean > renders boolean parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const booleanParserNoCoerce = DP.boolean();"
+export const booleanParserNoCoerceDataParser = DP.boolean();"
 `;

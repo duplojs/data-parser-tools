@@ -37,4 +37,4 @@ export const recursiveDataParser2: DP.DataParser<$recursiveDataParser2> = DP.obj
 
 export const recursiveDataParser4: DP.DataParser<$recursiveDataParser4> = DP.tuple([DP.string(), DP.array(DP.lazy(() => recursiveDataParser4))]);
 
-export const recursiveNode = recursiveDataParser0;
+export const recursiveNodeDataParser = recursiveDataParser0;

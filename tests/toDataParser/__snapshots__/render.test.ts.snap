@@ -13,7 +13,7 @@ export const recursiveDataParser0: DP.DataParser<$recursiveDataParser0> = DP.obj
     next: DP.lazy(() => recursiveDataParser0)
 });
 
-export const recursiveNodeParser = recursiveDataParser0;"
+export const recursiveNodeParserDataParser = recursiveDataParser0;"
 `;
 
 exports[`render > renders checked dataParsers in normal and extended modes 1`] = `
@@ -21,7 +21,7 @@ exports[`render > renders checked dataParsers in normal and extended modes 1`] =
 
 import * as D from "@duplojs/utils/date";
 
-export const checkedParser = DP.object({
+export const checkedParserDataParser = DP.object({
     startAt: DP.time({ checkers: [
             DP.checkerTimeMin(D.createTime(1000, "millisecond")),
             DP.checkerTimeMax(D.createTime(5000, "millisecond"))
@@ -41,7 +41,7 @@ import * as DPE from "@duplojs/utils/dataParserExtended";
 
 import * as D from "@duplojs/utils/date";
 
-export const checkedExtendedParser = DPE.object({
+export const checkedExtendedParserDataParser = DPE.object({
     startAt: DPE.time({ checkers: [DP.checkerTimeMin(D.createTime(250, "millisecond"))] }),
     tags: DPE.array(DPE.string({ checkers: [DP.checkerStringMin(1)] }), { checkers: [DP.checkerArrayMin(1)] })
 });"
@@ -117,13 +117,13 @@ export const recursiveDataParser6: DP.DataParser<$recursiveDataParser6> = DP.uni
     DP.array(DP.lazy(() => recursiveDataParser6))
 ]);
 
-export const complexRecursiveParser = recursiveDataParser0;"
+export const complexRecursiveParserDataParser = recursiveDataParser0;"
 `;
 
 exports[`render > renders dataParser with nested checkers 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const compactParser = DP.object({
+export const compactParserDataParser = DP.object({
     name: DP.string({ checkers: [DP.checkerStringMin(2)] }),
     roles: DP.array(DP.literal(["admin", "editor"]), { checkers: [DP.checkerArrayMin(1)] }),
     contact: DP.union([
@@ -142,7 +142,7 @@ exports[`render > renders named dependencies before their consumers 1`] = `
 
 export const childParserDataParser = DP.string();
 
-export const parentParser = DP.object({
+export const parentParserDataParser = DP.object({
     child: childParserDataParser
 });"
 `;

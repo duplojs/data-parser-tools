@@ -5,7 +5,7 @@ exports[`time > renders time parser with checker imports 1`] = `
 
 import * as D from "@duplojs/utils/date";
 
-export const timeParser = DP.time({
+export const timeParserDataParser = DP.time({
     coerce: true,
     checkers: [DP.checkerTimeMin(D.createTime(1, "millisecond"))]
 });"
@@ -14,5 +14,5 @@ export const timeParser = DP.time({
 exports[`time > renders time parser without coerce and without checkers 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const timeParserNoCoerce = DP.time();"
+export const timeParserNoCoerceDataParser = DP.time();"
 `;

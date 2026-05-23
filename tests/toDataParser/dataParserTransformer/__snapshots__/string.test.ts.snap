@@ -3,5 +3,5 @@
 exports[`string > renders string parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const stringParser = DP.string();"
+export const stringParserDataParser = DP.string();"
 `;

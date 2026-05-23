@@ -196,4 +196,21 @@ describe("render", () => {
 			),
 		).toMatchSnapshot();
 	});
+
+	it("normalizes the render identifier into a dataParser const identifier", () => {
+		const identifier = "UserParser";
+		const result = render(
+			DPE.string(),
+			{
+				identifier,
+				dataParserTransformers: defaultTransformers,
+				checkerTransformers: defaultCheckerTransformers,
+				typescriptTransformers: tsDefaultTransformers,
+			},
+		);
+		const renderedIdentifier = result.match(/export const (?<identifier>\w+)/)?.groups?.identifier;
+
+		expect(identifier).toBe("UserParser");
+		expect(renderedIdentifier).toBe("userParserDataParser");
+	});
 });

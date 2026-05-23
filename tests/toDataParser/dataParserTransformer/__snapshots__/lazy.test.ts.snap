@@ -3,5 +3,5 @@
 exports[`lazy > renders lazy parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const lazyParser = DP.lazy(() => DP.string());"
+export const lazyParserDataParser = DP.lazy(() => DP.string());"
 `;

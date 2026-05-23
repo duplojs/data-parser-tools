@@ -3,11 +3,11 @@
 exports[`tuple > renders tuple parser with rest 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const tupleParser = DP.tuple([DP.string()], { rest: DP.number() });"
+export const tupleParserDataParser = DP.tuple([DP.string()], { rest: DP.number() });"
 `;
 
 exports[`tuple > renders tuple parser without rest 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const tupleParserNoRest = DP.tuple([DP.string()]);"
+export const tupleParserNoRestDataParser = DP.tuple([DP.string()]);"
 `;

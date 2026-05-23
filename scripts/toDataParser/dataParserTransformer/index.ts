@@ -3,3 +3,4 @@ export * from "./transformer";
 export * from "./hook";
 export * from "./defaults";
 export * from "./getDefinitionDataParser";
+export * from "./createIdentifier";

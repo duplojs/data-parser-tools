@@ -3,11 +3,11 @@
 exports[`empty > renders empty parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const emptyParser = DP.empty({ coerce: true });"
+export const emptyParserDataParser = DP.empty({ coerce: true });"
 `;
 
 exports[`empty > renders empty parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const emptyParserNoCoerce = DP.empty();"
+export const emptyParserNoCoerceDataParser = DP.empty();"
 `;

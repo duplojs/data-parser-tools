@@ -3,7 +3,7 @@
 exports[`templateLiteral > renders template literal parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const templateLiteralParser = DP.templateLiteral([
+export const templateLiteralParserDataParser = DP.templateLiteral([
     "pre-",
     1n,
     "mid-",

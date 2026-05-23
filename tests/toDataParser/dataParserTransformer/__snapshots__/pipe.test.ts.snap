@@ -3,5 +3,5 @@
 exports[`pipe > renders pipe parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const pipeParser = DP.pipe(DP.string(), DP.number());"
+export const pipeParserDataParser = DP.pipe(DP.string(), DP.number());"
 `;

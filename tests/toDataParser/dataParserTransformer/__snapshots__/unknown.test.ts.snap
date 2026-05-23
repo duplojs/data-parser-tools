@@ -3,5 +3,5 @@
 exports[`unknown > renders unknown parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const unknownParser = DP.unknown();"
+export const unknownParserDataParser = DP.unknown();"
 `;

@@ -3,7 +3,7 @@
 exports[`union > renders union parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const unionParser = DP.union([
+export const unionParserDataParser = DP.union([
     DP.string(),
     DP.number()
 ]);"

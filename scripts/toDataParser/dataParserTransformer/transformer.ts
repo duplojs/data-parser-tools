@@ -1,10 +1,11 @@
-import { A, E, type DP, unwrap, S, justExec } from "@duplojs/utils";
+import { A, E, type DP, unwrap, justExec } from "@duplojs/utils";
 import * as TST from "@scripts/toTypescript";
 import type { MapContext, TransformerParams, createTransformer, MaybeTransformerEither } from "./create";
 import { factory, type Identifier } from "typescript";
 import type { TransformerHook } from "./hook";
 import type { createCheckerTransformer } from "../checkerTransformer";
 import { getDefinitionDataParser } from "./getDefinitionDataParser";
+import { createIdentifier } from "./createIdentifier";
 
 export interface TransformerFunctionParams {
 	readonly dataParserTransformers: readonly ReturnType<typeof createTransformer>[];
@@ -62,7 +63,7 @@ export function transformer(
 	const currentIdentifier = shouldCreateConstDeclaration
 		? factory.createIdentifier(
 			currentDataParser.definition.identifier !== undefined
-				? `${S.uncapitalize(currentDataParser.definition.identifier)}DataParser`
+				? createIdentifier(currentDataParser.definition.identifier)
 				: `recursiveDataParser${params.context.size + params.context.size}`,
 		)
 		: undefined;

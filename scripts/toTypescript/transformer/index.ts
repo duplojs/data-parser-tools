@@ -5,4 +5,5 @@ export * from "./defaults";
 export * from "./includesUndefinedTypeNode";
 export * from "./createImportDeclaration";
 export * from "./addImport";
+export * from "./createIdentifier";
 export { defaultTransformers } from "./defaults";

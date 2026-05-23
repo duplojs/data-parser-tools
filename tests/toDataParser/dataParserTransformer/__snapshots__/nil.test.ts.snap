@@ -3,11 +3,11 @@
 exports[`nil > renders nil parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const nilParser = DP.nil({ coerce: true });"
+export const nilParserDataParser = DP.nil({ coerce: true });"
 `;
 
 exports[`nil > renders nil parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const nilParserNoCoerce = DP.nil();"
+export const nilParserNoCoerceDataParser = DP.nil();"
 `;

@@ -3,5 +3,5 @@
 exports[`transform > renders transform parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const transformParser = DP.transform(DP.string(), (value) => value.trim());"
+export const transformParserDataParser = DP.transform(DP.string(), (value) => value.trim());"
 `;

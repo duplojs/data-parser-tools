@@ -96,13 +96,13 @@ describe("override", () => {
 		const result = render(
 			schema,
 			{
-				identifier: "overrideParser",
+				identifier: "override",
 				dataParserTransformers: defaultTransformers,
 				checkerTransformers: defaultCheckerTransformers,
 				typescriptTransformers: tsDefaultTransformers,
 			},
 		);
 
-		expect(result).toContain("export const overrideParser = DP.number();");
+		expect(result).toContain("export const overrideDataParser = DP.number();");
 	});
 });

@@ -3,11 +3,11 @@
 exports[`bigint > renders bigint parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const bigintParser = DP.bigint({ coerce: true });"
+export const bigintParserDataParser = DP.bigint({ coerce: true });"
 `;
 
 exports[`bigint > renders bigint parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const bigintParserNoCoerce = DP.bigint();"
+export const bigintParserNoCoerceDataParser = DP.bigint();"
 `;

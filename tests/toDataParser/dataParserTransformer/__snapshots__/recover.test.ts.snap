@@ -3,5 +3,5 @@
 exports[`recover > renders inner parser 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export const recoverParser = DP.string();"
+export const recoverParserDataParser = DP.string();"
 `;
