@@ -26,7 +26,7 @@ async function typedSnapshot(value: string, filePath: string) {
 
 describe("integration", () => {
 	it("basic", async() => {
-		const userSchema = DPE.object({
+		const userDataParser = DPE.object({
 			id: DPE.templateLiteral(["user-", DPE.number(), "-db1"]),
 			name: DPE.string().min(2),
 			email: DPE.email(),
@@ -60,18 +60,15 @@ describe("integration", () => {
 			location: DPE.tuple([DPE.number(), DPE.number()], { rest: DPE.number() }),
 			createdAt: DPE.date({ coerce: true }),
 			startAt: DPE.time(),
-		}).addConstName("userProfileParser");
+		});
 
 		const result = render(
-			userSchema,
+			userDataParser,
 			{
-				constName: "userProfileParser",
+				identifier: "user",
 				dataParserTransformers: defaultTransformers,
 				checkerTransformers: defaultCheckerTransformers,
-				toTypescript: {
-					identifier: "UserProfile",
-					transformers: tsDefaultTransformers,
-				},
+				typescriptTransformers: tsDefaultTransformers,
 			},
 		);
 
@@ -92,49 +89,43 @@ describe("integration", () => {
 		const nodeSchema: DPE.DataParser<unknown> = DPE.object({
 			name: DPE.string(),
 			children: DPE.lazy(() => nodeSchema).array(),
-			comment: commentSchema,
-			meta: metaSchema,
-		}).addConstName("recursiveNodeDataParser");
+			comment: DPE.lazy(() => commentSchema),
+			meta: DPE.lazy(() => metaSchema),
+		});
 
 		const result = render(
 			nodeSchema,
 			{
-				constName: "recursiveNodeDataParser",
+				identifier: "recursiveNode",
 				dataParserTransformers: defaultTransformers,
 				checkerTransformers: defaultCheckerTransformers,
-				toTypescript: {
-					identifier: "RecursiveNode",
-					transformers: tsDefaultTransformers,
-				},
+				typescriptTransformers: tsDefaultTransformers,
 			},
 		);
 
 		await typedSnapshot(result, "__snapshots__/recursive.gen.ts");
 	});
 
-	it("divide with constName", async() => {
-		const roleDataParser = DPE.literal(["admin", "editor", "viewer"]).addConstName("userRoleDataParser");
+	it("divide with identifier", async() => {
+		const userRoleDataParser = DPE.literal(["admin", "editor", "viewer"]).addIdentifier("userRole");
 
 		const userDataParser = DPE.object({
 			id: DPE.templateLiteral(["user-", DPE.number(), "-db1"]),
 			name: DPE.string().min(2),
 			email: DPE.email(),
-			role: roleDataParser,
-		}).addConstName("userDataParser");
+			role: userRoleDataParser,
+		});
 
 		const result = render(
 			userDataParser,
 			{
-				constName: "userDataParser",
+				identifier: "user",
 				dataParserTransformers: defaultTransformers,
 				checkerTransformers: defaultCheckerTransformers,
-				toTypescript: {
-					identifier: "UserProfile",
-					transformers: tsDefaultTransformers,
-				},
+				typescriptTransformers: tsDefaultTransformers,
 			},
 		);
 
-		await typedSnapshot(result, "__snapshots__/withConstName.gen.ts");
+		await typedSnapshot(result, "__snapshots__/withIdentifier.gen.ts");
 	});
 });

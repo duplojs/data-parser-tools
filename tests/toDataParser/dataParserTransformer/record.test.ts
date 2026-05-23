@@ -2,21 +2,16 @@ import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "RecordParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("record", () => {
 	it("renders record parser", () => {
 		expect(
 			render(
 				DPE.record(DPE.string(), DPE.number()),
 				{
-					constName: "recordParser",
+					identifier: "recordParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,7 +22,7 @@ describe("record", () => {
 			() => render(
 				DPE.record(DPE.string(), DPE.number()),
 				{
-					constName: "recordParserKeyError",
+					identifier: "recordParserKeyError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.stringKind.has(dataParser)
 							? buildError()
@@ -35,7 +30,7 @@ describe("record", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -46,7 +41,7 @@ describe("record", () => {
 			() => render(
 				DPE.record(DPE.string(), DPE.number()),
 				{
-					constName: "recordParserValueError",
+					identifier: "recordParserValueError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.numberKind.has(dataParser)
 							? buildError()
@@ -54,7 +49,7 @@ describe("record", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -73,14 +68,14 @@ describe("record", () => {
 			() => render(
 				schema,
 				{
-					constName: "recordParserCheckerError",
+					identifier: "recordParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

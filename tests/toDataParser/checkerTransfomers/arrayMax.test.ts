@@ -6,7 +6,10 @@ describe("checkerArrayMax", () => {
 	it("basic", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerArrayMax(5),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

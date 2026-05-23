@@ -8,13 +8,10 @@ describe("recover", () => {
 			render(
 				DPE.recover(DPE.string(), "fallback"),
 				{
-					constName: "recoverParser",
+					identifier: "recoverParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "RecoverParser",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();

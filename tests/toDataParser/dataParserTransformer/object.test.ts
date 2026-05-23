@@ -2,11 +2,6 @@ import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "ObjectParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("object", () => {
 	it("renders object parser", () => {
 		expect(
@@ -16,10 +11,10 @@ describe("object", () => {
 					bar: DPE.number(),
 				}),
 				{
-					constName: "objectParser",
+					identifier: "objectParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -33,7 +28,7 @@ describe("object", () => {
 					bar: DPE.number(),
 				}),
 				{
-					constName: "objectParserError",
+					identifier: "objectParserError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.stringKind.has(dataParser)
 							? buildError()
@@ -41,7 +36,7 @@ describe("object", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -59,14 +54,14 @@ describe("object", () => {
 			() => render(
 				schema,
 				{
-					constName: "objectParserCheckerError",
+					identifier: "objectParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

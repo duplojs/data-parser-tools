@@ -3,11 +3,11 @@
 exports[`time > renders time parser with checker imports 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-import * as DDate from "@duplojs/utils/date";
+import * as D from "@duplojs/utils/date";
 
 export const timeParser = DP.time({
     coerce: true,
-    checkers: [DP.checkerTimeMin(DDate.createTime(1, "millisecond"))]
+    checkers: [DP.checkerTimeMin(D.createTime(1, "millisecond"))]
 });"
 `;
 

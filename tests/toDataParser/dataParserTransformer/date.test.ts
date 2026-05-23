@@ -2,21 +2,16 @@ import { DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "DateParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("date", () => {
 	it("renders date parser", () => {
 		expect(
 			render(
 				DPE.date({ coerce: true }),
 				{
-					constName: "dateParser",
+					identifier: "dateParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("date", () => {
 			render(
 				DPE.date(),
 				{
-					constName: "dateParserNoCoerce",
+					identifier: "dateParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -45,14 +40,14 @@ describe("date", () => {
 			() => render(
 				schema,
 				{
-					constName: "dateParserError",
+					identifier: "dateParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

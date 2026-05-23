@@ -6,7 +6,10 @@ describe("checkerUuid", () => {
 	it("basic", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerUuid(),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

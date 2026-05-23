@@ -6,7 +6,10 @@ describe("checkerInt", () => {
 	it("basic", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerInt(),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

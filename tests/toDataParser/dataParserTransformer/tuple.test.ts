@@ -2,21 +2,16 @@ import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "TupleParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("tuple", () => {
 	it("renders tuple parser with rest", () => {
 		expect(
 			render(
 				DPE.tuple([DPE.string()], { rest: DPE.number() }),
 				{
-					constName: "tupleParser",
+					identifier: "tupleParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("tuple", () => {
 			render(
 				DPE.tuple([DPE.string()]),
 				{
-					constName: "tupleParserNoRest",
+					identifier: "tupleParserNoRest",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -41,7 +36,7 @@ describe("tuple", () => {
 			() => render(
 				DPE.tuple([DPE.string()], { rest: DPE.number() }),
 				{
-					constName: "tupleParserShapeError",
+					identifier: "tupleParserShapeError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.stringKind.has(dataParser)
 							? buildError()
@@ -49,7 +44,7 @@ describe("tuple", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -60,7 +55,7 @@ describe("tuple", () => {
 			() => render(
 				DPE.tuple([DPE.string()], { rest: DPE.number() }),
 				{
-					constName: "tupleParserRestError",
+					identifier: "tupleParserRestError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.numberKind.has(dataParser)
 							? buildError()
@@ -68,7 +63,7 @@ describe("tuple", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -84,14 +79,14 @@ describe("tuple", () => {
 			() => render(
 				schema,
 				{
-					constName: "tupleParserCheckerError",
+					identifier: "tupleParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

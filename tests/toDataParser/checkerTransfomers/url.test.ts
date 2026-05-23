@@ -10,7 +10,10 @@ describe("checkerUrl", () => {
 				normalize: true,
 				protocol: /^https?$/,
 			}),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);
@@ -20,7 +23,10 @@ describe("checkerUrl", () => {
 	it("without options", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerUrl(),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

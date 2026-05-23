@@ -6,7 +6,10 @@ describe("checkerNumberMax", () => {
 	it("exclusive", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerNumberMax(10, { exclusive: true }),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);
@@ -16,7 +19,10 @@ describe("checkerNumberMax", () => {
 	it("non exclusive", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerNumberMax(10),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

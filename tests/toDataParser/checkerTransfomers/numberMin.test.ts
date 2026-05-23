@@ -6,7 +6,10 @@ describe("checkerNumberMin", () => {
 	it("exclusive", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerNumberMin(1, { exclusive: true }),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);
@@ -16,7 +19,10 @@ describe("checkerNumberMin", () => {
 	it("non exclusive", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerNumberMin(1),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

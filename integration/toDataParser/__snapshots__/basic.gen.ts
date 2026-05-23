@@ -1,6 +1,6 @@
 import * as DP from "@duplojs/utils/dataParser";
 
-export const userProfileParser = DP.object({
+export const user = DP.object({
     id: DP.templateLiteral(["user-", DP.number(), "-db1"]),
     name: DP.string({ checkers: [DP.checkerStringMin(2)] }),
     email: DP.string({ checkers: [DP.checkerEmail()] }),

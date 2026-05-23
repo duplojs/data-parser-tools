@@ -3,11 +3,6 @@ import { E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "FileParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("file", () => {
 	it("renders file parser with async constraints", () => {
 		expect(
@@ -19,10 +14,10 @@ describe("file", () => {
 					mimeType: /image\/png/,
 				}),
 				{
-					constName: "fileParser",
+					identifier: "fileParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -33,10 +28,10 @@ describe("file", () => {
 			render(
 				SDP.file(),
 				{
-					constName: "fileParserNoOptions",
+					identifier: "fileParserNoOptions",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -47,11 +42,11 @@ describe("file", () => {
 			render(
 				SDP.file(),
 				{
-					constName: "fileParserExtended",
+					identifier: "fileParserExtended",
 					importMode: "extended",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -66,14 +61,14 @@ describe("file", () => {
 			() => render(
 				schema,
 				{
-					constName: "fileParserError",
+					identifier: "fileParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

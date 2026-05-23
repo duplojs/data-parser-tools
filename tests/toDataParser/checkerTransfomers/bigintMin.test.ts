@@ -6,7 +6,10 @@ describe("checkerBigIntMin", () => {
 	it("basic", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerBigIntMin(1n),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

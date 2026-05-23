@@ -2,21 +2,16 @@ import { DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "BigintParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("bigint", () => {
 	it("renders bigint parser", () => {
 		expect(
 			render(
 				DPE.bigint({ coerce: true }),
 				{
-					constName: "bigintParser",
+					identifier: "bigintParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("bigint", () => {
 			render(
 				DPE.bigint(),
 				{
-					constName: "bigintParserNoCoerce",
+					identifier: "bigintParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -45,14 +40,14 @@ describe("bigint", () => {
 			() => render(
 				schema,
 				{
-					constName: "bigintParserError",
+					identifier: "bigintParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

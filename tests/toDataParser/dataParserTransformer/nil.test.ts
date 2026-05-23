@@ -2,21 +2,16 @@ import { DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "NilParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("nil", () => {
 	it("renders nil parser", () => {
 		expect(
 			render(
 				DPE.nil({ coerce: true }),
 				{
-					constName: "nilParser",
+					identifier: "nilParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("nil", () => {
 			render(
 				DPE.nil(),
 				{
-					constName: "nilParserNoCoerce",
+					identifier: "nilParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -43,14 +38,14 @@ describe("nil", () => {
 			() => render(
 				schema,
 				{
-					constName: "nilParserError",
+					identifier: "nilParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

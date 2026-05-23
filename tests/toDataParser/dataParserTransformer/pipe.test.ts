@@ -2,21 +2,16 @@ import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "PipeParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("pipe", () => {
 	it("renders pipe parser", () => {
 		expect(
 			render(
 				DPE.pipe(DPE.string(), DPE.number()),
 				{
-					constName: "pipeParser",
+					identifier: "pipeParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,7 +22,7 @@ describe("pipe", () => {
 			() => render(
 				DPE.pipe(DPE.string(), DPE.number()),
 				{
-					constName: "pipeParserInputError",
+					identifier: "pipeParserInputError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.stringKind.has(dataParser)
 							? buildError()
@@ -35,7 +30,7 @@ describe("pipe", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -46,7 +41,7 @@ describe("pipe", () => {
 			() => render(
 				DPE.pipe(DPE.string(), DPE.number()),
 				{
-					constName: "pipeParserOutputError",
+					identifier: "pipeParserOutputError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.numberKind.has(dataParser)
 							? buildError()
@@ -54,7 +49,7 @@ describe("pipe", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -69,14 +64,14 @@ describe("pipe", () => {
 			() => render(
 				schema,
 				{
-					constName: "pipeParserCheckerError",
+					identifier: "pipeParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

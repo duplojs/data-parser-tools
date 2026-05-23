@@ -16,33 +16,27 @@ describe("render", () => {
 			render(
 				schema,
 				{
-					constName: "recursiveNodeParser",
+					identifier: "recursiveNodeParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "RecursiveNode",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
 	});
 
 	it("renders named dependencies before their consumers", () => {
-		const child = DPE.string().addConstName("childParser");
-		const schema = DPE.object({ child }).addConstName("parentParser");
+		const child = DPE.string().addIdentifier("childParser");
+		const schema = DPE.object({ child });
 
 		expect(
 			render(
 				schema,
 				{
-					constName: "parentParser",
+					identifier: "parentParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "Parent",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -118,13 +112,10 @@ describe("render", () => {
 			render(
 				schema,
 				{
-					constName: "complexRecursiveParser",
+					identifier: "complexRecursiveParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "ComplexRecursive",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -157,13 +148,10 @@ describe("render", () => {
 			render(
 				checkedSchema,
 				{
-					constName: "checkedParser",
+					identifier: "checkedParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "Checked",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -172,20 +160,17 @@ describe("render", () => {
 			render(
 				checkedExtendedSchema,
 				{
-					constName: "checkedExtendedParser",
+					identifier: "checkedExtendedParser",
 					importMode: "extended",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "CheckedExtended",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
 	});
 
-	it("renders dataParser in compact mode when indent is false", () => {
+	it("renders dataParser with nested checkers", () => {
 		const compactSchema = DPE.object({
 			name: DPE.string().min(2),
 			roles: DPE.literal(["admin", "editor"]).array().min(1),
@@ -203,14 +188,10 @@ describe("render", () => {
 			render(
 				compactSchema,
 				{
-					constName: "compactParser",
-					indent: false,
+					identifier: "compactParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript: {
-						identifier: "CompactSchema",
-						transformers: tsDefaultTransformers,
-					},
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();

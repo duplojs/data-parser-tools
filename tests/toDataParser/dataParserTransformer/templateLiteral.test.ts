@@ -2,11 +2,6 @@ import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "TemplateLiteralParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("templateLiteral", () => {
 	it("renders template literal parser", () => {
 		expect(
@@ -30,10 +25,10 @@ describe("templateLiteral", () => {
 					DPE.string(),
 				]),
 				{
-					constName: "templateLiteralParser",
+					identifier: "templateLiteralParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -44,7 +39,7 @@ describe("templateLiteral", () => {
 			() => render(
 				DPE.templateLiteral(["user-", DPE.number(), "-id"]),
 				{
-					constName: "templateLiteralParserError",
+					identifier: "templateLiteralParserError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.numberKind.has(dataParser)
 							? buildError()
@@ -52,7 +47,7 @@ describe("templateLiteral", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -67,14 +62,14 @@ describe("templateLiteral", () => {
 			() => render(
 				schema,
 				{
-					constName: "templateLiteralParserCheckerError",
+					identifier: "templateLiteralParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

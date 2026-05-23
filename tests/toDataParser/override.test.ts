@@ -6,31 +6,31 @@ import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescr
 import { type TransformerBuildFunction } from "@scripts/toDataParser/dataParserTransformer";
 
 describe("override", () => {
-	it("setConstName", () => {
+	it("setIdentifier", () => {
 		const schema = DP.string();
 
-		expect(schema.definition.constName).toBe(undefined);
+		expect(schema.definition.identifier).toBe(undefined);
 
-		schema.setConstName("test");
+		schema.setIdentifier("test");
 
-		expect(schema.definition.constName).toBe("test");
+		expect(schema.definition.identifier).toBe("test");
 	});
 
-	it("addConstName", () => {
+	it("addIdentifier", () => {
 		const schema = DP.string();
 
-		expect(schema.definition.constName).toBe(undefined);
+		expect(schema.definition.identifier).toBe(undefined);
 
-		const newSchema = schema.addConstName("test");
+		const newSchema = schema.addIdentifier("test");
 
-		expect(schema.definition.constName).toBe(undefined);
-		expect(newSchema.definition.constName).toBe("test");
+		expect(schema.definition.identifier).toBe(undefined);
+		expect(newSchema.definition.identifier).toBe("test");
 
 		const newSchemaWithChecker = newSchema.addChecker(DP.checkerRefine(justReturn(true)));
 
-		schema.setConstName("test1");
+		schema.setIdentifier("test1");
 
-		expect(newSchemaWithChecker.definition.constName).toBe("test");
+		expect(newSchemaWithChecker.definition.identifier).toBe("test");
 	});
 
 	it("setOverrideDataParserTransformer", () => {
@@ -96,13 +96,10 @@ describe("override", () => {
 		const result = render(
 			schema,
 			{
-				constName: "overrideParser",
+				identifier: "overrideParser",
 				dataParserTransformers: defaultTransformers,
 				checkerTransformers: defaultCheckerTransformers,
-				toTypescript: {
-					identifier: "OverrideParser",
-					transformers: tsDefaultTransformers,
-				},
+				typescriptTransformers: tsDefaultTransformers,
 			},
 		);
 

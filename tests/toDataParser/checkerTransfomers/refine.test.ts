@@ -14,7 +14,10 @@ describe("checkerRefine", () => {
 		const checker = DP.checkerRefine((value: number[]) => value.length > 0);
 		const result = DataParserToDataParser.checkerTransformer(
 			checker,
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);
@@ -25,7 +28,10 @@ describe("checkerRefine", () => {
 		const checker = DP.checkerRefine(Array.isArray as never);
 		const result = DataParserToDataParser.checkerTransformer(
 			checker,
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		expect(result).toEqual(E.left("buildCheckerError", checker));
@@ -37,7 +43,10 @@ describe("checkerRefine", () => {
 
 		const result = DataParserToDataParser.checkerTransformer(
 			checker,
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		expect(result).toEqual(E.left("buildCheckerError", checker));
@@ -49,7 +58,10 @@ describe("checkerRefine", () => {
 
 		const result = DataParserToDataParser.checkerTransformer(
 			checker,
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		expect(result).toEqual(E.left("buildCheckerError", checker));
@@ -68,13 +80,17 @@ describe("checkerRefine", () => {
 
 		const { checkerRefineTransformer } = await import("@scripts/toDataParser/checkerTransformer/defaults/refine");
 		const checker = DP.checkerRefine(() => true);
+		const importContext = new Map();
 		const result = checkerRefineTransformer(checker, {
+			importContext,
+			importType: importContext,
 			success(value) {
 				return E.right("buildSuccess", value);
 			},
 			buildError() {
 				return E.left("buildCheckerError", checker);
 			},
+			addImport() {},
 			getDefinition() {
 				return [];
 			},
@@ -96,13 +112,17 @@ describe("checkerRefine", () => {
 
 		const { checkerRefineTransformer } = await import("@scripts/toDataParser/checkerTransformer/defaults/refine");
 		const checker = DP.checkerRefine(() => true);
+		const importContext = new Map();
 		const result = checkerRefineTransformer(checker, {
+			importContext,
+			importType: importContext,
 			success(value) {
 				return E.right("buildSuccess", value);
 			},
 			buildError() {
 				return E.left("buildCheckerError", checker);
 			},
+			addImport() {},
 			getDefinition() {
 				return [];
 			},

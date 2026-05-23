@@ -2,21 +2,16 @@ import { DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "BooleanParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("boolean", () => {
 	it("renders boolean parser", () => {
 		expect(
 			render(
 				DPE.boolean({ coerce: true }),
 				{
-					constName: "booleanParser",
+					identifier: "booleanParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("boolean", () => {
 			render(
 				DPE.boolean(),
 				{
-					constName: "booleanParserNoCoerce",
+					identifier: "booleanParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -45,14 +40,14 @@ describe("boolean", () => {
 			() => render(
 				schema,
 				{
-					constName: "booleanParserError",
+					identifier: "booleanParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

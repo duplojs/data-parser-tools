@@ -6,7 +6,10 @@ describe("checkerEmail", () => {
 	it("basic", () => {
 		const result = DataParserToDataParser.checkerTransformer(
 			DP.checkerEmail(),
-			{ transformers: DataParserToDataParser.defaultCheckerTransformers },
+			{
+				transformers: DataParserToDataParser.defaultCheckerTransformers,
+				importContext: new Map(),
+			},
 		);
 
 		asserts(result, E.isRight);

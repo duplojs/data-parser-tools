@@ -2,21 +2,16 @@ import { DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "EmptyParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("empty", () => {
 	it("renders empty parser", () => {
 		expect(
 			render(
 				DPE.empty({ coerce: true }),
 				{
-					constName: "emptyParser",
+					identifier: "emptyParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -27,10 +22,10 @@ describe("empty", () => {
 			render(
 				DPE.empty(),
 				{
-					constName: "emptyParserNoCoerce",
+					identifier: "emptyParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -45,14 +40,14 @@ describe("empty", () => {
 			() => render(
 				schema,
 				{
-					constName: "emptyParserError",
+					identifier: "emptyParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

@@ -16,11 +16,6 @@ vi.mock("typescript", async() => {
 	};
 });
 
-const toTypescript = {
-	identifier: "TransformParser",
-	transformers: tsDefaultTransformers,
-};
-
 afterEach(() => {
 	vi.restoreAllMocks();
 });
@@ -31,10 +26,10 @@ describe("transform", () => {
 			render(
 				DPE.transform(DPE.string(), (value) => value.trim()),
 				{
-					constName: "transformParser",
+					identifier: "transformParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -45,7 +40,7 @@ describe("transform", () => {
 			() => render(
 				DPE.transform(DPE.string(), (value) => value.trim()),
 				{
-					constName: "transformParserInnerError",
+					identifier: "transformParserInnerError",
 					dataParserTransformers: [
 						((dataParser, { buildError }) => DP.stringKind.has(dataParser)
 							? buildError()
@@ -53,7 +48,7 @@ describe("transform", () => {
 						...defaultTransformers,
 					],
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -64,10 +59,10 @@ describe("transform", () => {
 			() => render(
 				DPE.transform(DPE.string(), Math.max as any),
 				{
-					constName: "transformParserNativeError",
+					identifier: "transformParserNativeError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -79,10 +74,10 @@ describe("transform", () => {
 			() => render(
 				schema,
 				{
-					constName: "transformParserMalformedError",
+					identifier: "transformParserMalformedError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -95,10 +90,10 @@ describe("transform", () => {
 			() => render(
 				schema,
 				{
-					constName: "transformParserEmptySourceError",
+					identifier: "transformParserEmptySourceError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -114,10 +109,10 @@ describe("transform", () => {
 			() => render(
 				DPE.transform(DPE.string(), (value) => value.trim()),
 				{
-					constName: "transformParserStatementError",
+					identifier: "transformParserStatementError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -138,10 +133,10 @@ describe("transform", () => {
 			() => render(
 				DPE.transform(DPE.string(), (value) => value.trim()),
 				{
-					constName: "transformParserParenthesizedError",
+					identifier: "transformParserParenthesizedError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
@@ -156,14 +151,14 @@ describe("transform", () => {
 			() => render(
 				schema,
 				{
-					constName: "transformParserCheckerError",
+					identifier: "transformParserCheckerError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();

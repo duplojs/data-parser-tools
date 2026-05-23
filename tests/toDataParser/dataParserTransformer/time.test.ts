@@ -2,11 +2,6 @@ import { DDate, DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
-const toTypescript = {
-	identifier: "TimeParser",
-	transformers: tsDefaultTransformers,
-};
-
 describe("time", () => {
 	it("renders time parser with checker imports", () => {
 		expect(
@@ -15,10 +10,10 @@ describe("time", () => {
 					DP.checkerTimeMin(DDate.createTime(1, "millisecond")),
 				),
 				{
-					constName: "timeParser",
+					identifier: "timeParser",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -29,10 +24,10 @@ describe("time", () => {
 			render(
 				DPE.time(),
 				{
-					constName: "timeParserNoCoerce",
+					identifier: "timeParserNoCoerce",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toMatchSnapshot();
@@ -47,14 +42,14 @@ describe("time", () => {
 			() => render(
 				schema,
 				{
-					constName: "timeParserError",
+					identifier: "timeParserError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: [
 						((checker, { buildError }) => (checker as any).kind === "forced-error"
 							? buildError()
 							: E.left("checkerNotSupport", checker)),
 					],
-					toTypescript,
+					typescriptTransformers: tsDefaultTransformers,
 				},
 			),
 		).toThrow();
