@@ -1,4 +1,4 @@
-import * as TST from "@scripts/toTypescript";
+import type * as TST from "@scripts/toTypescript";
 import { type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type DataParserErrorEither, type MapContext, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
 import { createToDataParserKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
@@ -31,19 +31,12 @@ export class DataParserToDataParserTypeRenderError extends kindClass(
 
 export interface RenderParams extends BuildContextParams {
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType?: TST.MapImportType;
 }
 
 export function render(dataParser: DP.DataParser, params: RenderParams) {
 	const context: MapContext = new Map(params.context);
-	const typescriptContext = new Map(params.typescriptContext);
-	const importContext: TST.MapImportContext = TST.createImportContext(
-		params.importContext,
-		params.importType,
-	);
+	const typescriptContext: TST.MapContext = new Map(params.typescriptContext);
+	const importContext: TST.MapImportContext = new Map(params.importContext);
 
 	const result = buildContext(dataParser, {
 		...params,

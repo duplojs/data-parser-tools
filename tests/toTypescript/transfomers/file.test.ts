@@ -1,5 +1,5 @@
 import { SDP } from "@duplojs/server-utils";
-import { defaultTransformers, type MapImportType, render } from "@scripts/toTypescript";
+import { defaultTransformers, type MapImportContext, render } from "@scripts/toTypescript";
 
 describe("file", () => {
 	it("basic", () => {
@@ -29,8 +29,8 @@ describe("file", () => {
 	});
 
 	it("with preset importType", () => {
-		const importType: MapImportType = new Map();
-		importType.set("@duplojs/server-utils/file", ["FileInterface"]);
+		const importContext: MapImportContext = new Map();
+		importContext.set("@duplojs/server-utils/file", { direct: ["FileInterface"] });
 
 		expect(
 			render(
@@ -39,7 +39,7 @@ describe("file", () => {
 					identifier: "File",
 					transformers: defaultTransformers,
 					mode: "in",
-					importType,
+					importContext,
 				},
 			),
 		).toMatchSnapshot();

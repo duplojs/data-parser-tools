@@ -1,15 +1,11 @@
 import { type DP, E, kindClass } from "@duplojs/utils";
-import { type MapContext, type MapImportContext, type MapImportType, type DataParserErrorEither, type DataParserNotSupportedEither, createImportContext } from "./transformer";
+import { type DataParserErrorEither, type DataParserNotSupportedEither } from "./transformer";
 import { createToTypescriptKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
 import { printer } from "./printer";
 
 export interface RenderParams extends BuildContextParams {
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType?: MapImportType;
 }
 
 export class DataParserToTypescriptRenderError extends kindClass(
@@ -25,11 +21,8 @@ export class DataParserToTypescriptRenderError extends kindClass(
 }
 
 export function render(schema: DP.DataParser, params: RenderParams) {
-	const context: MapContext = new Map(params.context);
-	const importContext: MapImportContext = createImportContext(
-		params.importContext,
-		params.importType,
-	);
+	const context = new Map(params.context);
+	const importContext = new Map(params.importContext);
 
 	const result = buildContext(schema, {
 		...params,

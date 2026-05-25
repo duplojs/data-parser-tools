@@ -1,6 +1,6 @@
 import { DP, E, unwrap } from "@duplojs/utils";
 import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
-import * as TST from "@scripts/toTypescript";
+import type * as TST from "@scripts/toTypescript";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory } from "typescript";
 import { type createCheckerTransformer } from "./checkerTransformer";
@@ -23,11 +23,6 @@ export interface BuildContextParams {
 	readonly typescriptContext?: TST.MapContext;
 	readonly importContext?: TST.MapImportContext;
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType?: TST.MapImportType;
-
 	readonly importMode?: ImportMode;
 	readonly hooks?: readonly TransformerHook[];
 	readonly toTypescript?: {
@@ -48,11 +43,8 @@ export function buildContext(
 	| ToTypescriptDataParserErrorEither
 	) {
 	const context: MapContext = params.context ?? new Map();
-	const typescriptContext = params.typescriptContext ?? new Map();
-	const importContext: TST.MapImportContext = TST.createImportContext(
-		params.importContext,
-		params.importType,
-	);
+	const typescriptContext: TST.MapContext = params.typescriptContext ?? new Map();
+	const importContext: TST.MapImportContext = params.importContext ?? new Map();
 	const importMode = params.importMode ?? "lite";
 
 	importContext.set("@duplojs/utils/dataParser", {

@@ -1,5 +1,5 @@
 import { DPE } from "@duplojs/utils";
-import { defaultTransformers, type MapImportType, render } from "@scripts/toTypescript";
+import { defaultTransformers, type MapImportContext, render } from "@scripts/toTypescript";
 
 describe("time", () => {
 	it("mode out", () => {
@@ -55,8 +55,8 @@ describe("time", () => {
 	});
 
 	it("with preset importType", () => {
-		const importType: MapImportType = new Map();
-		importType.set("@duplojs/utils/date", ["TheTime"]);
+		const importContext: MapImportContext = new Map();
+		importContext.set("@duplojs/utils/date", { direct: ["TheTime"] });
 
 		expect(
 			render(
@@ -65,7 +65,7 @@ describe("time", () => {
 					identifier: "Time",
 					transformers: defaultTransformers,
 					mode: "in",
-					importType,
+					importContext,
 				},
 			),
 		).toMatchSnapshot();

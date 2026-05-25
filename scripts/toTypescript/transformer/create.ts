@@ -21,11 +21,6 @@ export type MapImportContext = Map<
 	}
 >;
 
-/**
- * @deprecated use MapImportContext
- */
-export type MapImportType = Map<string, string[]>;
-
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
 	| DataParserNotSupportedEither
