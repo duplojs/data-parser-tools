@@ -28,7 +28,7 @@ describe("file", () => {
 		).toMatchSnapshot();
 	});
 
-	it("with preset importType", () => {
+	it("with preset importContext", () => {
 		const importContext: MapImportContext = new Map();
 		importContext.set("@duplojs/server-utils/file", { direct: ["FileInterface"] });
 

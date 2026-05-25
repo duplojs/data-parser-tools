@@ -35,7 +35,6 @@ export function transformer(
 				dataParser: lastValue,
 				context: params.context,
 				importContext: params.importContext,
-				importType: params.importContext,
 				output: (action, dataParser) => ({
 					dataParser,
 					action,
@@ -95,7 +94,6 @@ export function transformer(
 			return E.left("buildDataParserError", currentDataParser);
 		},
 		importContext: params.importContext,
-		importType: params.importContext,
 		getDefinition(customProperties = []) {
 			return getDefinitionDataParser({
 				dataParser: currentDataParser,

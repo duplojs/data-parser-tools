@@ -12,11 +12,6 @@ export interface TransformerFunctionParams {
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DDataParser.DataParser[];
 	readonly importContext: MapImportContext;
-
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType?: MapImportContext;
 }
 export function transformer(
 	schema: DP.DataParser,
@@ -30,7 +25,6 @@ export function transformer(
 				schema: lastValue,
 				context: params.context,
 				importContext: params.importContext,
-				importType: params.importContext,
 				output: (action, schema) => ({
 					schema,
 					action,
@@ -98,7 +92,6 @@ export function transformer(
 			return E.left("buildDataParserError");
 		},
 		importContext: params.importContext,
-		importType: params.importContext,
 		addImport: createAddImport(params.importContext),
 	};
 

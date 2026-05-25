@@ -42,11 +42,6 @@ export interface TransformerParams {
 	readonly context: MapContext;
 	readonly importContext: TST.MapImportContext;
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType: TST.MapImportContext;
-
 	transformer(
 		dataParser: DP.DataParser,
 	): MaybeTransformerEither;

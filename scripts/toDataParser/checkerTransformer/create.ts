@@ -16,11 +16,6 @@ export type CheckerTransformerEither =
 export interface CheckerTransformerParams {
 	readonly importContext: TST.MapImportContext;
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType: TST.MapImportContext;
-
 	success(
 		result: CallExpression,
 	): CheckerTransformerSuccessEither;

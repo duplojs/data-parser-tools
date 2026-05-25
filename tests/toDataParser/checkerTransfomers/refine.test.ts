@@ -83,7 +83,6 @@ describe("checkerRefine", () => {
 		const importContext = new Map();
 		const result = checkerRefineTransformer(checker, {
 			importContext,
-			importType: importContext,
 			success(value) {
 				return E.right("buildSuccess", value);
 			},
@@ -115,7 +114,6 @@ describe("checkerRefine", () => {
 		const importContext = new Map();
 		const result = checkerRefineTransformer(checker, {
 			importContext,
-			importType: importContext,
 			success(value) {
 				return E.right("buildSuccess", value);
 			},

@@ -33,11 +33,6 @@ export interface TransformerParams {
 	readonly context: MapContext;
 	readonly importContext: MapImportContext;
 
-	/**
-	 * @deprecated use importContext
-	 */
-	readonly importType: MapImportContext;
-
 	transformer(
 		schema: DP.DataParser,
 	): MaybeTransformerEither;

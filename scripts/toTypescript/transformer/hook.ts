@@ -13,11 +13,6 @@ export interface TransformerHookParams {
 	context: MapContext;
 	importContext: MapImportContext;
 
-	/**
-	 * @deprecated use importContext
-	 */
-	importType: MapImportContext;
-
 	output(
 		action: TransformerHookAction,
 		schema: DP.DataParsers

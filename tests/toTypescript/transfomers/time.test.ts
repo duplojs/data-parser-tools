@@ -54,7 +54,7 @@ describe("time", () => {
 		).toMatchSnapshot();
 	});
 
-	it("with preset importType", () => {
+	it("with preset importContext", () => {
 		const importContext: MapImportContext = new Map();
 		importContext.set("@duplojs/utils/date", { direct: ["TheTime"] });
 

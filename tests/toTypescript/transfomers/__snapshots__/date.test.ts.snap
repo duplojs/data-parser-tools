@@ -24,7 +24,7 @@ exports[`date > mode out 2`] = `
 export type DateIdentifier = TheDate;"
 `;
 
-exports[`date > with preset importType 1`] = `
+exports[`date > with preset importContext 1`] = `
 "import { TheDate, SerializedTheDate } from "@duplojs/utils/date";
 
 export type Date = TheDate | Date | SerializedTheDate;"

@@ -34,7 +34,6 @@ export function buildContext(
 			...params,
 			context,
 			importContext,
-			importType: importContext,
 			mode: params.mode ?? "out",
 			hooks: params.hooks ?? [],
 			recursiveDataParsers: getRecursiveDataParser(schema),

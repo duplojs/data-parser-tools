@@ -35,7 +35,6 @@ export function checkerTransformer(
 ) {
 	const functionParams: CheckerTransformerParams = {
 		importContext: params.importContext,
-		importType: params.importContext,
 		success(result) {
 			return E.right("buildSuccess", result);
 		},
