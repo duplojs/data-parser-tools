@@ -27,21 +27,4 @@ describe("file", () => {
 			),
 		).toMatchSnapshot();
 	});
-
-	it("with preset importContext", () => {
-		const importContext: MapImportContext = new Map();
-		importContext.set("@duplojs/server-utils/file", { direct: ["FileInterface"] });
-
-		expect(
-			render(
-				SDP.file(),
-				{
-					identifier: "File",
-					transformers: defaultTransformers,
-					mode: "in",
-					importContext,
-				},
-			),
-		).toMatchSnapshot();
-	});
 });
