@@ -1,5 +1,5 @@
 import { DP, E, unwrap } from "@duplojs/utils";
-import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
+import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither, type DependenciesContext } from "./dataParserTransformer";
 import type * as TST from "@scripts/toTypescript";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory } from "typescript";
@@ -35,7 +35,7 @@ export function buildContext(
 	schema: DP.DataParser,
 	params: BuildContextParams,
 ): (
-	| BuildedContext
+	| E.Success<BuildedContext>
 	| DataParserNotSupportedEither
 	| DataParserErrorEither
 	| DataParserGetDefinitionErrorEither
@@ -45,6 +45,7 @@ export function buildContext(
 	const context: MapContext = params.context ?? new Map();
 	const typescriptContext: TST.MapContext = params.typescriptContext ?? new Map();
 	const importContext: TST.MapImportContext = params.importContext ?? new Map();
+	const dependenciesContext: DependenciesContext = new Set();
 	const importMode = params.importMode ?? "lite";
 
 	importContext.set("@duplojs/utils/dataParser", {
@@ -67,6 +68,7 @@ export function buildContext(
 			hooks: params.hooks ?? [],
 			recursiveDataParsers: getRecursiveDataParser(schema),
 			dependencyIdentifier: factory.createIdentifier(importMode === "extended" ? "DPE" : "DP"),
+			dependenciesContext,
 		},
 	);
 
@@ -81,23 +83,27 @@ export function buildContext(
 				identifier: factory.createIdentifier(createIdentifier(params.identifier)),
 				expression: unwrap(result),
 				typeIdentifier: null,
+				dependencies: dependenciesContext,
 			},
 		);
 	} else if (schema.definition.identifier !== params.identifier) {
+		dependenciesContext.add(schema);
+
 		context.set(
 			DP.empty(),
 			{
 				identifier: factory.createIdentifier(createIdentifier(params.identifier)),
 				expression: factory.createIdentifier(createIdentifier(schema.definition.identifier)),
 				typeIdentifier: null,
+				dependencies: dependenciesContext,
 			},
 		);
 	}
 
-	return {
+	return E.success({
 		context,
 		importContext: importContext,
 		typescriptContext,
 		importMode,
-	};
+	});
 }

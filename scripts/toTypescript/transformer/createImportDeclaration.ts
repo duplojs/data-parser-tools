@@ -8,6 +8,7 @@ export function createImportDeclaration(importContext: MapImportContext) {
 		A.reduceFrom<ImportDeclaration[]>([]),
 		({ element: [path, imports], lastValue, next }) => {
 			const declarations = A.concat(
+				lastValue,
 				A.map(
 					imports.namespace ?? [],
 					(identifier) => factory.createImportDeclaration(
@@ -34,36 +35,33 @@ export function createImportDeclaration(importContext: MapImportContext) {
 						undefined,
 					),
 				),
-			);
-
-			return next(
-				A.concat(
-					lastValue,
-					imports.direct?.length
-						? A.push(
-							declarations,
-							factory.createImportDeclaration(
+				imports.direct?.length
+					? [
+						factory.createImportDeclaration(
+							undefined,
+							factory.createImportClause(
 								undefined,
-								factory.createImportClause(
-									undefined,
-									undefined,
-									factory.createNamedImports(
-										A.map(
-											imports.direct,
-											(identifier) => factory.createImportSpecifier(
-												false,
-												undefined,
-												factory.createIdentifier(identifier),
-											),
+								undefined,
+								factory.createNamedImports(
+									A.map(
+										imports.direct,
+										(identifier) => factory.createImportSpecifier(
+											false,
+											undefined,
+											factory.createIdentifier(identifier),
 										),
 									),
 								),
-								factory.createStringLiteral(path),
-								undefined,
 							),
-						)
-						: declarations,
-				),
+							factory.createStringLiteral(path),
+							undefined,
+						),
+					]
+					: [],
+			);
+
+			return next(
+				declarations,
 			);
 		},
 	);

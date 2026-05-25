@@ -1,4 +1,4 @@
-import { type DP, E, kindClass } from "@duplojs/utils";
+import { type DP, E, kindClass, unwrap } from "@duplojs/utils";
 import { type DataParserErrorEither, type DataParserNotSupportedEither } from "./transformer";
 import { createToTypescriptKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
@@ -38,6 +38,6 @@ export function render(schema: DP.DataParser, params: RenderParams) {
 	}
 
 	return printer(
-		result,
+		unwrap(result),
 	);
 }

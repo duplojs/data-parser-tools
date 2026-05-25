@@ -5,6 +5,7 @@ export default defineConfig({
 	test: {
 		watch: false,
 		globals: true,
+		setupFiles: "tests/_utils/setup.ts",
 		include: [
 			"tests/**/*.test.ts",
 			"integration/**/*.test.ts",

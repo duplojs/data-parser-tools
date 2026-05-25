@@ -21,10 +21,13 @@ export type DataParserGetDefinitionErrorEither = E.Left<
 	}
 >;
 
+export type DependenciesContext = Set<DP.DataParser>;
+
 export interface MapContextValue {
 	readonly identifier: Identifier;
 	readonly expression: CallExpression | Identifier;
 	readonly typeIdentifier: Identifier | null;
+	readonly dependencies: DependenciesContext;
 }
 
 export type MapContext = Map<DP.DataParsers, MapContextValue>;

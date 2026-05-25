@@ -5,14 +5,14 @@ export type RecursiveType0 = {
     replies: RecursiveType0[];
 };
 
-export type $recursiveDataParser2 = RecursiveType0;
+export type $recursive1DataParser = RecursiveType0;
 
 export type RecursiveType2 = [
     string,
     RecursiveType2[]
 ];
 
-export type $recursiveDataParser4 = RecursiveType2;
+export type $recursive2DataParser = RecursiveType2;
 
 export type RecursiveType4 = {
     name: string;
@@ -21,20 +21,20 @@ export type RecursiveType4 = {
     meta: RecursiveType2;
 };
 
-export type $recursiveDataParser0 = RecursiveType4;
+export type $recursive0DataParser = RecursiveType4;
 
-export const recursiveDataParser0: DP.DataParser<$recursiveDataParser0> = DP.object({
-    name: DP.string(),
-    children: DP.array(DP.lazy(() => recursiveDataParser0)),
-    comment: DP.lazy(() => recursiveDataParser2),
-    meta: DP.lazy(() => recursiveDataParser4)
-});
-
-export const recursiveDataParser2: DP.DataParser<$recursiveDataParser2> = DP.object({
+export const recursive1DataParser: DP.DataParser<$recursive1DataParser> = DP.object({
     id: DP.string(),
-    replies: DP.array(DP.lazy(() => recursiveDataParser2))
+    replies: DP.array(DP.lazy(() => recursive1DataParser))
 });
 
-export const recursiveDataParser4: DP.DataParser<$recursiveDataParser4> = DP.tuple([DP.string(), DP.array(DP.lazy(() => recursiveDataParser4))]);
+export const recursive2DataParser: DP.DataParser<$recursive2DataParser> = DP.tuple([DP.string(), DP.array(DP.lazy(() => recursive2DataParser))]);
 
-export const recursiveNodeDataParser = recursiveDataParser0;
+export const recursive0DataParser: DP.DataParser<$recursive0DataParser> = DP.object({
+    name: DP.string(),
+    children: DP.array(DP.lazy(() => recursive0DataParser)),
+    comment: DP.lazy(() => recursive1DataParser),
+    meta: DP.lazy(() => recursive2DataParser)
+});
+
+export const recursiveNodeDataParser = recursive0DataParser;

@@ -1,6 +1,6 @@
 import { A, E, type DP, unwrap, justExec } from "@duplojs/utils";
 import * as TST from "@scripts/toTypescript";
-import type { MapContext, TransformerParams, createTransformer, MaybeTransformerEither } from "./create";
+import type { MapContext, TransformerParams, createTransformer, MaybeTransformerEither, DependenciesContext, MapContextValue } from "./create";
 import { factory, type Identifier } from "typescript";
 import type { TransformerHook } from "./hook";
 import type { createCheckerTransformer } from "../checkerTransformer";
@@ -14,6 +14,7 @@ export interface TransformerFunctionParams {
 	readonly context: MapContext;
 	readonly typescriptContext: TST.MapContext;
 	readonly importContext: TST.MapImportContext;
+	readonly dependenciesContext: DependenciesContext;
 	readonly dependencyIdentifier: Identifier;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DP.DataParser[];
@@ -48,35 +49,47 @@ export function transformer(
 		},
 	);
 
-	const contextValue = params.context.get(currentDataParser);
+	if (currentDataParser.definition.identifier) {
+		params.dependenciesContext.add(currentDataParser);
+	}
 
-	if (contextValue) {
+	const identifiedDataParser = params.context.get(currentDataParser);
+
+	if (identifiedDataParser) {
 		return E.right(
 			"buildSuccess",
-			contextValue.identifier,
+			identifiedDataParser.identifier,
 		);
 	}
 
-	const shouldCreateConstDeclaration = A.includes(params.recursiveDataParsers, currentDataParser)
-		|| !!currentDataParser.definition.identifier;
-	const currentIdentifier = shouldCreateConstDeclaration
-		? factory.createIdentifier(
-			currentDataParser.definition.identifier !== undefined
-				? createIdentifier(currentDataParser.definition.identifier)
-				: `recursiveDataParser${params.context.size + params.context.size}`,
-		)
-		: undefined;
+	const newIdentifiedDataParser = justExec(() => {
+		const currentIdentifier = A.includes(params.recursiveDataParsers, currentDataParser)
+		|| !!currentDataParser.definition.identifier
+			? factory.createIdentifier(
+				currentDataParser.definition.identifier !== undefined
+					? createIdentifier(currentDataParser.definition.identifier)
+					: `recursive${params.context.size}DataParser`,
+			)
+			: undefined;
 
-	if (currentIdentifier) {
+		if (!currentIdentifier) {
+			return null;
+		}
+
+		const contextValue: MapContextValue = {
+			identifier: currentIdentifier,
+			expression: factory.createIdentifier("undefined"),
+			typeIdentifier: null,
+			dependencies: new Set(),
+		};
+
 		params.context.set(
 			currentDataParser,
-			{
-				identifier: currentIdentifier,
-				expression: factory.createIdentifier("undefined"),
-				typeIdentifier: null,
-			},
+			contextValue,
 		);
-	}
+
+		return contextValue;
+	});
 
 	const functionParams: TransformerParams = {
 		success(result) {
@@ -85,7 +98,11 @@ export function transformer(
 		transformer(dataParser) {
 			return transformer(
 				dataParser,
-				params,
+				{
+					...params,
+					dependenciesContext: newIdentifiedDataParser?.dependencies
+						?? params.dependenciesContext,
+				},
 			);
 		},
 		context: params.context,
@@ -139,12 +156,12 @@ export function transformer(
 		return result;
 	}
 
-	if (currentIdentifier) {
+	if (newIdentifiedDataParser) {
 		const typeIdentifier = justExec(() => {
 			if (!A.includes(params.recursiveDataParsers, currentDataParser)) {
-				return undefined;
+				return null;
 			}
-			const identifier = `$${currentIdentifier.text}`;
+			const identifier = `$${newIdentifiedDataParser.identifier.text}`;
 
 			const result = TST.buildContext(
 				currentDataParser,
@@ -176,18 +193,20 @@ export function transformer(
 			return typeIdentifier;
 		}
 
+		params.context.delete(currentDataParser);
+
 		params.context.set(
 			currentDataParser,
 			{
-				identifier: currentIdentifier,
+				...newIdentifiedDataParser,
 				expression: unwrap(result),
-				typeIdentifier: typeIdentifier ?? null,
+				typeIdentifier: typeIdentifier,
 			},
 		);
 
 		return E.right(
 			"buildSuccess",
-			currentIdentifier,
+			newIdentifiedDataParser.identifier,
 		);
 	}
 

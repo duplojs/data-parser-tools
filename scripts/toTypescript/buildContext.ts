@@ -21,7 +21,7 @@ export function buildContext(
 	schema: DP.DataParser,
 	params: BuildContextParams,
 ): (
-	| BuildedContext
+	| E.Success<BuildedContext>
 	| DataParserNotSupportedEither
 	| DataParserErrorEither
 	) {
@@ -68,8 +68,8 @@ export function buildContext(
 		);
 	}
 
-	return {
+	return E.success({
 		context,
 		importContext,
-	};
+	});
 }

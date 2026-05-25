@@ -2,7 +2,7 @@ import type * as TST from "@scripts/toTypescript";
 import { type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type DataParserErrorEither, type MapContext, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
 import { createToDataParserKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
-import { type DP, E, kindClass } from "@duplojs/utils";
+import { type DP, E, kindClass, unwrap } from "@duplojs/utils";
 import { printer } from "./printer";
 
 export class DataParserToDataParserRenderError extends kindClass(
@@ -65,6 +65,6 @@ export function render(dataParser: DP.DataParser, params: RenderParams) {
 	}
 
 	return printer(
-		result,
+		unwrap(result),
 	);
 }

@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`dependencies context > dataParser with no identifier 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const test1DataParser = DP.object({
+    name: DP.string(),
+    age: DP.number()
+});"
+`;
+
+exports[`dependencies context > dataParser with sub dataParser with identifier 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const userNameDataParser = DP.string();
+
+export const userAgeDataParser = DP.number();
+
+export const otherTestDataParser = DP.object({
+    name: userNameDataParser,
+    age: userAgeDataParser
+});
+
+export const test4DataParser = otherTestDataParser;"
+`;
+
+exports[`dependencies context > dataParser with top level identifier 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const test3DataParser = DP.object({
+    name: DP.string(),
+    age: DP.number()
+});"
+`;
+
+exports[`dependencies context > dataParser with top level identifier but it doesn't match with builder identifier 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const otherTestDataParser = DP.object({
+    name: DP.string(),
+    age: DP.number()
+});
+
+export const test2DataParser = otherTestDataParser;"
+`;
