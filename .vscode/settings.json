@@ -20,4 +20,9 @@
 	},
 	
 	"js/ts.tsdk.path": "node_modules/typescript/lib",
+	"js/ts.format.enabled": false,
+	"js/ts.tsdk.promptToUseWorkspaceVersion": true,
+	"cSpell.words": [
+		"SDPE"
+	],
 }

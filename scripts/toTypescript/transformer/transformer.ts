@@ -1,7 +1,9 @@
 import { A, type DDataParser, E, unwrap, type DP, justExec } from "@duplojs/utils";
-import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportType } from "./create";
+import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext } from "./create";
 import { factory, SyntaxKind } from "typescript";
 import type { TransformerHook } from "./hook";
+import { createAddImport } from "./addImport";
+import { createIdentifier } from "./createIdentifier";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
@@ -9,9 +11,8 @@ export interface TransformerFunctionParams {
 	readonly mode: TransformerMode;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DDataParser.DataParser[];
-	readonly importType: MapImportType;
+	readonly importContext: MapImportContext;
 }
-
 export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
@@ -23,7 +24,7 @@ export function transformer(
 			const result = hook({
 				schema: lastValue,
 				context: params.context,
-				importType: params.importType,
+				importContext: params.importContext,
 				output: (action, schema) => ({
 					schema,
 					action,
@@ -56,7 +57,9 @@ export function transformer(
 			return undefined;
 		}
 
-		const identifier = currentSchema.definition.identifier ?? `RecursiveType${params.context.size}`;
+		const identifier = currentSchema.definition.identifier !== undefined
+			? createIdentifier(currentSchema.definition.identifier)
+			: `RecursiveType${params.context.size}`;
 
 		params.context.set(
 			currentSchema,
@@ -88,14 +91,8 @@ export function transformer(
 		buildError() {
 			return E.left("buildDataParserError");
 		},
-		importType: params.importType,
-		addImport(path, typeName) {
-			const types = params.importType.get(path) ?? [];
-
-			if (!A.includes(types, typeName)) {
-				params.importType.set(path, A.push(types, typeName));
-			}
-		},
+		importContext: params.importContext,
+		addImport: createAddImport(params.importContext),
 	};
 
 	const result = currentSchema.definition.overrideTypescriptTransformer
@@ -153,4 +150,3 @@ export function transformer(
 
 	return result;
 }
-

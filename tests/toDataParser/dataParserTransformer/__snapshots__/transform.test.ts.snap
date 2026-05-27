@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`transform > renders transform parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const transformParserDataParser = DP.transform(DP.string(), (value) => value.trim());"
+`;

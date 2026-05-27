@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerBigIntMin > basic 1`] = `"DP.checkerBigIntMin(1n)"`;

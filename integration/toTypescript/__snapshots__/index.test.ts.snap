@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`integration 1`] = `
-"import type { TheDate, TheTime } from "@duplojs/utils/date";
+"import { TheDate, TheTime } from "@duplojs/utils/date";
 
 export type UserProfile = {
     id: \`user-\${number}-db1\`;

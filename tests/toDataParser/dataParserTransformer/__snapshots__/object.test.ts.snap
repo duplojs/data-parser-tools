@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`object > renders object parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const objectParserDataParser = DP.object({
+    foo: DP.string(),
+    bar: DP.number()
+});"
+`;

@@ -1,31 +1,31 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`date > mode in 1`] = `
-"import type { TheDate, SerializedTheDate } from "@duplojs/utils/date";
+"import { TheDate, SerializedTheDate } from "@duplojs/utils/date";
 
 export type Date = TheDate | Date | SerializedTheDate;"
 `;
 
 exports[`date > mode in 2`] = `
-"import type { TheDate, SerializedTheDate } from "@duplojs/utils/date";
+"import { TheDate, SerializedTheDate } from "@duplojs/utils/date";
 
 export type DateIdentifier = TheDate | Date | SerializedTheDate;"
 `;
 
 exports[`date > mode out 1`] = `
-"import type { TheDate } from "@duplojs/utils/date";
+"import { TheDate } from "@duplojs/utils/date";
 
 export type Date = TheDate;"
 `;
 
 exports[`date > mode out 2`] = `
-"import type { TheDate } from "@duplojs/utils/date";
+"import { TheDate } from "@duplojs/utils/date";
 
 export type DateIdentifier = TheDate;"
 `;
 
-exports[`date > with preset importType 1`] = `
-"import type { TheDate, SerializedTheDate } from "@duplojs/utils/date";
+exports[`date > with preset importContext 1`] = `
+"import { TheDate, SerializedTheDate } from "@duplojs/utils/date";
 
 export type Date = TheDate | Date | SerializedTheDate;"
 `;

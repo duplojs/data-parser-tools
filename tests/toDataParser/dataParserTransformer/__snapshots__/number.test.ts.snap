@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`number > renders number parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const numberParserDataParser = DP.number({ coerce: true });"
+`;
+
+exports[`number > renders number parser without coerce 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const numberParserNoCoerceDataParser = DP.number();"
+`;

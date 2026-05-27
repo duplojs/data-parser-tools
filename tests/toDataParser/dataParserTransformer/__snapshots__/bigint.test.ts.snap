@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`bigint > renders bigint parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const bigintParserDataParser = DP.bigint({ coerce: true });"
+`;
+
+exports[`bigint > renders bigint parser without coerce 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const bigintParserNoCoerceDataParser = DP.bigint();"
+`;

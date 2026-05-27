@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`record > renders record parser 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const recordParserDataParser = DP.record(DP.string(), DP.number());"
+`;

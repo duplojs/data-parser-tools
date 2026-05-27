@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerTimeMin > basic 1`] = `"DP.checkerTimeMin(D.createTime(1000, "millisecond"))"`;

@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerUrl > with options 1`] = `"DP.checkerUrl({ hostname: /^[a-z.-]+$/, normalize: true, protocol: /^https?$/ })"`;
+
+exports[`checkerUrl > without options 1`] = `"DP.checkerUrl()"`;

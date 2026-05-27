@@ -11,7 +11,7 @@ export default [
 			},
 		},
 		files: ["**/*.test.ts", "**/*.bench.ts", "test/**/*.ts"],
-		ignores: ["**/*.d.ts"]
+		ignores: ["**/*.d.ts", "**/*.gen.ts"]
 	},
 	{
 		...duplojsEslintOpen,
@@ -23,7 +23,7 @@ export default [
 			},
 		},
 		files: ["**/*.ts"],
-		ignores: ["**/*.test.ts", "**/*.bench.ts", "test/**/*.ts", "**/*.d.ts"],
+		ignores: ["**/*.test.ts", "**/*.bench.ts", "test/**/*.ts", "**/*.d.ts", "**/*.gen.ts"],
 	},
 	{
 		ignores: ["coverage", "dist"]

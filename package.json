@@ -45,6 +45,11 @@
       "import": "./dist/toJsonSchema/index.mjs",
       "require": "./dist/toJsonSchema/index.cjs",
       "types": "./dist/toJsonSchema/index.d.ts"
+    },
+    "./toDataParser": {
+      "import": "./dist/toDataParser/index.mjs",
+      "require": "./dist/toDataParser/index.cjs",
+      "types": "./dist/toDataParser/index.d.ts"
     }
   },
   "files": [
@@ -71,7 +76,7 @@
     "vitest": "3.2.4"
   },
   "peerDependencies": {
-    "@duplojs/utils": ">=1.8.1 <2.0.0",
+    "@duplojs/utils": ">=1.8.4 <2.0.0",
     "@duplojs/server-utils": ">=0.3.0 < 1.0.0"
   },
   "dependencies": {

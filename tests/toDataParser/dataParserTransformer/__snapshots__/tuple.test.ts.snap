@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`tuple > renders tuple parser with rest 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const tupleParserDataParser = DP.tuple([DP.string()], { rest: DP.number() });"
+`;
+
+exports[`tuple > renders tuple parser without rest 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const tupleParserNoRestDataParser = DP.tuple([DP.string()]);"
+`;

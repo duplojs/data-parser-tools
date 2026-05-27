@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`recursive > when using an schema two time but non recursive 1`] = `
-"export type noneRecursive = {
+"export type NoneRecursive = {
     one: {
         prop: string;
     };

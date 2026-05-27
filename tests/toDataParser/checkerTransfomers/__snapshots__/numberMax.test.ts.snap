@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerNumberMax > exclusive 1`] = `"DP.checkerNumberMax(10, { exclusive: true })"`;
+
+exports[`checkerNumberMax > non exclusive 1`] = `"DP.checkerNumberMax(10)"`;

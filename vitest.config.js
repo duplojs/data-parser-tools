@@ -5,6 +5,7 @@ export default defineConfig({
 	test: {
 		watch: false,
 		globals: true,
+		setupFiles: "tests/_utils/setup.ts",
 		include: [
 			"tests/**/*.test.ts",
 			"integration/**/*.test.ts",
@@ -15,7 +16,9 @@ export default defineConfig({
 			reportsDirectory: "coverage",
 			include: [
 				"scripts/toTypescript/transformer/defaults", 
-				"scripts/toJsonSchema/transformer/defaults"
+				"scripts/toJsonSchema/transformer/defaults",
+				"scripts/toDataParser/checkerTransformer/defaults",
+				"scripts/toDataParser/dataParserTransformer/defaults"
 			],
 			exclude: [
 				"**/*.test.ts", 
