@@ -4,9 +4,9 @@ import { type ResearcherParams, type createResearcher } from "./researcher";
 export * from "./researcher";
 
 export interface DataParserFinderParams {
-	researchers: ReturnType<typeof createResearcher>[];
-	ignore?: Set<DP.DataParser>;
-	continueAfterMatch?: boolean;
+	readonly researchers: readonly ReturnType<typeof createResearcher>[];
+	readonly ignore?: Set<DP.DataParser>;
+	readonly continueAfterMatch?: boolean;
 }
 
 export function dataParserFinder<
