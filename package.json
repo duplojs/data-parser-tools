@@ -50,6 +50,11 @@
       "import": "./dist/toDataParser/index.mjs",
       "require": "./dist/toDataParser/index.cjs",
       "types": "./dist/toDataParser/index.d.ts"
+    },
+    "./finder": {
+      "import": "./dist/finder/index.mjs",
+      "require": "./dist/finder/index.cjs",
+      "types": "./dist/finder/index.d.ts"
     }
   },
   "files": [
