@@ -46,7 +46,7 @@ export interface TransformerParams {
 }
 
 export type TransformerBuildFunction<
-	GenericDataParser extends DP.DataParsers = DP.DataParsers,
+	GenericDataParser extends DP.DataParser = DP.DataParser,
 > = (
 	schema: GenericDataParser,
 	params: TransformerParams,

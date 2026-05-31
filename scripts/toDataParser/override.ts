@@ -1,6 +1,7 @@
-import { dataParserBaseInit } from "@duplojs/utils/dataParser";
+import { dataParserBaseExtendedInit, dataParserBaseInit } from "@duplojs/utils/dataParser";
 import type { CallExpression, Identifier } from "typescript";
 import type { TransformerBuildFunction } from "./dataParserTransformer";
+import { type BaseVersion } from "@scripts/utils";
 
 declare module "@duplojs/utils/dataParser" {
 	interface DataParserBase {
@@ -15,10 +16,10 @@ declare module "@duplojs/utils/dataParser" {
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
 		setOverrideDataParserTransformer(
-			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
+			transformer: CallExpression | Identifier | TransformerBuildFunction<BaseVersion<this>> | null,
 		): this;
 		addOverrideDataParserTransformer(
-			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
+			transformer: CallExpression | Identifier | TransformerBuildFunction<BaseVersion<this>> | null,
 		): this;
 	}
 
@@ -48,6 +49,26 @@ dataParserBaseInit.overrideHandler.setMethod(
 	},
 );
 
+dataParserBaseExtendedInit.overrideHandler.setMethod(
+	"setIdentifier",
+	(schema, identifier) => {
+		schema.definition.identifier = identifier;
+
+		return schema;
+	},
+);
+
+dataParserBaseExtendedInit.overrideHandler.setMethod(
+	"addIdentifier",
+	(schema, identifier) => {
+		const newSchema = schema.clone();
+
+		newSchema.setIdentifier(identifier);
+
+		return newSchema;
+	},
+);
+
 dataParserBaseInit.overrideHandler.setMethod(
 	"setOverrideDataParserTransformer",
 	(schema, overrideTransformer) => {
@@ -64,6 +85,32 @@ dataParserBaseInit.overrideHandler.setMethod(
 );
 
 dataParserBaseInit.overrideHandler.setMethod(
+	"addOverrideDataParserTransformer",
+	(schema, overrideTransformer) => {
+		const newSchema = schema.clone();
+
+		newSchema.setOverrideDataParserTransformer(overrideTransformer);
+
+		return newSchema;
+	},
+);
+
+dataParserBaseExtendedInit.overrideHandler.setMethod(
+	"setOverrideDataParserTransformer",
+	(schema, overrideTransformer) => {
+		if (overrideTransformer) {
+			schema.definition.overrideDataParserTransformer = typeof overrideTransformer === "function"
+				? overrideTransformer
+				: (__, { success }) => success(overrideTransformer);
+		} else {
+			schema.definition.overrideDataParserTransformer = undefined;
+		}
+
+		return schema;
+	},
+);
+
+dataParserBaseExtendedInit.overrideHandler.setMethod(
 	"addOverrideDataParserTransformer",
 	(schema, overrideTransformer) => {
 		const newSchema = schema.clone();
