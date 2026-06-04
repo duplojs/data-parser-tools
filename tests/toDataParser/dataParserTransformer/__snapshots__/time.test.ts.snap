@@ -1,5 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`time > renders time parser with addChecker max 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as D from "@duplojs/utils/date";
+
+export const timeParserWithAddCheckerDataParser = DP.time({ checkers: [DP.checkerTimeMax(D.createTime(2, "millisecond"))] });"
+`;
+
 exports[`time > renders time parser with checker imports 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
@@ -9,6 +17,17 @@ export const timeParserDataParser = DP.time({
     coerce: true,
     checkers: [DP.checkerTimeMin(D.createTime(1, "millisecond"))]
 });"
+`;
+
+exports[`time > renders time parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as D from "@duplojs/utils/date";
+
+export const timeParserWithDefinitionCheckersDataParser = DP.time({ checkers: [
+        DP.checkerTimeMin(D.createTime(1, "millisecond")),
+        DP.checkerTimeMax(D.createTime(2, "millisecond"))
+    ] });"
 `;
 
 exports[`time > renders time parser without coerce and without checkers 1`] = `

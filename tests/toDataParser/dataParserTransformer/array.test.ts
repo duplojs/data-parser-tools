@@ -17,6 +17,41 @@ describe("array", () => {
 		).toMatchSnapshot();
 	});
 
+	it("renders array parser with definition checkers", () => {
+		expect(
+			render(
+				DPE.array(DPE.string(), {
+					checkers: [
+						DP.checkerArrayMin(1),
+						DP.checkerArrayMax(3),
+					],
+				}),
+				{
+					identifier: "arrayParserWithDefinitionCheckers",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders array parser with addChecker", () => {
+		expect(
+			render(
+				DPE.array(DPE.string()).addChecker(
+					DP.checkerArrayMin(1),
+				),
+				{
+					identifier: "arrayParserWithAddChecker",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
 	it("fails when inner element cannot be rendered", () => {
 		expect(
 			() => render(

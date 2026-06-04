@@ -3,6 +3,8 @@
 exports[`integration 1`] = `
 "import { TheDate, TheTime } from "@duplojs/utils/date";
 
+export type IdentifiedDataParser = string;
+
 export type UserProfile = {
     id: \`user-\${number}-db1\`;
     name: string;
@@ -33,5 +35,7 @@ export type UserProfile = {
     ];
     createdAt: TheDate;
     startAt: TheTime;
+    identifiedDataParser: IdentifiedDataParser;
+    identifiedDataParserArray: IdentifiedDataParser[];
 };"
 `;

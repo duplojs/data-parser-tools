@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkerFileSize > with max only 1`] = `"SDP.checkerFileSize({ max: 10 })"`;
+
+exports[`checkerFileSize > with min and max 1`] = `"SDP.checkerFileSize({ min: 1, max: 10 })"`;
+
+exports[`checkerFileSize > with min only 1`] = `"SDP.checkerFileSize({ min: 1 })"`;

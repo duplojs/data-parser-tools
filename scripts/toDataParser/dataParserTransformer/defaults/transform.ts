@@ -34,13 +34,13 @@ export const transformTransformer = createTransformer(
 		);
 
 		const statement = sourceFile.statements[0];
-		if (!statement || !isExpressionStatement(statement)) {
-			return buildError();
-		}
 
-		const functionExpression = isParenthesizedExpression(statement.expression)
-			? statement.expression.expression
-			: undefined;
+		const functionExpression = (
+			statement !== undefined
+			&& isExpressionStatement(statement)
+			&& isParenthesizedExpression(statement.expression)
+			&& statement.expression.expression
+		);
 
 		if (
 			!functionExpression

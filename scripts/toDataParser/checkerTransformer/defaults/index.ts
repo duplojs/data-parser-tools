@@ -1,6 +1,7 @@
 export * from "./number";
 export * from "./string";
 export * from "./array";
+export * from "./file";
 
 import type { createCheckerTransformer } from "../create";
 
@@ -10,6 +11,7 @@ import { checkerArrayMaxTransformer, checkerArrayMinTransformer } from "./array"
 import { checkerBigIntMaxTransformer, checkerBigIntMinTransformer } from "./bigint";
 import { checkerTimeMaxTransformer, checkerTimeMinTransformer } from "./time";
 import { checkerRefineTransformer } from "./refine";
+import { checkerFileExistTransformer, checkerFileMimeTypeTransformer, checkerFileSizeTransformer } from "./file";
 
 export const defaultCheckerTransformers = [
 	checkerRefineTransformer,
@@ -27,6 +29,10 @@ export const defaultCheckerTransformers = [
 	// array
 	checkerArrayMaxTransformer,
 	checkerArrayMinTransformer,
+	// file
+	checkerFileExistTransformer,
+	checkerFileMimeTypeTransformer,
+	checkerFileSizeTransformer,
 	// bigint
 	checkerBigIntMaxTransformer,
 	checkerBigIntMinTransformer,

@@ -7,12 +7,7 @@ describe("file", () => {
 	it("renders file parser with async constraints", () => {
 		expect(
 			render(
-				SDP.coerce.file({
-					checkExist: true,
-					maxSize: 10,
-					minSize: 5,
-					mimeType: /image\/png/,
-				}),
+				SDP.coerce.file(),
 				{
 					identifier: "fileParser",
 					dataParserTransformers: defaultTransformers,
@@ -52,8 +47,46 @@ describe("file", () => {
 		).toMatchSnapshot();
 	});
 
+	it("renders file parser with definition checkers", () => {
+		expect(
+			render(
+				SDP.file({
+					checkers: [
+						SDP.checkerFileExist(),
+						SDP.checkerFileMimeType(/^image\//),
+					],
+				}),
+				{
+					identifier: "fileParserWithDefinitionCheckers",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders file parser with addChecker", () => {
+		expect(
+			render(
+				SDP.file().addChecker(
+					SDP.checkerFileSize({
+						min: 1,
+						max: 10,
+					}),
+				),
+				{
+					identifier: "fileParserWithAddChecker",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
 	it("fails when definition checker cannot be rendered", () => {
-		const schema = SDP.file({}, {
+		const schema = SDP.file({
 			checkers: [{ kind: "forced-error" } as any],
 		});
 

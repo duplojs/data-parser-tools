@@ -1,24 +1,7 @@
-/* eslint-disable @typescript-eslint/consistent-type-imports */
+
 import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
-import { afterEach, vi } from "vitest";
-import * as ts from "typescript";
-
-vi.mock("typescript", async() => {
-	const actual = await vi.importActual<typeof import("typescript")>("typescript");
-
-	return {
-		...actual,
-		createSourceFile: vi.fn(actual.createSourceFile),
-		isExpressionStatement: vi.fn(actual.isExpressionStatement),
-		isParenthesizedExpression: vi.fn(actual.isParenthesizedExpression),
-	};
-});
-
-afterEach(() => {
-	vi.restoreAllMocks();
-});
 
 describe("transform", () => {
 	it("renders transform parser", () => {
@@ -100,40 +83,11 @@ describe("transform", () => {
 	});
 
 	it("fails when the parsed statement is not an expression statement", () => {
-		vi.mocked(ts.createSourceFile).mockReturnValue({
-			statements: [{ kind: ts.SyntaxKind.VariableStatement }],
-		} as any);
-		vi.mocked(ts.isExpressionStatement).mockReturnValue(false);
-
 		expect(
 			() => render(
-				DPE.transform(DPE.string(), (value) => value.trim()),
+				DPE.transform(DPE.string(), undefined as never),
 				{
 					identifier: "transformParserStatementError",
-					dataParserTransformers: defaultTransformers,
-					checkerTransformers: defaultCheckerTransformers,
-					typescriptTransformers: tsDefaultTransformers,
-				},
-			),
-		).toThrow();
-	});
-
-	it("fails when the parsed function is not parenthesized", () => {
-		vi.mocked(ts.createSourceFile).mockReturnValue({
-			statements: [
-				{
-					expression: {},
-				},
-			],
-		} as any);
-		vi.mocked(ts.isExpressionStatement).mockReturnValue(true);
-		vi.mocked(ts.isParenthesizedExpression).mockReturnValue(false);
-
-		expect(
-			() => render(
-				DPE.transform(DPE.string(), (value) => value.trim()),
-				{
-					identifier: "transformParserParenthesizedError",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
 					typescriptTransformers: tsDefaultTransformers,

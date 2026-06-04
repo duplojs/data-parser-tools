@@ -6,6 +6,21 @@ exports[`bigint > renders bigint parser 1`] = `
 export const bigintParserDataParser = DP.bigint({ coerce: true });"
 `;
 
+exports[`bigint > renders bigint parser with addChecker 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const bigintParserWithAddCheckerDataParser = DP.bigint({ checkers: [DP.checkerBigIntMin(1n)] });"
+`;
+
+exports[`bigint > renders bigint parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const bigintParserWithDefinitionCheckersDataParser = DP.bigint({ checkers: [
+        DP.checkerBigIntMin(1n),
+        DP.checkerBigIntMax(10n)
+    ] });"
+`;
+
 exports[`bigint > renders bigint parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 

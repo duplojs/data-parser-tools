@@ -19,6 +19,41 @@ describe("time", () => {
 		).toMatchSnapshot();
 	});
 
+	it("renders time parser with definition checkers", () => {
+		expect(
+			render(
+				DPE.time({
+					checkers: [
+						DP.checkerTimeMin(DDate.createTime(1, "millisecond")),
+						DP.checkerTimeMax(DDate.createTime(2, "millisecond")),
+					],
+				}),
+				{
+					identifier: "timeParserWithDefinitionCheckers",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders time parser with addChecker max", () => {
+		expect(
+			render(
+				DPE.time().addChecker(
+					DP.checkerTimeMax(DDate.createTime(2, "millisecond")),
+				),
+				{
+					identifier: "timeParserWithAddChecker",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
 	it("renders time parser without coerce and without checkers", () => {
 		expect(
 			render(

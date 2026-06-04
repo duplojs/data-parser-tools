@@ -50,7 +50,13 @@ export const checkedExtendedParserDataParser = DPE.object({
 exports[`render > renders complex nested recursive dataParsers 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
-export type RecursiveType0 = (string | RecursiveType0 | RecursiveType1)[];
+export type RecursiveType3 = string | RecursiveType1 | RecursiveType2 | RecursiveType3[];
+
+export type RecursiveType2 = [
+    string,
+    RecursiveType1,
+    (RecursiveType2 | RecursiveType3 | string)[]
+];
 
 export type RecursiveType1 = {
     recursiveProp: {
@@ -65,13 +71,7 @@ export type RecursiveType1 = {
     union: RecursiveType3;
 };
 
-export type RecursiveType2 = [
-    string,
-    RecursiveType1,
-    (RecursiveType2 | RecursiveType3 | string)[]
-];
-
-export type RecursiveType3 = string | RecursiveType1 | RecursiveType2 | RecursiveType3[];
+export type RecursiveType0 = (string | RecursiveType0 | RecursiveType1)[];
 
 export type $recursive1DataParser = RecursiveType0;
 

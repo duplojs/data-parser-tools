@@ -80,7 +80,7 @@ describe("DPE override", () => {
 
 		asserts(
 			schema.setIdentifier("test"),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.identifier).toBe("test");
@@ -93,7 +93,7 @@ describe("DPE override", () => {
 
 		const newSchema = forwardAsserts(
 			schema.addIdentifier("test"),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.identifier).toBe(undefined);
@@ -120,7 +120,7 @@ describe("DPE override", () => {
 				schema: overrideSchema,
 				isOptional: true,
 			}),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(typeof schema.definition.overrideJsonSchemaTransformer).toBe("function");
@@ -137,7 +137,7 @@ describe("DPE override", () => {
 
 		const newSchema = forwardAsserts(
 			schema.addOverrideJsonSchemaTransformer(overrideTransformer),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.overrideJsonSchemaTransformer).toBe(undefined);

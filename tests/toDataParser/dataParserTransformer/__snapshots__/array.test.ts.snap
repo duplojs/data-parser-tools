@@ -5,3 +5,18 @@ exports[`array > renders array parser 1`] = `
 
 export const arrayParserDataParser = DP.array(DP.string());"
 `;
+
+exports[`array > renders array parser with addChecker 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const arrayParserWithAddCheckerDataParser = DP.array(DP.string(), { checkers: [DP.checkerArrayMin(1)] });"
+`;
+
+exports[`array > renders array parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const arrayParserWithDefinitionCheckersDataParser = DP.array(DP.string(), { checkers: [
+        DP.checkerArrayMin(1),
+        DP.checkerArrayMax(3)
+    ] });"
+`;

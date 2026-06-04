@@ -3,7 +3,7 @@ import { asserts, DP, DPE, type ExpectType, forwardAsserts, justReturn } from "@
 import { factory } from "typescript";
 import { defaultCheckerTransformers, defaultTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
-import { type TransformerBuildFunction } from "@scripts/toDataParser/dataParserTransformer";
+import { type DataParserToDataParser, type DataParserToTypescript, type DataParserToJsonSchema } from "@scripts/index";
 
 describe("DP override", () => {
 	it("setIdentifier", () => {
@@ -51,7 +51,7 @@ describe("DP override", () => {
 
 	it("addOverrideDataParserTransformer", () => {
 		const schema = DP.string();
-		const overrideTransformer: TransformerBuildFunction = (__, { success }) => success(
+		const overrideTransformer: DataParserToDataParser.TransformerBuildFunction = (__, { success }) => success(
 			factory.createCallExpression(
 				factory.createIdentifier("test"),
 				undefined,
@@ -115,7 +115,7 @@ describe("DPE override", () => {
 
 		asserts(
 			schema.setIdentifier("test"),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.identifier).toBe("test");
@@ -128,7 +128,7 @@ describe("DPE override", () => {
 
 		const newSchema = forwardAsserts(
 			schema.addIdentifier("test"),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.identifier).toBe(undefined);
@@ -154,7 +154,7 @@ describe("DPE override", () => {
 					[],
 				),
 			),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(typeof schema.definition.overrideDataParserTransformer).toBe("function");
@@ -162,7 +162,7 @@ describe("DPE override", () => {
 
 	it("addOverrideDataParserTransformer", () => {
 		const schema = DPE.string();
-		const overrideTransformer: TransformerBuildFunction = (__, { success }) => success(
+		const overrideTransformer: DataParserToDataParser.TransformerBuildFunction = (__, { success }) => success(
 			factory.createCallExpression(
 				factory.createIdentifier("test"),
 				undefined,
@@ -174,7 +174,7 @@ describe("DPE override", () => {
 
 		const newSchema = forwardAsserts(
 			schema.addOverrideDataParserTransformer(overrideTransformer),
-			DP.extendedKind.has,
+			DP.dataParserExtendedKind.has,
 		);
 
 		expect(schema.definition.overrideDataParserTransformer).toBe(undefined);
@@ -198,7 +198,18 @@ describe("DPE override", () => {
 			(__, { success, dependencyIdentifier }) => {
 				type Check = ExpectType<
 					typeof __,
-					DP.DataParserString,
+					DP.extended.DataParserStringExtended<{
+						readonly errorMessage?: string | undefined;
+						readonly identifier?: string | undefined;
+						readonly overrideTypescriptTransformer?:
+							DataParserToTypescript.TransformerBuildFunction | undefined;
+						readonly overrideDataParserTransformer?:
+							DataParserToDataParser.TransformerBuildFunction | undefined;
+						readonly overrideJsonSchemaTransformer?:
+							DataParserToJsonSchema.TransformerBuildFunction | undefined;
+						readonly coerce: boolean;
+						readonly checkers: readonly [];
+					}>,
 					"strict"
 				>;
 

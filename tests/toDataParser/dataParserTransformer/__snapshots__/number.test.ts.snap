@@ -6,6 +6,21 @@ exports[`number > renders number parser 1`] = `
 export const numberParserDataParser = DP.number({ coerce: true });"
 `;
 
+exports[`number > renders number parser with addChecker 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const numberParserWithAddCheckerDataParser = DP.number({ checkers: [DP.checkerNumberMax(10)] });"
+`;
+
+exports[`number > renders number parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const numberParserWithDefinitionCheckersDataParser = DP.number({ checkers: [
+        DP.checkerNumberMin(1),
+        DP.checkerInt()
+    ] });"
+`;
+
 exports[`number > renders number parser without coerce 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 

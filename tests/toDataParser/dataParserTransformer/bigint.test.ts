@@ -1,4 +1,4 @@
-import { DPE, E } from "@duplojs/utils";
+import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
@@ -23,6 +23,41 @@ describe("bigint", () => {
 				DPE.bigint(),
 				{
 					identifier: "bigintParserNoCoerce",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders bigint parser with definition checkers", () => {
+		expect(
+			render(
+				DPE.bigint({
+					checkers: [
+						DP.checkerBigIntMin(1n),
+						DP.checkerBigIntMax(10n),
+					],
+				}),
+				{
+					identifier: "bigintParserWithDefinitionCheckers",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders bigint parser with addChecker", () => {
+		expect(
+			render(
+				DPE.bigint().addChecker(
+					DP.checkerBigIntMin(1n),
+				),
+				{
+					identifier: "bigintParserWithAddChecker",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
 					typescriptTransformers: tsDefaultTransformers,

@@ -1,5 +1,6 @@
 import type { CallExpression, ObjectLiteralExpression, PropertyAssignment } from "typescript";
 import { type DP, E } from "@duplojs/utils";
+import type { DServerDataParser } from "@duplojs/server-utils";
 import type * as TST from "@scripts/toTypescript";
 
 export type CheckerTransformerSuccessEither = E.Right<"buildSuccess", CallExpression>;
@@ -47,6 +48,9 @@ export type DataParserCheckers = (
 	| DP.DataParserCheckerRefine
 	| DP.DataParserCheckerTimeMin
 	| DP.DataParserCheckerTimeMax
+	| DServerDataParser.DataParserCheckerFileExist
+	| DServerDataParser.DataParserCheckerFileMimeType
+	| DServerDataParser.DataParserCheckerFileSize
 );
 
 export type CheckerTransformerBuildFunction<

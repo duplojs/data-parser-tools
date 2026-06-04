@@ -18,20 +18,20 @@ export type RecursiveTuple = RecursiveType0;"
 `;
 
 exports[`recursive > with complex recursive schema 1`] = `
-"export type RecursiveType0 = {
+"export type RecursiveType1 = [
+    string,
+    (RecursiveType1 | string)[]
+];
+
+export type RecursiveType2 = (string | RecursiveType2)[];
+
+export type RecursiveType0 = {
     recursiveProp: {
         test: RecursiveType0;
     };
     tuple: RecursiveType1;
     array: RecursiveType2;
 };
-
-export type RecursiveType1 = [
-    string,
-    (RecursiveType1 | string)[]
-];
-
-export type RecursiveType2 = (string | RecursiveType2)[];
 
 export type RecursiveObject = RecursiveType0;"
 `;

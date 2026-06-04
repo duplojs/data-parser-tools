@@ -2,6 +2,8 @@ import { render, defaultTransformers } from "@duplojs/data-parser-tools/toTypesc
 import { DPE } from "@duplojs/utils";
 
 it("integration", () => {
+	const identifiedDataParser = DPE.string().setIdentifier("identifiedDataParser");
+
 	const userSchema = DPE.object({
 		id: DPE.templateLiteral(["user-", DPE.number(), "-db1"]),
 		name: DPE.string().min(2),
@@ -31,6 +33,8 @@ it("integration", () => {
 		location: DPE.tuple([DPE.number(), DPE.number()], { rest: DPE.number() }),
 		createdAt: DPE.date({ coerce: true }),
 		startAt: DPE.time(),
+		identifiedDataParser,
+		identifiedDataParserArray: identifiedDataParser.array(),
 	}).addIdentifier("UserProfile");
 
 	const result = render(

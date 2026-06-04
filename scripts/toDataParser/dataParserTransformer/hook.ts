@@ -5,18 +5,18 @@ import type { MapContext } from "./create";
 export type TransformerHookAction = "stop" | "next";
 
 export interface TransformerHookOutput {
-	dataParser: DP.DataParsers;
+	dataParser: DP.DataParser;
 	action: TransformerHookAction;
 }
 
 export interface TransformerHookParams {
-	dataParser: DP.DataParsers;
+	dataParser: DP.DataParser;
 	context: MapContext;
 	importContext: TST.MapImportContext;
 
 	output(
 		action: TransformerHookAction,
-		dataParser: DP.DataParsers
+		dataParser: DP.DataParser
 	): TransformerHookOutput;
 }
 

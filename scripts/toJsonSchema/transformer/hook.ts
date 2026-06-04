@@ -4,16 +4,16 @@ import { type MapContext } from "./create";
 export type TransformerHookAction = "stop" | "next";
 
 export interface TransformerHookOutput {
-	schema: DP.DataParsers;
+	schema: DP.DataParser;
 	action: TransformerHookAction;
 }
 
 export interface TransformerHookParams {
-	schema: DP.DataParsers;
+	schema: DP.DataParser;
 	context: MapContext;
 	output(
 		action: TransformerHookAction,
-		schema: DP.DataParsers
+		schema: DP.DataParser
 	): TransformerHookOutput;
 }
 

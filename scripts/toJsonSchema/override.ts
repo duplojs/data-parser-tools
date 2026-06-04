@@ -1,6 +1,5 @@
-import { dataParserBaseExtendedInit, dataParserBaseInit } from "@duplojs/utils/dataParser";
+import { DataParserBase } from "@duplojs/utils/dataParser";
 import { type TransformerBuildFunction, type TransformerSuccess } from "./transformer/create";
-import { type BaseVersion } from "@scripts/utils";
 
 declare module "@duplojs/utils/dataParser" {
 	interface DataParserBase {
@@ -15,10 +14,10 @@ declare module "@duplojs/utils/dataParser" {
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
 		setOverrideJsonSchemaTransformer(
-			transformer: TransformerSuccess | TransformerBuildFunction<BaseVersion<this>> | null
+			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
 		): this;
 		addOverrideJsonSchemaTransformer(
-			transformer: TransformerSuccess | TransformerBuildFunction<BaseVersion<this>> | null
+			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
 		): this;
 	}
 
@@ -28,94 +27,36 @@ declare module "@duplojs/utils/dataParser" {
 	}
 }
 
-dataParserBaseInit.overrideHandler.setMethod(
-	"setIdentifier",
-	(schema, identifier) => {
-		schema.definition.identifier = identifier;
+DataParserBase.prototype.setIdentifier = function(this: DataParserBase, identifier) {
+	this.definition.identifier = identifier;
 
-		return schema;
-	},
-);
+	return this;
+};
 
-dataParserBaseInit.overrideHandler.setMethod(
-	"addIdentifier",
-	(schema, identifier) => {
-		const newSchema = schema.clone();
+DataParserBase.prototype.addIdentifier = function(this: DataParserBase, identifier) {
+	const newSchema = this.clone();
 
-		newSchema.setIdentifier(identifier);
+	newSchema.setIdentifier(identifier);
 
-		return newSchema;
-	},
-);
+	return newSchema;
+};
 
-dataParserBaseExtendedInit.overrideHandler.setMethod(
-	"setIdentifier",
-	(schema, identifier) => {
-		schema.definition.identifier = identifier;
+DataParserBase.prototype.setOverrideJsonSchemaTransformer = function(this: DataParserBase, overrideTransformer) {
+	if (overrideTransformer) {
+		this.definition.overrideJsonSchemaTransformer = typeof overrideTransformer === "function"
+			? overrideTransformer
+			: (__, { success }) => success(overrideTransformer.schema, overrideTransformer.isOptional);
+	} else {
+		this.definition.overrideJsonSchemaTransformer = undefined;
+	}
 
-		return schema;
-	},
-);
+	return this;
+};
 
-dataParserBaseExtendedInit.overrideHandler.setMethod(
-	"addIdentifier",
-	(schema, identifier) => {
-		const newSchema = schema.clone();
+DataParserBase.prototype.addOverrideJsonSchemaTransformer = function(this: DataParserBase, overrideTransformer) {
+	const newSchema = this.clone();
 
-		newSchema.setIdentifier(identifier);
+	newSchema.setOverrideJsonSchemaTransformer(overrideTransformer);
 
-		return newSchema;
-	},
-);
-
-dataParserBaseInit.overrideHandler.setMethod(
-	"setOverrideJsonSchemaTransformer",
-	(schema, overrideTransformer) => {
-		if (overrideTransformer) {
-			schema.definition.overrideJsonSchemaTransformer = typeof overrideTransformer === "function"
-				? overrideTransformer
-				: (__, { success }) => success(overrideTransformer.schema, overrideTransformer.isOptional);
-		} else {
-			schema.definition.overrideJsonSchemaTransformer = undefined;
-		}
-
-		return schema;
-	},
-);
-
-dataParserBaseInit.overrideHandler.setMethod(
-	"addOverrideJsonSchemaTransformer",
-	(schema, overrideTransformer) => {
-		const newSchema = schema.clone();
-
-		newSchema.setOverrideJsonSchemaTransformer(overrideTransformer);
-
-		return newSchema;
-	},
-);
-
-dataParserBaseExtendedInit.overrideHandler.setMethod(
-	"setOverrideJsonSchemaTransformer",
-	(schema, overrideTransformer) => {
-		if (overrideTransformer) {
-			schema.definition.overrideJsonSchemaTransformer = typeof overrideTransformer === "function"
-				? overrideTransformer
-				: (__, { success }) => success(overrideTransformer.schema, overrideTransformer.isOptional);
-		} else {
-			schema.definition.overrideJsonSchemaTransformer = undefined;
-		}
-
-		return schema;
-	},
-);
-
-dataParserBaseExtendedInit.overrideHandler.setMethod(
-	"addOverrideJsonSchemaTransformer",
-	(schema, overrideTransformer) => {
-		const newSchema = schema.clone();
-
-		newSchema.setOverrideJsonSchemaTransformer(overrideTransformer);
-
-		return newSchema;
-	},
-);
+	return newSchema;
+};

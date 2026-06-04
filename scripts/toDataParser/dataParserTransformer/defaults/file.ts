@@ -30,38 +30,6 @@ export const fileTransformer = createTransformer(
 				),
 			);
 		}
-		if (dataParser.definition.checkExist) {
-			dataParserFileParams.push(
-				factory.createPropertyAssignment(
-					factory.createIdentifier("checkExist"),
-					factory.createTrue(),
-				),
-			);
-		}
-		if (dataParser.definition.maxSize) {
-			dataParserFileParams.push(
-				factory.createPropertyAssignment(
-					factory.createIdentifier("maxSize"),
-					factory.createNumericLiteral(dataParser.definition.maxSize),
-				),
-			);
-		}
-		if (dataParser.definition.minSize) {
-			dataParserFileParams.push(
-				factory.createPropertyAssignment(
-					factory.createIdentifier("minSize"),
-					factory.createNumericLiteral(dataParser.definition.minSize),
-				),
-			);
-		}
-		if (dataParser.definition.mimeType) {
-			dataParserFileParams.push(
-				factory.createPropertyAssignment(
-					factory.createIdentifier("mimeType"),
-					factory.createRegularExpressionLiteral(dataParser.definition.mimeType.toString()),
-				),
-			);
-		}
 
 		const namespace = dependencyIdentifier.text === "DP"
 			? justExec(

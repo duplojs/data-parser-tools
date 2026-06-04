@@ -152,6 +152,8 @@ export function transformer(
 	if (currentIdentifier) {
 		const { schema: builtSchema, isOptional } = unwrap(result);
 
+		params.context.delete(currentSchema);
+
 		params.context.set(
 			currentSchema,
 			{

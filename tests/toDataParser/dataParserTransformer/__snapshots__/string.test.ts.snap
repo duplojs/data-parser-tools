@@ -5,3 +5,18 @@ exports[`string > renders string parser 1`] = `
 
 export const stringParserDataParser = DP.string();"
 `;
+
+exports[`string > renders string parser with addChecker 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const stringParserWithAddCheckerDataParser = DP.string({ checkers: [DP.checkerRegex(/^[a-z]+$/)] });"
+`;
+
+exports[`string > renders string parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+export const stringParserWithDefinitionCheckersDataParser = DP.string({ checkers: [
+        DP.checkerStringMin(3),
+        DP.checkerStringMax(10)
+    ] });"
+`;

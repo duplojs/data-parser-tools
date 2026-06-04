@@ -1,4 +1,4 @@
-import { DPE, E } from "@duplojs/utils";
+import { DP, DPE, E } from "@duplojs/utils";
 import { defaultTransformers, defaultCheckerTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
 
@@ -23,6 +23,41 @@ describe("number", () => {
 				DPE.number(),
 				{
 					identifier: "numberParserNoCoerce",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders number parser with definition checkers", () => {
+		expect(
+			render(
+				DPE.number({
+					checkers: [
+						DP.checkerNumberMin(1),
+						DP.checkerInt(),
+					],
+				}),
+				{
+					identifier: "numberParserWithDefinitionCheckers",
+					dataParserTransformers: defaultTransformers,
+					checkerTransformers: defaultCheckerTransformers,
+					typescriptTransformers: tsDefaultTransformers,
+				},
+			),
+		).toMatchSnapshot();
+	});
+
+	it("renders number parser with addChecker", () => {
+		expect(
+			render(
+				DPE.number().addChecker(
+					DP.checkerNumberMax(10),
+				),
+				{
+					identifier: "numberParserWithAddChecker",
 					dataParserTransformers: defaultTransformers,
 					checkerTransformers: defaultCheckerTransformers,
 					typescriptTransformers: tsDefaultTransformers,

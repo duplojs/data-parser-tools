@@ -130,6 +130,8 @@ export function transformer(
 	}
 
 	if (currentIdentifier) {
+		params.context.delete(currentSchema);
+
 		params.context.set(
 			currentSchema,
 			factory.createTypeAliasDeclaration(

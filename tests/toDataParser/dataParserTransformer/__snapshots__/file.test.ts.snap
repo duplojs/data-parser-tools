@@ -10,18 +10,31 @@ import * as SDPE from "@duplojs/server-utils/dataParserExtended";
 export const fileParserExtendedDataParser = SDPE.file({});"
 `;
 
+exports[`file > renders file parser with addChecker 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as SDP from "@duplojs/server-utils/dataParser";
+
+export const fileParserWithAddCheckerDataParser = SDP.file({}, { checkers: [SDP.checkerFileSize({ min: 1, max: 10 })] });"
+`;
+
 exports[`file > renders file parser with async constraints 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 
 import * as SDP from "@duplojs/server-utils/dataParser";
 
-export const fileParserDataParser = SDP.file({
-    coerce: true,
-    checkExist: true,
-    maxSize: 10,
-    minSize: 5,
-    mimeType: /image\\/png/
-});"
+export const fileParserDataParser = SDP.file({ coerce: true });"
+`;
+
+exports[`file > renders file parser with definition checkers 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as SDP from "@duplojs/server-utils/dataParser";
+
+export const fileParserWithDefinitionCheckersDataParser = SDP.file({}, { checkers: [
+        SDP.checkerFileExist(),
+        SDP.checkerFileMimeType(/^image\\//)
+    ] });"
 `;
 
 exports[`file > renders file parser without options 1`] = `

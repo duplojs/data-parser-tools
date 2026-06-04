@@ -100,6 +100,15 @@ exports[`integration 1`] = `
           "pattern": "^(?:user\\-)(?:-?[0-9]+(?:\\.[0-9]+)?)(?:\\-db1)$",
           "type": "string",
         },
+        "identifiedDataParser": {
+          "$ref": "#/definitions/identifiedDataParser",
+        },
+        "identifiedDataParserArray": {
+          "items": {
+            "$ref": "#/definitions/identifiedDataParser",
+          },
+          "type": "array",
+        },
         "location": {
           "additionalItems": {
             "type": "number",
@@ -213,8 +222,13 @@ exports[`integration 1`] = `
         "location",
         "createdAt",
         "startAt",
+        "identifiedDataParser",
+        "identifiedDataParserArray",
       ],
       "type": "object",
+    },
+    "identifiedDataParser": {
+      "type": "string",
     },
   },
 }
