@@ -55,6 +55,11 @@
       "import": "./dist/finder/index.mjs",
       "require": "./dist/finder/index.cjs",
       "types": "./dist/finder/index.d.ts"
+    },
+    "./typescript": {
+      "import": "./dist/typescript/index.mjs",
+      "require": "./dist/typescript/index.cjs",
+      "types": "./dist/typescript/index.d.ts"
     }
   },
   "files": [

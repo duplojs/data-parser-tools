@@ -7,4 +7,11 @@
 	"declarationDir": "dist",
 	"types": null,
   },
+  "tsc-alias": {
+    "replacers": {
+      "base-url": {
+        "enabled": false
+      }
+    }
+  }
 }
