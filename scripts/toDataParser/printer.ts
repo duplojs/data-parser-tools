@@ -25,7 +25,10 @@ export function printer(params: BuildedContext) {
 										factory.createIdentifier(params.importMode === "extended" ? "DPE" : "DP"),
 										factory.createIdentifier(params.importMode === "extended" ? "DataParserExtended" : "DataParser"),
 									),
-									[factory.createTypeReferenceNode(contextValue.typeIdentifier)],
+									[
+										factory.createTypeReferenceNode(contextValue.typeIdentifier),
+										factory.createKeywordTypeNode(SyntaxKind.UnknownKeyword),
+									],
 								)
 								: undefined,
 							contextValue.expression,
