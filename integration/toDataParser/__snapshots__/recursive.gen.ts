@@ -23,14 +23,14 @@ export type RecursiveType4 = {
 
 export type $recursive0DataParser = RecursiveType4;
 
-export const recursive1DataParser: DP.DataParser<$recursive1DataParser> = DP.object({
+export const recursive1DataParser: DP.DataParser<$recursive1DataParser, unknown> = DP.object({
     id: DP.string(),
     replies: DP.array(DP.lazy(() => recursive1DataParser))
 });
 
-export const recursive2DataParser: DP.DataParser<$recursive2DataParser> = DP.tuple([DP.string(), DP.array(DP.lazy(() => recursive2DataParser))]);
+export const recursive2DataParser: DP.DataParser<$recursive2DataParser, unknown> = DP.tuple([DP.string(), DP.array(DP.lazy(() => recursive2DataParser))]);
 
-export const recursive0DataParser: DP.DataParser<$recursive0DataParser> = DP.object({
+export const recursive0DataParser: DP.DataParser<$recursive0DataParser, unknown> = DP.object({
     name: DP.string(),
     children: DP.array(DP.lazy(() => recursive0DataParser)),
     comment: DP.lazy(() => recursive1DataParser),
