@@ -21,6 +21,7 @@ export * from "./tuple";
 export * from "./union";
 export * from "./unknown";
 export * from "./time";
+export * from "./errorHandler";
 
 import { type createTransformer } from "../create";
 import { arrayTransformer } from "./array";
@@ -46,6 +47,7 @@ import { unionTransformer } from "./union";
 import { unknownTransformer } from "./unknown";
 import { timeTransformer } from "./time";
 import { fileTransformer } from "./file";
+import { errorHandlerTransformer } from "./errorHandler";
 
 export const defaultTransformers = [
 	arrayTransformer,
@@ -71,4 +73,5 @@ export const defaultTransformers = [
 	unknownTransformer,
 	timeTransformer,
 	fileTransformer,
+	errorHandlerTransformer,
 ] as const satisfies readonly ReturnType<typeof createTransformer>[];

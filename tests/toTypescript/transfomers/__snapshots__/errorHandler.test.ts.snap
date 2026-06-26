@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`errorHandler > renders inner parser type in mode in and out 1`] = `"export type ErrorHandlerIn = string;"`;
+
+exports[`errorHandler > renders inner parser type in mode in and out 2`] = `"export type ErrorHandlerOut = string;"`;
