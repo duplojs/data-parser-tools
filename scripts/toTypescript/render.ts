@@ -1,5 +1,5 @@
 import { type DP, E, kindClass, unwrap } from "@duplojs/utils";
-import { type DataParserErrorEither, type DataParserNotSupportedEither } from "./transformer";
+import { type DataParserErrorEither, type DataParserNotSupportedEither } from "./dataParserTransformer";
 import { createToTypescriptKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
 import { printer } from "./printer";

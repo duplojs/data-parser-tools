@@ -1,18 +1,21 @@
-import { A, type DDataParser, E, unwrap, type DP, justExec } from "@duplojs/utils";
-import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext } from "./create";
-import { factory, SyntaxKind } from "typescript";
+import { A, type DDataParser, E, unwrap, type DP, justExec, pipe, when, type AnyTuple } from "@duplojs/utils";
+import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext, TransformerSuccessEither } from "./create";
+import { factory, SyntaxKind, type TypeNode } from "typescript";
 import type { TransformerHook } from "./hook";
 import { createAddImport } from "./addImport";
 import { createIdentifier } from "./createIdentifier";
+import { checkerRefiner, type CheckerTransformerFunctionParams, type createCheckerRefiner } from "../checkerRefiner";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
+	readonly checkerRefiner?: readonly ReturnType<typeof createCheckerRefiner>[];
 	readonly context: MapContext;
 	readonly mode: TransformerMode;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DDataParser.DataParser[];
 	readonly importContext: MapImportContext;
 }
+
 export function transformer(
 	schema: DP.DataParser,
 	params: TransformerFunctionParams,
@@ -30,6 +33,7 @@ export function transformer(
 					action,
 				}),
 			});
+
 			if (result.action === "stop") {
 				return exit(result.schema);
 			} else {
@@ -95,35 +99,86 @@ export function transformer(
 		addImport: createAddImport(params.importContext),
 	};
 
-	const result = currentSchema.definition.overrideTypescriptTransformer
-		? currentSchema.definition.overrideTypescriptTransformer(
-			currentSchema.addOverrideTypescriptTransformer(null),
-			functionParams,
-		)
-		: A.reduce(
-			params.transformers,
-			A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
-				E.left("dataParserNotSupport", currentSchema),
-			),
-			({
-				element: functionBuilder,
-				lastValue,
-				next,
-				exit,
-			}) => {
-				const result = functionBuilder(currentSchema, functionParams);
+	const result = pipe(
+		currentSchema.definition.overrideTypescriptTransformer
+			? currentSchema.definition.overrideTypescriptTransformer(
+				currentSchema.addOverrideTypescriptTransformer(null),
+				functionParams,
+			)
+			: A.reduce(
+				params.transformers,
+				A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
+					E.left("dataParserNotSupport", currentSchema),
+				),
+				({
+					element: functionBuilder,
+					lastValue,
+					next,
+					exit,
+				}) => {
+					const result = functionBuilder(currentSchema, functionParams);
 
-				if (E.isLeft(result)) {
-					if (unwrap(result) !== currentSchema) {
-						return exit(result);
+					if (E.isLeft(result)) {
+						if (unwrap(result) !== currentSchema) {
+							return exit(result);
+						}
+
+						return next(lastValue);
 					}
 
-					return next(lastValue);
+					return exit(result);
+				},
+			),
+		when(
+			E.hasInformation("buildSuccess"),
+			(resultTypeNode): TransformerSuccessEither => {
+				if (
+					!A.minElements(currentSchema.definition.checkers, 1)
+					|| !params.checkerRefiner
+					|| !A.minElements(params.checkerRefiner, 1)
+				) {
+					return resultTypeNode;
 				}
 
-				return exit(result);
+				const currentTypeNode = unwrap(resultTypeNode);
+
+				const refinerFunctionParams: CheckerTransformerFunctionParams = {
+					mode: functionParams.mode,
+					importContext: functionParams.importContext,
+					refiners: params.checkerRefiner,
+				};
+
+				return pipe(
+					currentSchema.definition.checkers,
+					A.reduce(
+						A.reduceFrom<AnyTuple<TypeNode>>([currentTypeNode]),
+						({ element: checker, next, lastValue }) => pipe(
+							checkerRefiner(
+								checker,
+								currentTypeNode,
+								refinerFunctionParams,
+							),
+							E.whenHasInformationOtherwise(
+								"buildSuccess",
+								(refinedTypeNode) => next([...lastValue, refinedTypeNode]),
+								() => next(lastValue),
+							),
+						),
+					),
+					(result) => {
+						if (A.minElements(result, 2)) {
+							return E.right(
+								"buildSuccess",
+								factory.createIntersectionTypeNode(result),
+							);
+						}
+
+						return resultTypeNode;
+					},
+				);
 			},
-		);
+		),
+	);
 
 	if (E.isLeft(result)) {
 		return result;

@@ -1,7 +1,7 @@
 import { createPrinter, createSourceFile, EmitHint, ScriptKind, ScriptTarget } from "typescript";
 import { type BuildedContext } from "./buildContext";
 import { A, pipe, S } from "@duplojs/utils";
-import { createImportDeclaration } from "./transformer";
+import { createImportDeclaration } from "./dataParserTransformer";
 
 export function printer(params: BuildedContext) {
 	const sourceFile = createSourceFile("print.ts", "", ScriptTarget.Latest, false, ScriptKind.TS);

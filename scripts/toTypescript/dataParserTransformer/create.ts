@@ -1,24 +1,23 @@
 import { type TypeAliasDeclaration, type TypeNode } from "typescript";
 import { type DP, E } from "@duplojs/utils";
 
-export type TransformerSuccessEither<
-> = E.Right<"buildSuccess", TypeNode>;
+export type TransformerSuccessEither = E.Right<"buildSuccess", TypeNode>;
 
-export type DataParserNotSupportedEither<
-> = E.Left<"dataParserNotSupport", DP.DataParser>;
+export type DataParserNotSupportedEither = E.Left<"dataParserNotSupport", DP.DataParser>;
 
-export type DataParserErrorEither<
-> = E.Left<"buildDataParserError", DP.DataParser>;
+export type DataParserErrorEither = E.Left<"buildDataParserError", DP.DataParser>;
 
 export type MapContext = Map<DP.DataParsers, TypeAliasDeclaration>;
 
+export interface MapImportContextValue {
+	namespace?: string[];
+	default?: string[];
+	direct?: string[];
+}
+
 export type MapImportContext = Map<
 	string,
-	{
-		namespace?: string[];
-		default?: string[];
-		direct?: string[];
-	}
+	MapImportContextValue
 >;
 
 export type MaybeTransformerEither =

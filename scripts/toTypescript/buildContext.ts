@@ -1,7 +1,8 @@
 import { DP, E, unwrap } from "@duplojs/utils";
-import { createIdentifier, type createTransformer, transformer, type MapContext, type MapImportContext, type TransformerHook, type TransformerMode, type DataParserErrorEither, type DataParserNotSupportedEither } from "./transformer";
+import { createIdentifier, type createTransformer, transformer, type MapContext, type MapImportContext, type TransformerHook, type TransformerMode, type DataParserErrorEither, type DataParserNotSupportedEither } from "./dataParserTransformer";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory, SyntaxKind } from "typescript";
+import { type createCheckerRefiner } from "./checkerRefiner";
 
 export interface BuildedContext {
 	readonly context: MapContext;
@@ -11,6 +12,7 @@ export interface BuildedContext {
 export interface BuildContextParams {
 	readonly identifier: string;
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
+	readonly checkerRefiner?: readonly ReturnType<typeof createCheckerRefiner>[];
 	readonly context?: MapContext;
 	readonly mode?: TransformerMode;
 	readonly hooks?: readonly TransformerHook[];
