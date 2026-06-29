@@ -1,5 +1,6 @@
 import { type TypeAliasDeclaration, type TypeNode } from "typescript";
 import { type DP, E } from "@duplojs/utils";
+import { type CheckerRefinerBuildErrorEither } from "../checkerRefiner";
 
 export type TransformerSuccessEither = E.Right<"buildSuccess", TypeNode>;
 
@@ -23,7 +24,8 @@ export type MapImportContext = Map<
 export type MaybeTransformerEither =
 	| TransformerSuccessEither
 	| DataParserNotSupportedEither
-	| DataParserErrorEither;
+	| DataParserErrorEither
+	| CheckerRefinerBuildErrorEither;
 
 export type TransformerMode = "in" | "out";
 

@@ -1,10 +1,11 @@
-import { A, type DDataParser, E, unwrap, type DP, justExec, pipe, when, type AnyTuple } from "@duplojs/utils";
+import { A, type DDataParser, E, unwrap, type DP, justExec, pipe, when, type AnyTuple, whenElse } from "@duplojs/utils";
 import type { MapContext, DataParserNotSupportedEither, TransformerParams, createTransformer, TransformerMode, DataParserErrorEither, MapImportContext, TransformerSuccessEither } from "./create";
 import { factory, SyntaxKind, type TypeNode } from "typescript";
 import type { TransformerHook } from "./hook";
 import { createAddImport } from "./addImport";
 import { createIdentifier } from "./createIdentifier";
-import { checkerRefiner, type CheckerTransformerFunctionParams, type createCheckerRefiner } from "../checkerRefiner";
+import { checkerRefiner, type CheckerRefinerBuildErrorEither, type CheckerTransformerFunctionParams, type createCheckerRefiner } from "../checkerRefiner";
+import { applyMapImportContextEntries } from "../override";
 
 export interface TransformerFunctionParams {
 	readonly transformers: readonly ReturnType<typeof createTransformer>[];
@@ -17,12 +18,12 @@ export interface TransformerFunctionParams {
 }
 
 export function transformer(
-	schema: DP.DataParser,
+	dataParser: DP.DataParser,
 	params: TransformerFunctionParams,
 ) {
-	const currentSchema = A.reduce(
+	const currentDataParser = A.reduce(
 		params.hooks,
-		A.reduceFrom<DP.DataParser>(schema),
+		A.reduceFrom<DP.DataParser>(dataParser),
 		({ element: hook, lastValue, next, exit }) => {
 			const result = hook({
 				schema: lastValue,
@@ -42,7 +43,7 @@ export function transformer(
 		},
 	);
 
-	const currentDeclaration = params.context.get(currentSchema);
+	const currentDeclaration = params.context.get(currentDataParser);
 
 	if (currentDeclaration) {
 		return E.right(
@@ -55,18 +56,18 @@ export function transformer(
 
 	const currentIdentifier = justExec(() => {
 		if (
-			!A.includes(params.recursiveDataParsers, currentSchema)
-			&& !currentSchema.definition.identifier
+			!A.includes(params.recursiveDataParsers, currentDataParser)
+			&& !currentDataParser.definition.identifier
 		) {
 			return undefined;
 		}
 
-		const identifier = currentSchema.definition.identifier !== undefined
-			? createIdentifier(currentSchema.definition.identifier)
+		const identifier = currentDataParser.definition.identifier !== undefined
+			? createIdentifier(currentDataParser.definition.identifier)
 			: `RecursiveType${params.context.size}`;
 
 		params.context.set(
-			currentSchema,
+			currentDataParser,
 			factory.createTypeAliasDeclaration(
 				[factory.createToken(SyntaxKind.ExportKeyword)],
 				factory.createIdentifier(identifier),
@@ -99,16 +100,23 @@ export function transformer(
 		addImport: createAddImport(params.importContext),
 	};
 
+	if (currentDataParser.definition.mapImportContextEntries) {
+		applyMapImportContextEntries(
+			functionParams.addImport,
+			currentDataParser.definition.mapImportContextEntries,
+		);
+	}
+
 	const result = pipe(
-		currentSchema.definition.overrideTypescriptTransformer
-			? currentSchema.definition.overrideTypescriptTransformer(
-				currentSchema.addOverrideTypescriptTransformer(null),
+		currentDataParser.definition.overrideTypescriptTransformer
+			? currentDataParser.definition.overrideTypescriptTransformer(
+				currentDataParser.addOverrideTypescriptTransformer(null),
 				functionParams,
 			)
 			: A.reduce(
 				params.transformers,
 				A.reduceFrom<DataParserNotSupportedEither | DataParserErrorEither>(
-					E.left("dataParserNotSupport", currentSchema),
+					E.left("dataParserNotSupport", currentDataParser),
 				),
 				({
 					element: functionBuilder,
@@ -116,10 +124,10 @@ export function transformer(
 					next,
 					exit,
 				}) => {
-					const result = functionBuilder(currentSchema, functionParams);
+					const result = functionBuilder(currentDataParser, functionParams);
 
 					if (E.isLeft(result)) {
-						if (unwrap(result) !== currentSchema) {
+						if (E.hasInformation(result, ["buildCheckerError", "buildDataParserError"])) {
 							return exit(result);
 						}
 
@@ -131,9 +139,9 @@ export function transformer(
 			),
 		when(
 			E.hasInformation("buildSuccess"),
-			(resultTypeNode): TransformerSuccessEither => {
+			(resultTypeNode): TransformerSuccessEither | CheckerRefinerBuildErrorEither => {
 				if (
-					!A.minElements(currentSchema.definition.checkers, 1)
+					!A.minElements(currentDataParser.definition.checkers, 1)
 					|| !params.checkerRefiner
 					|| !A.minElements(params.checkerRefiner, 1)
 				) {
@@ -147,12 +155,11 @@ export function transformer(
 					importContext: functionParams.importContext,
 					refiners: params.checkerRefiner,
 				};
-
 				return pipe(
-					currentSchema.definition.checkers,
+					currentDataParser.definition.checkers,
 					A.reduce(
 						A.reduceFrom<AnyTuple<TypeNode>>([currentTypeNode]),
-						({ element: checker, next, lastValue }) => pipe(
+						({ element: checker, next, exit, lastValue }) => pipe(
 							checkerRefiner(
 								checker,
 								currentTypeNode,
@@ -161,11 +168,19 @@ export function transformer(
 							E.whenHasInformationOtherwise(
 								"buildSuccess",
 								(refinedTypeNode) => next([...lastValue, refinedTypeNode]),
-								() => next(lastValue),
+								whenElse(
+									E.hasInformation(["buildCheckerError"]),
+									exit,
+									() => next(lastValue),
+								),
 							),
 						),
 					),
 					(result) => {
+						if (E.hasInformation(result, "buildCheckerError")) {
+							return result;
+						}
+
 						if (A.minElements(result, 2)) {
 							return E.right(
 								"buildSuccess",
@@ -185,10 +200,10 @@ export function transformer(
 	}
 
 	if (currentIdentifier) {
-		params.context.delete(currentSchema);
+		params.context.delete(currentDataParser);
 
 		params.context.set(
-			currentSchema,
+			currentDataParser,
 			factory.createTypeAliasDeclaration(
 				[factory.createToken(SyntaxKind.ExportKeyword)],
 				factory.createIdentifier(currentIdentifier),

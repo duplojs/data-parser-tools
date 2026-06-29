@@ -1,8 +1,8 @@
-import type { CallExpression, ObjectLiteralExpression, PropertyAssignment } from "typescript";
+import type { CallExpression, Identifier, ObjectLiteralExpression, PropertyAssignment } from "typescript";
 import { type DP, E } from "@duplojs/utils";
 import type * as TST from "@scripts/toTypescript";
 
-export type CheckerTransformerSuccessEither = E.Right<"buildSuccess", CallExpression>;
+export type CheckerTransformerSuccessEither = E.Right<"buildSuccess", CallExpression | Identifier>;
 
 export type CheckerTransformerCheckerNotSupportedEither = E.Left<"checkerNotSupport", DP.DataParserCheckers>;
 
@@ -17,7 +17,7 @@ export interface CheckerTransformerParams {
 	readonly importContext: TST.MapImportContext;
 
 	success(
-		result: CallExpression,
+		result: CallExpression | Identifier,
 	): CheckerTransformerSuccessEither;
 	buildError(): CheckerTransformerBuildErrorEither;
 	addImport(path: string, typeName: string, type?: "default" | "namespace" | "direct"): void;

@@ -47,28 +47,37 @@ export function checkerTransformer(
 		},
 	};
 
-	return A.reduce(
-		params.transformers,
-		A.reduceFrom<CheckerTransformerEither>(
-			E.left("checkerNotSupport", checker),
-		),
-		({
-			element: functionBuilder,
-			lastValue,
-			next,
-			exit,
-		}) => {
-			const result = functionBuilder(checker, functionParams);
+	if (checker.definition.mapImportContextEntries) {
+		TST.applyMapImportContextEntries(
+			functionParams.addImport,
+			checker.definition.mapImportContextEntries,
+		);
+	}
 
-			if (E.isLeft(result)) {
-				if (!E.hasInformation(result, "checkerNotSupport")) {
-					return exit(result);
+	return checker.definition.overrideCheckerTransformer
+		? checker.definition.overrideCheckerTransformer(checker, functionParams)
+		: A.reduce(
+			params.transformers,
+			A.reduceFrom<CheckerTransformerEither>(
+				E.left("checkerNotSupport", checker),
+			),
+			({
+				element: functionBuilder,
+				lastValue,
+				next,
+				exit,
+			}) => {
+				const result = functionBuilder(checker, functionParams);
+
+				if (E.isLeft(result)) {
+					if (!E.hasInformation(result, "checkerNotSupport")) {
+						return exit(result);
+					}
+
+					return next(lastValue);
 				}
 
-				return next(lastValue);
-			}
-
-			return exit(result);
-		},
-	);
+				return exit(result);
+			},
+		);
 }

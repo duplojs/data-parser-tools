@@ -1,7 +1,7 @@
 import "@scripts/toTypescript/override";
 import { asserts, DP, DPE, forwardAsserts, justReturn } from "@duplojs/utils";
 import { factory } from "typescript";
-import { type TransformerBuildFunction } from "@scripts/toTypescript/transformer";
+import { type TransformerBuildFunction } from "@scripts/toTypescript/dataParserTransformer";
 
 describe("DP override", () => {
 	it("setIdentifier", () => {

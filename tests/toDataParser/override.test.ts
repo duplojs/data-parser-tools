@@ -1,5 +1,5 @@
 import "@scripts/toDataParser/override";
-import { asserts, DP, DPE, type ExpectType, forwardAsserts, justReturn } from "@duplojs/utils";
+import { type AnyTuple, asserts, DP, DPE, type ExpectType, forwardAsserts, justReturn } from "@duplojs/utils";
 import { factory } from "typescript";
 import { defaultCheckerTransformers, defaultTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
@@ -209,6 +209,8 @@ describe("DPE override", () => {
 							DataParserToJsonSchema.TransformerBuildFunction | undefined;
 						readonly coerce: boolean;
 						readonly checkers: readonly [];
+						readonly mapImportContextEntries?:
+							AnyTuple<DataParserToTypescript.MapImportContextEntry> | undefined;
 					}>,
 					"strict"
 				>;

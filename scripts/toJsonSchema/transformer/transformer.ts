@@ -134,7 +134,7 @@ export function transformer(
 				const result = functionBuilder(currentSchema, functionParams);
 
 				if (E.isLeft(result)) {
-					if (unwrap(result) !== currentSchema) {
+					if (E.hasInformation(result, "buildDataParserError")) {
 						return exit(result);
 					}
 

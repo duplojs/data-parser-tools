@@ -3,6 +3,7 @@ import { type DataParserErrorEither, type DataParserNotSupportedEither } from ".
 import { createToTypescriptKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
 import { printer } from "./printer";
+import { type CheckerRefinerBuildErrorEither } from "./checkerRefiner";
 
 export interface RenderParams extends BuildContextParams {
 
@@ -14,7 +15,7 @@ export class DataParserToTypescriptRenderError extends kindClass(
 ) {
 	public constructor(
 		public schema: DP.DataParser,
-		public error: DataParserNotSupportedEither | DataParserErrorEither,
+		public error: DataParserNotSupportedEither | DataParserErrorEither | CheckerRefinerBuildErrorEither,
 	) {
 		super({}, "Error during the render of dataParser in typescript type.");
 	}

@@ -2,7 +2,7 @@ import { DP, E, unwrap } from "@duplojs/utils";
 import { createIdentifier, type createTransformer, transformer, type MapContext, type MapImportContext, type TransformerHook, type TransformerMode, type DataParserErrorEither, type DataParserNotSupportedEither } from "./dataParserTransformer";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory, SyntaxKind } from "typescript";
-import { type createCheckerRefiner } from "./checkerRefiner";
+import { type CheckerRefinerBuildErrorEither, type createCheckerRefiner } from "./checkerRefiner";
 
 export interface BuildedContext {
 	readonly context: MapContext;
@@ -26,6 +26,7 @@ export function buildContext(
 	| E.Success<BuildedContext>
 	| DataParserNotSupportedEither
 	| DataParserErrorEither
+	| CheckerRefinerBuildErrorEither
 	) {
 	const context: MapContext = params.context ?? new Map();
 	const importContext: MapImportContext = params.importContext ?? new Map();
