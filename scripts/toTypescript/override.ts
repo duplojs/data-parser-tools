@@ -137,7 +137,7 @@ DataParserBase.prototype.addMapImportContextEntries = function(this: DataParserB
 
 	newSchema.setMapImportContextEntries(...importValues);
 
-	return this as never;
+	return newSchema as never;
 };
 
 DataParserCheckerBase.prototype.setOverrideTypescriptRefiner = function(this: DataParserCheckerBase, overrideRefiner) {
@@ -177,5 +177,5 @@ DataParserCheckerBase.prototype.addMapImportContextEntries = function(
 
 	newSchema.setMapImportContextEntries(...mapImportContextEntries);
 
-	return this as never;
+	return newSchema as never;
 };

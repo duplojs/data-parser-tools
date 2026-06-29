@@ -1,5 +1,23 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`render > renders anonymous recursive dataParser in extended mode 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import * as DPE from "@duplojs/utils/dataParserExtended";
+
+export type RecursiveType0 = {
+    next: RecursiveType0;
+};
+
+export type $recursive0DataParser = RecursiveType0;
+
+export const recursive0DataParser: DPE.DataParserExtended<$recursive0DataParser, unknown> = DPE.object({
+    next: DPE.lazy(() => recursive0DataParser)
+});
+
+export const recursiveExtendedNodeParserDataParser = recursive0DataParser;"
+`;
+
 exports[`render > renders anonymous recursive dataParser with a temporary const 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 

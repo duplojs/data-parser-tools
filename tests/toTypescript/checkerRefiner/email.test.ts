@@ -1,5 +1,5 @@
 import { render, defaultTransformers, defaultCheckerRefiners } from "@scripts/toTypescript";
-import { DPE } from "@duplojs/utils";
+import { DP, DPE, E } from "@duplojs/utils";
 
 describe("string email", () => {
 	it("basic", () => {
@@ -16,5 +16,21 @@ describe("string email", () => {
 				},
 			),
 		).toMatchSnapshot();
+	});
+
+	it("keeps base type when checker refiner does not support checker", () => {
+		expect(
+			render(
+				DPE.string({
+					checkers: [DP.checkerEmail()],
+				}),
+				{
+					identifier: "UnsupportedEmailRefiner",
+					transformers: defaultTransformers,
+					checkerRefiner: [(checker) => E.left("checkerNotSupport", checker)],
+					mode: "out",
+				},
+			),
+		).toBe("export type UnsupportedEmailRefiner = string;");
 	});
 });

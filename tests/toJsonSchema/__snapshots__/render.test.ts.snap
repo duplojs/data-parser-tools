@@ -1,0 +1,31 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`render > renders jsonSchema202012 1`] = `
+{
+  "$defs": {
+    "StringSchema": {
+      "type": "string",
+    },
+  },
+  "$ref": "#/$defs/StringSchema",
+  "$schema": "jsonSchema202012",
+}
+`;
+
+exports[`render > reuses identified schema references 1`] = `
+{
+  "properties": {
+    "other": {
+      "$ref": "#/definitions/ReferencedSchema",
+    },
+    "value": {
+      "$ref": "#/definitions/ReferencedSchema",
+    },
+  },
+  "required": [
+    "value",
+    "other",
+  ],
+  "type": "object",
+}
+`;
