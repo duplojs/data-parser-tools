@@ -1,6 +1,6 @@
 import { A, type DP, E, pipe, when } from "@duplojs/utils";
 import { checkerTransformer, type createCheckerTransformer } from "../checkerTransformer";
-import { type CallExpression, factory, type PropertyAssignment } from "typescript";
+import { type CallExpression, factory, type Identifier, type PropertyAssignment } from "typescript";
 import type * as TST from "@scripts/toTypescript";
 
 export interface getDefinitionDataParserParams {
@@ -27,7 +27,7 @@ export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
 	if (A.minElements(params.dataParser.definition.checkers, 1)) {
 		const checkers = A.reduce(
 			params.dataParser.definition.checkers,
-			A.reduceFrom<CallExpression[]>([]),
+			A.reduceFrom<(CallExpression | Identifier)[]>([]),
 			({ element, lastValue, nextPush, exit }) => pipe(
 				checkerTransformer(
 					element,

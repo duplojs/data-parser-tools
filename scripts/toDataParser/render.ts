@@ -1,5 +1,5 @@
 import type * as TST from "@scripts/toTypescript";
-import { type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type DataParserErrorEither, type MapContext, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither } from "./dataParserTransformer";
+import { type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type DataParserErrorEither, type MapContext, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither, type ToTypescriptCheckerErrorEither } from "./dataParserTransformer";
 import { createToDataParserKind } from "./kind";
 import { buildContext, type BuildContextParams } from "./buildContext";
 import { type DP, E, kindClass, unwrap } from "@duplojs/utils";
@@ -23,7 +23,11 @@ export class DataParserToDataParserTypeRenderError extends kindClass(
 ) {
 	public constructor(
 		public dataParser: DP.DataParser,
-		public error: ToTypescriptDataParserNotSupportedEither | ToTypescriptDataParserErrorEither,
+		public error: (
+			| ToTypescriptDataParserNotSupportedEither
+			| ToTypescriptDataParserErrorEither
+			| ToTypescriptCheckerErrorEither
+		),
 	) {
 		super({}, "Error during the render of recursive dataParser type.");
 	}
@@ -46,17 +50,22 @@ export function render(dataParser: DP.DataParser, params: RenderParams) {
 	});
 
 	if (
-		E.hasInformation(result, "buildDataParserError")
-		|| E.hasInformation(result, "dataParserNotSupport")
-		|| E.hasInformation(result, "buildDataParserGetDefinitionError")
+		E.hasInformation(result, [
+			"buildDataParserError",
+			"dataParserNotSupport",
+			"buildDataParserGetDefinitionError",
+		])
 	) {
 		throw new DataParserToDataParserRenderError(
 			dataParser,
 			result,
 		);
 	} else if (
-		E.hasInformation(result, "toTypescriptBuildDataParserError")
-		|| E.hasInformation(result, "toTypescriptDataParserNotSupport")
+		E.hasInformation(result, [
+			"toTypescriptBuildDataParserError",
+			"toTypescriptBuildCheckerError",
+			"toTypescriptDataParserNotSupport",
+		])
 	) {
 		throw new DataParserToDataParserTypeRenderError(
 			dataParser,

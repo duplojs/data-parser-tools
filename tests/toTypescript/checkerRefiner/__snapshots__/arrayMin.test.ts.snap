@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`array min > string array 1`] = `
+"export type ArrayString = string[] & [
+    string,
+    string,
+    string,
+    ...string[]
+];"
+`;

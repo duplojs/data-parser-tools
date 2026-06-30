@@ -86,8 +86,8 @@
     "vitest": "4.1.8"
   },
   "peerDependencies": {
-    "@duplojs/server-utils": ">=0.4.0 < 1.0.0",
-    "@duplojs/utils": ">=1.9.1 <2.0.0"
+    "@duplojs/server-utils": ">=0.4.2 < 1.0.0",
+    "@duplojs/utils": ">=1.10.1 <2.0.0"
   },
   "dependencies": {
     "typescript": "5.9.2"

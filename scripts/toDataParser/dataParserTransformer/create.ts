@@ -13,6 +13,8 @@ export type ToTypescriptDataParserNotSupportedEither = E.Left<"toTypescriptDataP
 
 export type ToTypescriptDataParserErrorEither = E.Left<"toTypescriptBuildDataParserError", DP.DataParser>;
 
+export type ToTypescriptCheckerErrorEither = E.Left<"toTypescriptBuildCheckerError", DP.DataParserChecker>;
+
 export type DataParserGetDefinitionErrorEither = E.Left<
 	"buildDataParserGetDefinitionError",
 	{
@@ -38,7 +40,8 @@ export type MaybeTransformerEither =
 	| DataParserErrorEither
 	| DataParserGetDefinitionErrorEither
 	| ToTypescriptDataParserNotSupportedEither
-	| ToTypescriptDataParserErrorEither;
+	| ToTypescriptDataParserErrorEither
+	| ToTypescriptCheckerErrorEither;
 
 export interface TransformerParams {
 	readonly dependencyIdentifier: Identifier;

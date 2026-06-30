@@ -15,10 +15,7 @@ export default defineConfig({
 			reporter: ["text", "json", "html", "json-summary"],
 			reportsDirectory: "coverage",
 			include: [
-				"scripts/toTypescript/transformer/defaults", 
-				"scripts/toJsonSchema/transformer/defaults",
-				"scripts/toDataParser/checkerTransformer/defaults",
-				"scripts/toDataParser/dataParserTransformer/defaults"
+				"scripts"
 			],
 			exclude: [
 				"**/*.test.ts", 

@@ -11,6 +11,7 @@ export interface TransformerFunctionParams {
 	readonly dataParserTransformers: readonly ReturnType<typeof createTransformer>[];
 	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
 	readonly typescriptTransformers: readonly ReturnType<typeof TST.createTransformer>[];
+	readonly typescriptCheckerRefiner?: readonly ReturnType<typeof TST.createCheckerRefiner>[];
 	readonly context: MapContext;
 	readonly typescriptContext: TST.MapContext;
 	readonly importContext: TST.MapImportContext;
@@ -122,6 +123,13 @@ export function transformer(
 		addImport: TST.createAddImport(params.importContext),
 	};
 
+	if (currentDataParser.definition.mapImportContextEntries) {
+		TST.applyMapImportContextEntries(
+			functionParams.addImport,
+			currentDataParser.definition.mapImportContextEntries,
+		);
+	}
+
 	const result = currentDataParser.definition.overrideDataParserTransformer
 		? currentDataParser.definition.overrideDataParserTransformer(
 			currentDataParser.addOverrideDataParserTransformer(null),
@@ -141,7 +149,14 @@ export function transformer(
 				const result = functionBuilder(currentDataParser, functionParams);
 
 				if (E.isLeft(result)) {
-					if (!E.hasInformation(result, "dataParserNotSupport")) {
+					if (
+						E.hasInformation(result, [
+							"buildDataParserError",
+							"buildDataParserGetDefinitionError",
+							"toTypescriptBuildDataParserError",
+							"toTypescriptBuildCheckerError",
+						])
+					) {
 						return exit(result);
 					}
 
@@ -168,12 +183,13 @@ export function transformer(
 				{
 					identifier,
 					transformers: params.typescriptTransformers,
+					checkerRefiner: params.typescriptCheckerRefiner,
 					context: params.typescriptContext,
 					importContext: params.importContext,
 					...params.toTypescript,
 				},
 			);
-			return E.matchInformationOtherwise(
+			return E.matchInformation(
 				result,
 				{
 					buildDataParserError: (dataParser) => E.left(
@@ -184,8 +200,12 @@ export function transformer(
 						"toTypescriptDataParserNotSupport",
 						dataParser,
 					),
+					buildCheckerError: (checker) => E.left(
+						"toTypescriptBuildCheckerError",
+						checker,
+					),
+					success: () => factory.createIdentifier(identifier),
 				},
-				() => factory.createIdentifier(identifier),
 			);
 		});
 

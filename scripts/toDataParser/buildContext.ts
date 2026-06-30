@@ -1,5 +1,5 @@
 import { DP, E, unwrap } from "@duplojs/utils";
-import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither, type DependenciesContext } from "./dataParserTransformer";
+import { createIdentifier, type createTransformer, transformer, type MapContext, type TransformerHook, type DataParserErrorEither, type DataParserNotSupportedEither, type DataParserGetDefinitionErrorEither, type ToTypescriptDataParserErrorEither, type ToTypescriptDataParserNotSupportedEither, type DependenciesContext, type ToTypescriptCheckerErrorEither } from "./dataParserTransformer";
 import type * as TST from "@scripts/toTypescript";
 import { getRecursiveDataParser } from "@scripts/utils";
 import { factory } from "typescript";
@@ -19,10 +19,10 @@ export interface BuildContextParams {
 	readonly dataParserTransformers: readonly ReturnType<typeof createTransformer>[];
 	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
 	readonly typescriptTransformers: readonly ReturnType<typeof TST.createTransformer>[];
+	readonly typescriptCheckerRefiner?: readonly ReturnType<typeof TST.createCheckerRefiner>[];
 	readonly context?: MapContext;
 	readonly typescriptContext?: TST.MapContext;
 	readonly importContext?: TST.MapImportContext;
-
 	readonly importMode?: ImportMode;
 	readonly hooks?: readonly TransformerHook[];
 	readonly toTypescript?: {
@@ -41,6 +41,7 @@ export function buildContext(
 	| DataParserGetDefinitionErrorEither
 	| ToTypescriptDataParserNotSupportedEither
 	| ToTypescriptDataParserErrorEither
+	| ToTypescriptCheckerErrorEither
 	) {
 	const context: MapContext = params.context ?? new Map();
 	const typescriptContext: TST.MapContext = params.typescriptContext ?? new Map();

@@ -10,6 +10,7 @@ export * from "./templateLiteral";
 export * from "./transform";
 export * from "./tuple";
 export * from "./union";
+export * from "./errorHandler";
 
 import type { createResearcher } from "../create";
 import { arrayResearcher } from "./array";
@@ -24,6 +25,7 @@ import { templateLiteralResearcher } from "./templateLiteral";
 import { transformResearcher } from "./transform";
 import { tupleResearcher } from "./tuple";
 import { unionResearcher } from "./union";
+import { errorHandlerResearcher } from "./errorHandler";
 
 export const defaultResearchers = [
 	arrayResearcher,
@@ -38,4 +40,5 @@ export const defaultResearchers = [
 	transformResearcher,
 	tupleResearcher,
 	unionResearcher,
+	errorHandlerResearcher,
 ] as const satisfies readonly ReturnType<typeof createResearcher>[];

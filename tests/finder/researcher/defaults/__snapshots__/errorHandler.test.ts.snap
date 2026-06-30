@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`errorHandlerResearcher > finds the inner parser 1`] = `
+[
+  {
+    "definition": {
+      "checkers": [],
+      "coerce": false,
+      "errorMessage": undefined,
+    },
+    "isTarget": true,
+  },
+]
+`;

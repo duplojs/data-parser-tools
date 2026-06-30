@@ -1,5 +1,5 @@
 import "@scripts/toDataParser/override";
-import { asserts, DP, DPE, type ExpectType, forwardAsserts, justReturn } from "@duplojs/utils";
+import { type AnyTuple, asserts, DP, DPE, type ExpectType, forwardAsserts, justReturn } from "@duplojs/utils";
 import { factory } from "typescript";
 import { defaultCheckerTransformers, defaultTransformers, render } from "@scripts/toDataParser";
 import { defaultTransformers as tsDefaultTransformers } from "@scripts/toTypescript";
@@ -47,6 +47,10 @@ describe("DP override", () => {
 		);
 
 		expect(typeof schema.definition.overrideDataParserTransformer).toBe("function");
+
+		schema.setOverrideDataParserTransformer(null);
+
+		expect(schema.definition.overrideDataParserTransformer).toBe(undefined);
 	});
 
 	it("addOverrideDataParserTransformer", () => {
@@ -104,6 +108,73 @@ describe("DP override", () => {
 		);
 
 		expect(result).toContain("export const overrideDataParser = DP.number();");
+	});
+
+	it("uses static overrideDataParserTransformer in render", () => {
+		const schema = DPE.string().addOverrideDataParserTransformer(
+			factory.createCallExpression(
+				factory.createPropertyAccessExpression(
+					factory.createIdentifier("DP"),
+					factory.createIdentifier("number"),
+				),
+				undefined,
+				[],
+			),
+		);
+
+		const result = render(
+			schema,
+			{
+				identifier: "override",
+				dataParserTransformers: defaultTransformers,
+				checkerTransformers: defaultCheckerTransformers,
+				typescriptTransformers: tsDefaultTransformers,
+			},
+		);
+
+		expect(result).toContain("export const overrideDataParser = DP.number();");
+	});
+
+	it("sets checker override transformer", () => {
+		const checker = DP.checkerStringMin(1);
+
+		checker.setOverrideCheckerTransformer(factory.createIdentifier("customChecker"));
+
+		expect(typeof checker.definition.overrideCheckerTransformer).toBe("function");
+
+		checker.setOverrideCheckerTransformer(null);
+
+		expect(checker.definition.overrideCheckerTransformer).toBe(undefined);
+	});
+
+	it("adds checker override transformer", () => {
+		const checker = DP.checkerStringMin(1);
+		const overrideTransformer: DataParserToDataParser.CheckerTransformerBuildFunction = (
+			__,
+			{ success },
+		) => success(factory.createIdentifier("customChecker"));
+		const newChecker = checker.addOverrideCheckerTransformer(overrideTransformer);
+
+		expect(checker.definition.overrideCheckerTransformer).toBe(undefined);
+		expect(newChecker.definition.overrideCheckerTransformer).toBe(overrideTransformer);
+	});
+
+	it("uses static checker override transformer in render", () => {
+		const schema = DPE.string({
+			checkers: [DP.checkerStringMin(1).addOverrideCheckerTransformer(factory.createIdentifier("customChecker"))],
+		});
+
+		const result = render(
+			schema,
+			{
+				identifier: "overrideChecker",
+				dataParserTransformers: defaultTransformers,
+				checkerTransformers: defaultCheckerTransformers,
+				typescriptTransformers: tsDefaultTransformers,
+			},
+		);
+
+		expect(result).toContain("checkers: [customChecker]");
 	});
 });
 
@@ -209,6 +280,8 @@ describe("DPE override", () => {
 							DataParserToJsonSchema.TransformerBuildFunction | undefined;
 						readonly coerce: boolean;
 						readonly checkers: readonly [];
+						readonly mapImportContextEntries?:
+							AnyTuple<DataParserToTypescript.MapImportContextEntry> | undefined;
 					}>,
 					"strict"
 				>;
@@ -237,5 +310,31 @@ describe("DPE override", () => {
 		);
 
 		expect(result).toContain("export const overrideDataParser = DP.number();");
+	});
+
+	it("uses map imports in render", () => {
+		const schema = DPE.string()
+			.addMapImportContextEntries([
+				"module-a",
+				{
+					direct: ["directValue"],
+					default: ["defaultValue"],
+					namespace: ["NamespaceValue"],
+				},
+			]);
+
+		const result = render(
+			schema,
+			{
+				identifier: "withImport",
+				dataParserTransformers: defaultTransformers,
+				checkerTransformers: defaultCheckerTransformers,
+				typescriptTransformers: tsDefaultTransformers,
+			},
+		);
+
+		expect(result).toContain("import * as NamespaceValue from \"module-a\";");
+		expect(result).toContain("import defaultValue from \"module-a\";");
+		expect(result).toContain("import { directValue } from \"module-a\";");
 	});
 });
