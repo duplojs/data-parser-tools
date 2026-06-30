@@ -12,6 +12,7 @@ export interface BuildedContext {
 	readonly typescriptContext: TST.MapContext;
 	readonly importContext: TST.MapImportContext;
 	readonly importMode: ImportMode;
+	readonly keepIdentifier?: boolean;
 }
 
 export interface BuildContextParams {
@@ -25,6 +26,7 @@ export interface BuildContextParams {
 	readonly importContext?: TST.MapImportContext;
 	readonly importMode?: ImportMode;
 	readonly hooks?: readonly TransformerHook[];
+	readonly keepIdentifier?: boolean;
 	readonly toTypescript?: {
 		readonly mode?: TST.TransformerMode;
 		readonly hooks?: readonly TST.TransformerHook[];
@@ -48,6 +50,7 @@ export function buildContext(
 	const importContext: TST.MapImportContext = params.importContext ?? new Map();
 	const dependenciesContext: DependenciesContext = new Set();
 	const importMode = params.importMode ?? "lite";
+	const keepIdentifier = params.keepIdentifier ?? false;
 
 	importContext.set("@duplojs/utils/dataParser", {
 		namespace: ["DP"],
@@ -70,6 +73,7 @@ export function buildContext(
 			recursiveDataParsers: getRecursiveDataParser(schema),
 			dependencyIdentifier: factory.createIdentifier(importMode === "extended" ? "DPE" : "DP"),
 			dependenciesContext,
+			keepIdentifier,
 		},
 	);
 
@@ -106,5 +110,6 @@ export function buildContext(
 		importContext: importContext,
 		typescriptContext,
 		importMode,
+		keepIdentifier,
 	});
 }

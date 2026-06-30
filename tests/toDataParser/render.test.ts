@@ -413,4 +413,19 @@ describe("render", () => {
 		expect(replaceHook).toHaveBeenCalledTimes(1);
 		expect(result).toContain("DP.string()");
 	});
+
+	it("keep identifier", () => {
+		const result = render(
+			DPE.number().setIdentifier("testKeepIdentifier"),
+			{
+				identifier: "testKeepIdentifier",
+				dataParserTransformers: defaultTransformers,
+				checkerTransformers: defaultCheckerTransformers,
+				typescriptTransformers: tsDefaultTransformers,
+				keepIdentifier: true,
+			},
+		);
+
+		expect(result).toMatchSnapshot();
+	});
 });

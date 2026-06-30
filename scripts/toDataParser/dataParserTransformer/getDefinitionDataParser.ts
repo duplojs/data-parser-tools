@@ -4,29 +4,43 @@ import { type CallExpression, factory, type Identifier, type PropertyAssignment 
 import type * as TST from "@scripts/toTypescript";
 
 export interface getDefinitionDataParserParams {
-	readonly dataParser: DP.DataParser;
 	readonly checkerTransformers: readonly ReturnType<typeof createCheckerTransformer>[];
 	readonly importContext: TST.MapImportContext;
 	readonly customProperties: readonly PropertyAssignment[];
+	readonly keepIdentifier: boolean;
 }
 
-export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
+export function getDefinitionDataParser(
+	dataParser: DP.DataParser,
+	params: getDefinitionDataParserParams,
+) {
 	const propertyAssignments: PropertyAssignment[] = [];
 
-	if (params.dataParser.definition.errorMessage) {
+	if (dataParser.definition.errorMessage) {
 		propertyAssignments.push(
 			factory.createPropertyAssignment(
 				factory.createIdentifier("errorMessage"),
-				factory.createStringLiteral(params.dataParser.definition.errorMessage),
+				factory.createStringLiteral(dataParser.definition.errorMessage),
 			),
 		);
 	}
+
+	if (params.keepIdentifier && dataParser.definition.identifier) {
+		propertyAssignments.push(
+			factory.createPropertyAssignment(
+				factory.createIdentifier("identifier"),
+				factory.createStringLiteral(dataParser.definition.identifier),
+			),
+		);
+	}
+
 	if (A.minElements(params.customProperties, 1)) {
 		propertyAssignments.push(...params.customProperties);
 	}
-	if (A.minElements(params.dataParser.definition.checkers, 1)) {
+
+	if (A.minElements(dataParser.definition.checkers, 1)) {
 		const checkers = A.reduce(
-			params.dataParser.definition.checkers,
+			dataParser.definition.checkers,
 			A.reduceFrom<(CallExpression | Identifier)[]>([]),
 			({ element, lastValue, nextPush, exit }) => pipe(
 				checkerTransformer(
@@ -48,7 +62,7 @@ export function getDefinitionDataParser(params: getDefinitionDataParserParams) {
 
 		if (E.isLeft(checkers)) {
 			return E.left("buildDataParserGetDefinitionError", {
-				dataParser: params.dataParser,
+				dataParser,
 				error: checkers,
 			});
 		}

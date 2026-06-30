@@ -2,6 +2,7 @@ import { createPrinter, createSourceFile, EmitHint, factory, NodeFlags, ScriptKi
 import { type BuildedContext } from "./buildContext";
 import { A, G, pipe, S } from "@duplojs/utils";
 import * as TST from "@scripts/toTypescript";
+import { getOverrideDeclaration } from "./getOverrideDeclaration";
 
 export function printer(params: BuildedContext) {
 	const sourceFile = createSourceFile("print.ts", "", ScriptTarget.Latest, false, ScriptKind.TS);
@@ -43,6 +44,11 @@ export function printer(params: BuildedContext) {
 	return pipe(
 		[
 			...TST.createImportDeclaration(params.importContext),
+			...(
+				params.keepIdentifier
+					? getOverrideDeclaration()
+					: []
+			),
 			...params.typescriptContext.values(),
 			...dataParserStatements,
 		],

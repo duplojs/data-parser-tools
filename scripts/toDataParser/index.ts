@@ -5,3 +5,4 @@ export * from "./dataParserTransformer";
 export * from "./render";
 export * from "./buildContext";
 export * from "./printer";
+export * from "./getOverrideDeclaration";
