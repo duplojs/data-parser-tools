@@ -7,8 +7,8 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the dataParser by adding an identifier
 		 */
-		setIdentifier(input: string): this;
-		addIdentifier(input: string): this;
+		setIdentifier(input: this["definition"]["identifier"] & string): this;
+		addIdentifier(input: this["definition"]["identifier"] & string): this;
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding an override transformer
@@ -27,13 +27,13 @@ declare module "@duplojs/utils/dataParser" {
 	}
 }
 
-DataParserBase.prototype.setIdentifier = function(this: DataParserBase, identifier) {
+DataParserBase.prototype.setIdentifier = function(this: DataParserBase, identifier: string) {
 	this.definition.identifier = identifier;
 
 	return this;
 };
 
-DataParserBase.prototype.addIdentifier = function(this: DataParserBase, identifier) {
+DataParserBase.prototype.addIdentifier = function(this: DataParserBase, identifier: string) {
 	const newSchema = this.clone();
 
 	newSchema.setIdentifier(identifier);
