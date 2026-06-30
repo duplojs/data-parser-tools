@@ -7,26 +7,18 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the dataParser by adding an identifier
 		 */
-		setIdentifier<
-			GenericSelf extends DataParserBase = this,
-		>(input: string): GenericSelf;
-		addIdentifier<
-			GenericSelf extends DataParserBase = this,
-		>(input: string): GenericSelf;
+		setIdentifier(input: string): this;
+		addIdentifier(input: string): this;
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
-		setOverrideJsonSchemaTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(
+		setOverrideJsonSchemaTransformer(
 			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
-		): GenericSelf;
-		addOverrideJsonSchemaTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(
+		): this;
+		addOverrideJsonSchemaTransformer(
 			transformer: TransformerSuccess | TransformerBuildFunction<this> | null
-		): GenericSelf;
+		): this;
 	}
 
 	interface DataParserDefinition {
@@ -58,7 +50,7 @@ DataParserBase.prototype.setOverrideJsonSchemaTransformer = function(this: DataP
 		this.definition.overrideJsonSchemaTransformer = undefined;
 	}
 
-	return this as never;
+	return this;
 };
 
 DataParserBase.prototype.addOverrideJsonSchemaTransformer = function(this: DataParserBase, overrideTransformer) {
@@ -66,5 +58,5 @@ DataParserBase.prototype.addOverrideJsonSchemaTransformer = function(this: DataP
 
 	newSchema.setOverrideJsonSchemaTransformer(overrideTransformer);
 
-	return newSchema as never;
+	return newSchema;
 };

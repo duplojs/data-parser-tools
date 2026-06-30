@@ -29,32 +29,20 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the dataParser by adding an identifier
 		 */
-		setIdentifier<
-			GenericSelf extends DataParserBase = this,
-		>(identifier: string): GenericSelf;
-		addIdentifier<
-			GenericSelf extends DataParserBase = this,
-		>(identifier: string): GenericSelf;
+		setIdentifier(identifier: string): this;
+		addIdentifier(identifier: string): this;
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
-		setOverrideTypescriptTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(typeNode: TypeNode | TransformerBuildFunction<this> | null): GenericSelf;
-		addOverrideTypescriptTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(typeNode: TypeNode | TransformerBuildFunction<this> | null): GenericSelf;
+		setOverrideTypescriptTransformer(typeNode: TypeNode | TransformerBuildFunction<this> | null): this;
+		addOverrideTypescriptTransformer(typeNode: TypeNode | TransformerBuildFunction<this> | null): this;
 
 		/**
 		 * @deprecated this method mutated the dataParser by adding import
 		 */
-		setMapImportContextEntries<
-			GenericSelf extends DataParserBase = this,
-		>(...args: AnyTuple<MapImportContextEntry>): GenericSelf;
-		addMapImportContextEntries<
-			GenericSelf extends DataParserBase = this,
-		>(...args: AnyTuple<MapImportContextEntry>): GenericSelf;
+		setMapImportContextEntries(...args: AnyTuple<MapImportContextEntry>): this;
+		addMapImportContextEntries(...args: AnyTuple<MapImportContextEntry>): this;
 	}
 
 	interface DataParserDefinition {
@@ -68,22 +56,14 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the checker by adding an override refiner
 		 */
-		setOverrideTypescriptRefiner<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(typeNode: TypeNode | CheckerRefinerBuildFunction<this> | null): GenericSelf;
-		addOverrideTypescriptRefiner<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(typeNode: TypeNode | CheckerRefinerBuildFunction<this> | null): GenericSelf;
+		setOverrideTypescriptRefiner(typeNode: TypeNode | CheckerRefinerBuildFunction<this> | null): this;
+		addOverrideTypescriptRefiner(typeNode: TypeNode | CheckerRefinerBuildFunction<this> | null): this;
 
 		/**
 		 * @deprecated this method mutated the checker by adding import
 		 */
-		setMapImportContextEntries<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(...args: AnyTuple<MapImportContextEntry>): GenericSelf;
-		addMapImportContextEntries<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(...args: AnyTuple<MapImportContextEntry>): GenericSelf;
+		setMapImportContextEntries(...args: AnyTuple<MapImportContextEntry>): this;
+		addMapImportContextEntries(...args: AnyTuple<MapImportContextEntry>): this;
 	}
 
 	interface DataParserCheckerDefinition {
@@ -115,7 +95,7 @@ DataParserBase.prototype.setOverrideTypescriptTransformer = function(this: DataP
 		this.definition.overrideTypescriptTransformer = undefined;
 	}
 
-	return this as never;
+	return this;
 };
 
 DataParserBase.prototype.addOverrideTypescriptTransformer = function(this: DataParserBase, overrideTransformer) {
@@ -123,13 +103,13 @@ DataParserBase.prototype.addOverrideTypescriptTransformer = function(this: DataP
 
 	newSchema.setOverrideTypescriptTransformer(overrideTransformer);
 
-	return newSchema as never;
+	return newSchema;
 };
 
 DataParserBase.prototype.setMapImportContextEntries = function(this: DataParserBase, ...importValues) {
 	this.definition.mapImportContextEntries = importValues;
 
-	return this as never;
+	return this;
 };
 
 DataParserBase.prototype.addMapImportContextEntries = function(this: DataParserBase, ...importValues) {
@@ -137,7 +117,7 @@ DataParserBase.prototype.addMapImportContextEntries = function(this: DataParserB
 
 	newSchema.setMapImportContextEntries(...importValues);
 
-	return newSchema as never;
+	return newSchema;
 };
 
 DataParserCheckerBase.prototype.setOverrideTypescriptRefiner = function(this: DataParserCheckerBase, overrideRefiner) {
@@ -149,7 +129,7 @@ DataParserCheckerBase.prototype.setOverrideTypescriptRefiner = function(this: Da
 		this.definition.overrideTypescriptRefiner = undefined;
 	}
 
-	return this as never;
+	return this;
 };
 
 DataParserCheckerBase.prototype.addOverrideTypescriptRefiner = function(this: DataParserCheckerBase, overrideRefiner) {
@@ -157,7 +137,7 @@ DataParserCheckerBase.prototype.addOverrideTypescriptRefiner = function(this: Da
 
 	newSchema.setOverrideTypescriptRefiner(overrideRefiner);
 
-	return newSchema as never;
+	return newSchema;
 };
 
 DataParserCheckerBase.prototype.setMapImportContextEntries = function(
@@ -166,7 +146,7 @@ DataParserCheckerBase.prototype.setMapImportContextEntries = function(
 ) {
 	this.definition.mapImportContextEntries = mapImportContextEntries;
 
-	return this as never;
+	return this;
 };
 
 DataParserCheckerBase.prototype.addMapImportContextEntries = function(
@@ -177,5 +157,5 @@ DataParserCheckerBase.prototype.addMapImportContextEntries = function(
 
 	newSchema.setMapImportContextEntries(...mapImportContextEntries);
 
-	return newSchema as never;
+	return newSchema;
 };

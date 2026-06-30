@@ -10,16 +10,12 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the dataParser by adding an override transformer
 		 */
-		setOverrideDataParserTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(
+		setOverrideDataParserTransformer(
 			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
-		): GenericSelf;
-		addOverrideDataParserTransformer<
-			GenericSelf extends DataParserBase = this,
-		>(
+		): this;
+		addOverrideDataParserTransformer(
 			transformer: CallExpression | Identifier | TransformerBuildFunction<this> | null,
-		): GenericSelf;
+		): this;
 	}
 
 	interface DataParserDefinition {
@@ -31,16 +27,12 @@ declare module "@duplojs/utils/dataParser" {
 		/**
 		 * @deprecated this method mutated the checker by adding an override refiner
 		 */
-		setOverrideCheckerTransformer<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(
+		setOverrideCheckerTransformer(
 			typeNode: CallExpression | Identifier | CheckerTransformerBuildFunction<this> | null
-		): GenericSelf;
-		addOverrideCheckerTransformer<
-			GenericSelf extends DataParserCheckerBase = this,
-		>(
+		): this;
+		addOverrideCheckerTransformer(
 			typeNode: CallExpression | Identifier | CheckerTransformerBuildFunction<this> | null
-		): GenericSelf;
+		): this;
 	}
 
 	interface DataParserCheckerDefinition {
@@ -57,7 +49,7 @@ DataParserBase.prototype.setOverrideDataParserTransformer = function(this: DataP
 		this.definition.overrideDataParserTransformer = undefined;
 	}
 
-	return this as never;
+	return this;
 };
 
 DataParserBase.prototype.addOverrideDataParserTransformer = function(this: DataParserBase, overrideTransformer) {
@@ -65,7 +57,7 @@ DataParserBase.prototype.addOverrideDataParserTransformer = function(this: DataP
 
 	newSchema.setOverrideDataParserTransformer(overrideTransformer);
 
-	return newSchema as never;
+	return newSchema;
 };
 
 DataParserCheckerBase.prototype.setOverrideCheckerTransformer = function(
@@ -80,7 +72,7 @@ DataParserCheckerBase.prototype.setOverrideCheckerTransformer = function(
 		this.definition.overrideCheckerTransformer = undefined;
 	}
 
-	return this as never;
+	return this;
 };
 
 DataParserCheckerBase.prototype.addOverrideCheckerTransformer = function(
@@ -91,6 +83,6 @@ DataParserCheckerBase.prototype.addOverrideCheckerTransformer = function(
 
 	newSchema.setOverrideCheckerTransformer(overrideTransformer);
 
-	return newSchema as never;
+	return newSchema;
 };
 
