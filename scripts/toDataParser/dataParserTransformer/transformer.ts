@@ -19,6 +19,7 @@ export interface TransformerFunctionParams {
 	readonly dependencyIdentifier: Identifier;
 	readonly hooks: readonly TransformerHook[];
 	readonly recursiveDataParsers: DP.DataParser[];
+	readonly keepIdentifier: boolean;
 	readonly toTypescript?: {
 		readonly mode?: TST.TransformerMode;
 		readonly hooks?: readonly TST.TransformerHook[];
@@ -113,12 +114,15 @@ export function transformer(
 		},
 		importContext: params.importContext,
 		getDefinition(customProperties = []) {
-			return getDefinitionDataParser({
-				dataParser: currentDataParser,
-				checkerTransformers: params.checkerTransformers,
-				importContext: params.importContext,
-				customProperties,
-			});
+			return getDefinitionDataParser(
+				currentDataParser,
+				{
+					checkerTransformers: params.checkerTransformers,
+					importContext: params.importContext,
+					keepIdentifier: params.keepIdentifier,
+					customProperties,
+				},
+			);
 		},
 		addImport: TST.createAddImport(params.importContext),
 	};

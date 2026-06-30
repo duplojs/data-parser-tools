@@ -1,5 +1,19 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`render > keep identifier 1`] = `
+"import * as DP from "@duplojs/utils/dataParser";
+
+import "@duplojs/utils/dataParser";
+
+declare module "@duplojs/utils/dataParser" {
+    interface DataParserDefinition {
+        identifier?: string;
+    }
+}
+
+export const testKeepIdentifierDataParser = DP.number({ identifier: "testKeepIdentifier" });"
+`;
+
 exports[`render > renders anonymous recursive dataParser in extended mode 1`] = `
 "import * as DP from "@duplojs/utils/dataParser";
 

@@ -86,16 +86,19 @@ describe("default dataParser transformers definition error", () => {
 		});
 
 		expect(
-			getDefinitionDataParser({
+			getDefinitionDataParser(
 				dataParser,
-				checkerTransformers: [
-					(checker, { buildError }) => DP.checkerStringMinKind.has(checker)
-						? buildError()
-						: E.left("checkerNotSupport", checker),
-				],
-				importContext: new Map(),
-				customProperties: [],
-			}),
+				{
+					checkerTransformers: [
+						(checker, { buildError }) => DP.checkerStringMinKind.has(checker)
+							? buildError()
+							: E.left("checkerNotSupport", checker),
+					],
+					importContext: new Map(),
+					customProperties: [],
+					keepIdentifier: true,
+				},
+			),
 		).toStrictEqual(
 			E.left("buildDataParserGetDefinitionError", {
 				dataParser,
